@@ -8,5 +8,7 @@ urlpatterns = patterns('',
 
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^admin/', include(admin.site.urls)),
-    (r'^particles/', 'particles.views.particle_list'),
+    (r'^motes/', 'motes.views.mote_list'),
+    (r'^motes/(?P<mote_id>\d+)/$', 'motes.views.mote_json'),
+
 )
