@@ -8,19 +8,21 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        # Deleting model 'Mote'
+        db.delete_table('motes_mote')
+
+        # Removing M2M table for field motes on 'Plan'
+        db.delete_table('motes_plan_motes')
+
+
+    def backwards(self, orm):
+        
         # Adding model 'Mote'
         db.create_table('motes_mote', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
         ))
         db.send_create_signal('motes', ['Mote'])
-
-        # Adding model 'Plan'
-        db.create_table('motes_plan', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-        ))
-        db.send_create_signal('motes', ['Plan'])
 
         # Adding M2M table for field motes on 'Plan'
         db.create_table('motes_plan_motes', (
@@ -31,28 +33,10 @@ class Migration(SchemaMigration):
         db.create_unique('motes_plan_motes', ['plan_id', 'mote_id'])
 
 
-    def backwards(self, orm):
-        
-        # Deleting model 'Mote'
-        db.delete_table('motes_mote')
-
-        # Deleting model 'Plan'
-        db.delete_table('motes_plan')
-
-        # Removing M2M table for field motes on 'Plan'
-        db.delete_table('motes_plan_motes')
-
-
     models = {
-        'motes.mote': {
-            'Meta': {'object_name': 'Mote'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
         'motes.plan': {
             'Meta': {'object_name': 'Plan'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'motes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['motes.Mote']", 'symmetrical': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         }
     }
