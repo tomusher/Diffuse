@@ -1,5 +1,11 @@
 from django.db import models
-from motes.models import Mote
 
-class WebURL(Mote):
+class WebURL(models.Model):
     url = models.URLField()
+
+    def as_dict(self):
+        output = {
+            "url": self.url,
+        }
+
+        return output

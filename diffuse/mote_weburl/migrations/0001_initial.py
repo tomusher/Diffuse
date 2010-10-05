@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
         
         # Adding model 'WebURL'
         db.create_table('mote_weburl_weburl', (
-            ('mote_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['motes.Mote'], unique=True, primary_key=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
         ))
         db.send_create_signal('mote_weburl', ['WebURL'])
@@ -24,14 +24,9 @@ class Migration(SchemaMigration):
 
     models = {
         'mote_weburl.weburl': {
-            'Meta': {'object_name': 'WebURL', '_ormbases': ['motes.Mote']},
-            'mote_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['motes.Mote']", 'unique': 'True', 'primary_key': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
-        },
-        'motes.mote': {
-            'Meta': {'object_name': 'Mote'},
+            'Meta': {'object_name': 'WebURL'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         }
     }
 
