@@ -7,5 +7,4 @@ class WebURL(models.Model):
         output = {
             "url": self.url,
         }
-
         return output
