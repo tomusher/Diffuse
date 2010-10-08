@@ -1,3 +1,3 @@
-{% for particle in particles %}
-{{ particle.name }}
+{% for mote in motes %}
+<a href="{% url mote_json mote.id %}">{{ mote.name }}</a>
 {% endfor %}
