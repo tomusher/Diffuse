@@ -11,9 +11,8 @@ class Migration(SchemaMigration):
         # Adding model 'Mote'
         db.create_table('motes_mote', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('polymorphic_ctype', self.gf('django.db.models.fields.related.ForeignKey')(related_name='polymorphic_motes.mote_set', null=True, to=orm['contenttypes.ContentType'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
-            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
         ))
         db.send_create_signal('motes', ['Mote'])
 
@@ -55,10 +54,9 @@ class Migration(SchemaMigration):
         },
         'motes.mote': {
             'Meta': {'object_name': 'Mote'},
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {})
+            'polymorphic_ctype': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'polymorphic_motes.mote_set'", 'null': 'True', 'to': "orm['contenttypes.ContentType']"})
         },
         'motes.plan': {
             'Meta': {'object_name': 'Plan'},

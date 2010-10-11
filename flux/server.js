@@ -12,23 +12,28 @@ var http = require('http'),
             res.end();
         });
    });
+
    send404 = function(res){
        res.writeHead(404);
        res.write('404');
        res.end();
    };
 server.listen('8040');
-var redis = require("./lib/redis-client").createClient();
+var redis_sub = require("./lib/redis-client").createClient();
+var redis_req = require("./lib/redis-client").createClient();
 
 var io = io.listen(server);
 io.on('connection', function(client){
-    redis.subscribeTo('*',
+    redis_sub.subscribeTo('*',
         function(channel, message, subscriptionPattern) {
             var output = "[" + channel;
             if(subscriptionPattern)
                 output += " (from pattern '" + subscriptionPattern + "')";
             output += "]: " + message;
             sys.puts(output);
+            redis_req.get(message, function(returned){
+                client.broadcast({message: returned});
+            });
             client.broadcast({message: output});
         });
 });

@@ -98,8 +98,10 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'annoying',
+    'polymorphic',
     'motes',
     'mote_weburl',
+    'mote_message',
 )
 
 DEBUG_TOOLBAR_CONFIG = {

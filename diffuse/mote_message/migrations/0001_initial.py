@@ -8,18 +8,18 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding model 'WebURL'
-        db.create_table('mote_weburl_weburl', (
+        # Adding model 'Message'
+        db.create_table('mote_message_message', (
             ('mote_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['motes.Mote'], unique=True, primary_key=True)),
-            ('url', self.gf('django.db.models.fields.URLField')(max_length=200)),
+            ('message_text', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
-        db.send_create_signal('mote_weburl', ['WebURL'])
+        db.send_create_signal('mote_message', ['Message'])
 
 
     def backwards(self, orm):
         
-        # Deleting model 'WebURL'
-        db.delete_table('mote_weburl_weburl')
+        # Deleting model 'Message'
+        db.delete_table('mote_message_message')
 
 
     models = {
@@ -30,10 +30,10 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        'mote_weburl.weburl': {
-            'Meta': {'object_name': 'WebURL', '_ormbases': ['motes.Mote']},
-            'mote_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['motes.Mote']", 'unique': 'True', 'primary_key': 'True'}),
-            'url': ('django.db.models.fields.URLField', [], {'max_length': '200'})
+        'mote_message.message': {
+            'Meta': {'object_name': 'Message', '_ormbases': ['motes.Mote']},
+            'message_text': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'mote_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['motes.Mote']", 'unique': 'True', 'primary_key': 'True'})
         },
         'motes.mote': {
             'Meta': {'object_name': 'Mote'},
@@ -43,4 +43,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['mote_weburl']
+    complete_apps = ['mote_message']
