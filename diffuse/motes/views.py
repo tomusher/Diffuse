@@ -21,9 +21,9 @@ def mote_cache(request, mote_id):
     r = redis.Redis(host='localhost', db=0)
     mote = Mote.objects.get(pk=mote_id)
     json_data = json.dumps(mote.as_dict())
-    r.setex(mote_id, 3600, json_data)
+    r.set(mote_id, json_data)
 
 def mote_push(request, plan_id, mote_id):
     r = redis.Redis(host='localhost', db=0)
-    r.publish(plan_id, mote_id)
     mote_cache(request, mote_id)
+    r.publish(plan_id, mote_id)
