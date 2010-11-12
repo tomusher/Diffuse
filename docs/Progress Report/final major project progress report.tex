@@ -1,0 +1,83 @@
+\documentclass[a4papert,11pt,notitlepage]{ltxdoc}
+\usepackage[left=1.0in, right=1.0in, top=1.0in, bottom=1.0in]{geometry}
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{mdwlist}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\bibliographystyle{unsrt}
+
+\title{Developing a device-agnostic, real-time ARS/PRS system with support for
+broadcasting rich interactive content}
+
+\begin{document}
+\begin{center}
+\textsc{\Large Final Major Project - Internet Engineering (H622)}\\[0.3cm]
+{\Large \bfseries Developing a device-agnostic, real-time ARS/PRS system with support for
+broadcasting rich interactive content}\\[0.3cm]
+{\Large Progress Report}\\[0.3cm]
+\emph{Author:} Thomas \textsc{Usher} \hspace{1cm} \emph{Supervisor:} Dave \textsc{Price}\\
+\emph{Date:} October 3, 2010 \hspace{1cm} \emph{Version:} 1.0
+\end{center}
+\section{Project Summary}
+\subsection{Introduction}
+Audience Response Systems (ARS), more commonly referred to as 'clickers' have been used with varying degrees of success in educational establishments around the world for numerous years. Their use as a means to improve interactivity between students and instructors in an educational environment has been widely documented, with research indicating notable effects on student responsiveness, involvement and success. While this project will not involve additional research in to the value of PRS systems, it will attempt to highlight and enhance upon ``The give-and-take atmosphere encouraged by use of clickers which... makes the students more responsive in general''\cite{wood:clickers}.
+
+From using these clickers from a students' perspective, I have noted two primary issues with the current implementation of these ARS systems:
+\begin{itemize}
+\item The devices are limited in what can be displayed on an individual users' device - while the majority have no displays at all, those that do typically only show which number/letter the user has selected. This limitation restricts interaction to simple question and answer style communication, as well as limiting potential for individual or group specific broadcasts.
+\item Specific clicker hardware is required. While they can be relatively cheap, costs do increase with complexity and they are single-purposes devices. In most cases, specialist receiver hardware is also required and in larger scale cases, technicians are required to maintain these systems.
+\end{itemize}
+
+This project will attempt to solve the above issues by creating a 'next-generation' ARS system for use on any system with a relatively modern web-browser and the ability to access the local network. While the system should be platform and device agnostic, the increasing popularity of Apple's iPad and other tablet computers to enhance textbooks in education provides an ideal device around which to build and test the system within the time constraints (although it should not use any tablet or device specific implementations).
+
+Clickers exist to improve interactivity during lectures, helping to engage students in the subject, improve attention-span and providing additional ways for students to feel personally involved in the subject. Secondarily, facilitating real-time feedback allows lecturers to tailor their approach based on the class response - for example, the lecturer might broadcast a set of questions about the current topic, if a large percentage of students answer incorrectly, the lecturer might wish to attempt another explanation. This project should maintain all of these benefits while building on the types of content which can be broadcast, as well as adding additional forms of interactivity where possible.
+
+The system should be built around an extensible framework; allowing additional types of content to be created for broadcast, and to allow the system to be used in other use cases, such as school classrooms and business meetings. 
+
+\subsection{Reasons for Project Choice}
+Throughout my education I have been interested in ways to enhance learning through technology and interactivity. I often envisioned how a ARS might work before I first used clicker technology in my first year at Aberystwyth University, and after I'd used them, have since been thinking about how they can be improved, and how we can further real-time interactive education. 
+
+I have personally noted a significant increase in responsiveness and interest shown by fellow students when clickers have been used in lectures, noting that others seem to pay more attention when interactivity is introduced as opposed to when they are being 'talked at' and that post-lecture discussion is more oriented around lecture material when clickers were used.
+
+Unfortunately, it is a relatively uncommon occurrence to see these clickers being used, while almost every student tends to have a laptop, tablet computer or smartphone in front of them. There have also been numerous reports of educational departments supplying all of their students with iPads or laptops. I envision that developing a ARS system which works on these more common devices will encourage more frequent usage of this type of interactivity.
+
+The technical challenges in this project were also interesting to me; I would need to facilitate real-time asynchronous communication to hundreds of devices at a time, work out how best to transfer and structure data for transfer and develop a means to collect and collate data returned from users' devices.
+
+\section{Background}
+Developing an effective system requires extensive research in to existing ARS solutions, devices which need to be supported, and technologies to be used in developing the project.
+
+\subsection{Existing ARS Solutions}
+A quick Google search for 'Audience Response System' quickly reveals the extent of the ARS market, with many companies producing their own specific hardware and software implementations. While the majority of products available are similar, I will take a more detailed look at a few.
+
+\subsection{Qwizdom}
+Qwizdom is the ARS system used by the Computer Science department at Aberystwyth University and is therefore the only one with which I have any direct experience. They provide two hardware solutions for learners:
+\begin{itemize}
+\item A keypad with a small E-ink display which shows the currently selected answer (the units currently used by Aberystwyth University are older versions of these units with an LCD display).
+\item A keypad with a larger LCD display with the ability to display the current question and answers.
+\end{itemize}
+
+These interact via RF to a unit attached to a computer. The computer needs to be running ActionPoint, a PowerPoint/Keynote plugin which instructors can use to integrate questions in to their slideshows. When an ActionPoint slide is being displayed during a lecture, students' can submit answers to the question which is then immediately updated in ActionPoint. The lecturer can choose to display a graph of responses which can be reacted on immediately, or saved for reporting.
+
+Qwizdom also supplies additional hardware for instructors to interact with their slides, including a tablet-style device.
+
+This keypad style of ARS seems to be the most basic, tried and tested implementation, with other companies providing similar solutions to Qwizdom include; KEEPad, ShowMode, Votech, Group Dynamics and PowerCom, all of which do not offer anything beyond this type of interaction.
+
+The issues with this keypad-style are what I noted in the introduction of this report; limited displays and the requirement for dedicated hardware. The integration with PowerPoint seems to be a good way of encouraging the use of these devices as a supplement to existing slideshow-based teaching, but I feel it makes the interactivity too oriented around slides where they could easily exist as separate entities if the device could display more information.
+
+\subsection{IML, Genee World}
+IML and Genee World are companies which both provide standard keypad based ARS', but have additional systems which are more in line with what I am trying to achieve with my project.
+
+``IML enotes'' is a product focused on group meetings; allowing users on laptops to type feedback on a discussion topic and submit them anonymously over wi-fi to a central computer where they can be collated. The use of laptops is interesting but it appears to require specific software, laptops rented from IML, and an 'IML producer' to be present during the meeting. All of which seem very restrictive.
+
+Genee World provide their ``Virtual G Pad'' solution; a web-based interface which appears to be emulating a keypad, interacting with the same server software (ClassComm) as their hardware based systems. The system can be accessed from modern browsers and should therefore run on tablets, phones and laptops, although the former two are not mentioned anywhere in the product description. As this system can run alongside their hardware, it is limited in the same ways.
+
+The use of a web-based interface for the ``Virtual G Pad'' seems like an excellent way to ensure cross-device and multi-platform compatibility, definitely something to consider when planning my system.
+
+\subsection{TurningPoint ResponseWare}
+Again, TurningPoint offer hardware keypad solutions, but now have their ``ResponseWare Web'' solution. Similar to the ``Virtual G Pad'', this is primarily a web-based interface but it seems device specific applications for iPhone, BlackBerry and Windows Mobile devices are available. The website does not mention whether these are required to use this system on these devices.
+
+\renewcommand{\refname}{Initial Bibliography}
+\bibliography{bibliography}
+
+\end{document}
