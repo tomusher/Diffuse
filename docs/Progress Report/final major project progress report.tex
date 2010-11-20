@@ -5,7 +5,7 @@
 \usepackage{epstopdf}
 \usepackage{mdwlist}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
-\bibliographystyle{unsrt}
+\bibliographystyle{plain-annote}
 
 \title{Developing a device-agnostic, real-time ARS/PRS system with support for
 broadcasting rich interactive content}
@@ -50,7 +50,7 @@ Developing an effective system requires extensive research in to existing ARS so
 \subsection{Existing ARS Solutions}
 A quick Google search for 'Audience Response System' quickly reveals the extent of the ARS market, with many companies producing their own specific hardware and software implementations. While the majority of products available are similar, I will take a more detailed look at a few.
 
-\subsection{Qwizdom}
+\subsubsection{Qwizdom}
 Qwizdom is the ARS system used by the Computer Science department at Aberystwyth University and is therefore the only one with which I have any direct experience. They provide two hardware solutions for learners:
 \begin{itemize}
 \item A keypad with a small E-ink display which shows the currently selected answer (the units currently used by Aberystwyth University are older versions of these units with an LCD display).
@@ -65,7 +65,7 @@ This keypad style of ARS seems to be the most basic, tried and tested implementa
 
 The issues with this keypad-style are what I noted in the introduction of this report; limited displays and the requirement for dedicated hardware. The integration with PowerPoint seems to be a good way of encouraging the use of these devices as a supplement to existing slideshow-based teaching, but I feel it makes the interactivity too oriented around slides where they could easily exist as separate entities if the device could display more information.
 
-\subsection{IML, Genee World}
+\subsubsection{IML, Genee World}
 IML and Genee World are companies which both provide standard keypad based ARS', but have additional systems which are more in line with what I am trying to achieve with my project.
 
 ``IML enotes'' is a product focused on group meetings; allowing users on laptops to type feedback on a discussion topic and submit them anonymously over wi-fi to a central computer where they can be collated. The use of laptops is interesting but it appears to require specific software, laptops rented from IML, and an 'IML producer' to be present during the meeting. All of which seem very restrictive.
@@ -74,10 +74,85 @@ Genee World provide their ``Virtual G Pad'' solution; a web-based interface whic
 
 The use of a web-based interface for the ``Virtual G Pad'' seems like an excellent way to ensure cross-device and multi-platform compatibility, definitely something to consider when planning my system.
 
-\subsection{TurningPoint ResponseWare}
-Again, TurningPoint offer hardware keypad solutions, but now have their ``ResponseWare Web'' solution. Similar to the ``Virtual G Pad'', this is primarily a web-based interface but it seems device specific applications for iPhone, BlackBerry and Windows Mobile devices are available. The website does not mention whether these are required to use this system on these devices.
+\subsubsection{TurningPoint ResponseWare}
+Again, TurningPoint offer hardware keypad solutions, but now have their ``ResponseWare Web'' solution. Similar to the ``Virtual G Pad'', this is primarily a web-based interface but it seems device specific applications for iPhone, BlackBerry and Windows Mobile devices are available. The website does not mention whether these applications are required to use this system on these devices or whether the web-based interface will adjust to be used on a touch-based device. There is also no mention of tablet devices or the Android mobile operating system.
 
-\renewcommand{\refname}{Initial Bibliography}
+The system runs over Wi-Fi or a mobile data connection - as it is likely that the majority of educational establishments to which this system is targeted are likely to have an established wireless infrastructure there would be no additional hardware or configuration required. This method of communication seems appropriate for the hardware independent solution I am working towards.
+
+The main notable limitation in the ResponseWare system are the limited content types which can be broadcast, restricted only to simple Q\&A style content. In an improved system, the larger, more detailed screens on modern devices could be used to display a variety of rich content.
+
+\subsubsection{Summary}
+From researching existing ARS solutions, I have noted how these systems have evolved from simple keypads, through to web-based clients which can be used on modern mobile phones. Despite the software and hardware evolving, the companies I researched have not extended their solutions beyond basic Q\&A interactions, possibly due to the need to support legacy devices in their software. To create an ARS system which sets itself apart from the Virtual G Pad or ResponseWare, I will need to support additional types of rich content, such as images, websites, and interactive activities.
+
+Existing solutions have also provided me with some suggestions as to how to build my implementation; particularly the use of a web-based interface rather than an application for every device I want to support, and the use of Wi-Fi/Data over HTTP for communication with the server.
+
+\subsection{Devices and Operating Systems}
+While the goal of my project is to develop a device/OS agnostic system, all the devices supported will need to be able to facilitate running the features required in an ARS with rich content support. This means they all need:
+\begin{itemize}
+\item A way to connect to a network, either over a cable, wi-fi or data connection (3G).
+\item A reasonably sized colour screen - for the purposes of displaying rich content, an initial suggestion of a minimum resolution of 480 x 320 seems reasonable.
+\item A flexible input mechanism; either touch or a pointing device and keyboard.
+\item Some way of executing code/applications.
+\end{itemize}
+
+I will take a closer look at common platforms, devices and operating systems which meet these requirements in order to find a common set of features on which to build the project. Ideally, the system should use a minimal amount of device-specific code and should any be required, it should be easily changed without needing to re-deploy to client devices.
+
+\subsubsection{Mobile Operating Systems}
+First, I look at mobile operating systems. To determine what were the most popular mobile OS', I used an analysis of the smartphone market published in May 2010 by Gartner Inc.\cite{gartner:mobile}:
+
+\begin{tabular}{l l}
+Company & Market Share 2010 Q1(\%) \\
+\hline
+Symbian & 44.3 \\
+Research In Motion & 19.4 \\
+iPhone OS & 15.4 \\
+Android & 9.6 \\
+Microsoft Windows Mobile & 6.8 \\
+Linux & 3.7 \\
+Other OSs & 0.7 \\
+\end{tabular}
+
+I will take a more detailed look at all listed OSs with a market share of 5\% or larger. 
+
+\subsubsection{Symbian}
+Symbian, the most popular mobile operating system has gone through many iterations since its original release as Symbian OS 6.0 in 2001 and is now found in all Nokia phones, as well as various mobile devices from Sony Ericsson, Sharp and Samsung.
+
+The majority of Symbian devices are basic mobile phones which do not meet the necessary specifications (particularly lack of a 3G data connection and large screen), but later Nokia running Symbian OS 9.1 and later seem to be suitable, so this is the version of the operating system which I would likely need to target.
+
+Software can be written for Symbian in various languages, primarily C++ with Qt but including Python, Java ME, Ruby and .NET. Developing a UI however, would need to use Symbian specific APIs, something which I would like to avoid. Device security is also left up to the vendor, meaning most devices can not run custom code, or only code approved by the vendor, such as through Nokia's Ovi store.
+
+While various browsers are available for Symbian devices, they typically use the built-in browser supplied by the vendor. In Nokia's case, the Nokia Browser in Series 60 devices and above is built upon Apple's WebKit project\cite{nokia:browser}, particularly the WebCore and JavaScriptCore components - suggesting that the majority of newer Symbian devices use relatively modern browser components, including support for JavaScript. Some later versions of Symbian on Nokia devices can make use of Flash, Silverlight and JavaFX.
+
+\subsubsection{Research In Motion}
+RIM develops the BlackBerry line of business smartphone devices, all of which run on BlackBerry OS. Most recent BlackBerry devices meet all the specifications listed above.
+
+BlackBerry OS applications are typically written in Java using a set of APIs to interface with the operating system - this suggests a lot of device specific-code, so this approach is unlikely to be suitable.
+
+As of BlackBerry OS 6, the bundled browser is also based on WebKit\cite{rim:browser}, and therefore supports modern web features and JavaScript. Later versions of BlackBerry OS also support Flash content, with plans to support Silverlight.
+
+\subsubsection{iPhone OS}
+iPhone OS, now known as iOS is Apple's mobile operating system which runs on all mobile devices built by Apple; iPod touch, iPhone \& iPad. 
+
+Applications are built using the iOS SDK and written in Objective-C. They can only be distributed through the Apple Store, which requires approval from Apple and a fee to be a member of the iOS Developer Program. Again, as this requires device independent code in an entirely different language from the OS' I've researched so far, it doesn't seem like a suitable solution.
+
+The browser on iOS is a version of Apple's Safari, also based on WebKit (Apple being the founder and contributor to the project). iOS does not allow any modifications to the operating system, so browser extensions such as Flash, JavaFX and Silverlight can not be used.
+
+\subsubsection{Android}
+Android is Google's open source mobile operating system licensed under the Apache License, allowing vendors to freely use and extend the OS, and as a result, it has been widely adopted by multiple manufacturers since its initial release.
+
+Applications are typically written using Java and the Android SDK, although due to the open nature of the operating system, most languages can be used. Applications can either be distributed through a store, such as the Android Store bundled with the majority of phones, through a vendor-specific store, or transferred directly to the phone. While the flexibility of this platform could mean only a thin UI layer would need to be written for it, it would still require quite a significant amount of device-specific code to do so.
+
+The bundled browser on Android devices is also based on WebKit, using Google's V8 engine for fast JavaScript execution. The browser can also be extended to use many web application platforms including Flash, Silverlight and potentially JavaFX (although there is no implementation currently available).
+
+\subsubsection{Windows Mobile}
+Microsoft's mobile OS, Windows Mobile has been used on various mobile devices built by a number of the world's largest mobile manufacturers. It is now being phased out in favour of the recently released Windows Phone 7.
+
+Developing for Windows Mobile requires the use of Visual C++, or code on the .NET Compact Framework - more device independent code.
+
+The Windows Mobile browser has evolved over its versions, although they are all based on Internet Explorer and therefore support most modern features and JavaScript. While JavaFX and Silverlight are supported on later versions of the platform, Flash support is not available.
+
+{\it{\bf Note regarding Windows Phone 7:} For the purpose of this assignment, as it was released less than two weeks before this report was written, market share figures are not yet available, and based on initial reviews of the operating system, we will assume that Windows Phone 7 has a significant enough market share to be considered, and that it has feature parity with iOS, namely restrictions on custom applications and a modern browser.}
+
 \bibliography{bibliography}
 
 \end{document}
