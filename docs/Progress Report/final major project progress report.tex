@@ -87,6 +87,7 @@ From researching existing ARS solutions, I have noted how these systems have evo
 Existing solutions have also provided me with some suggestions as to how to build my implementation; particularly the use of a web-based interface rather than an application for every device I want to support, and the use of Wi-Fi/Data over HTTP for communication with the server.
 
 \subsection{Devices and Operating Systems}
+\label{sec:devices}
 While the goal of my project is to develop a device/OS agnostic system, all the devices supported will need to be able to facilitate running the features required in an ARS with rich content support. This means they all need:
 \begin{itemize}
 \item A way to connect to a network, either over a cable, wi-fi or data connection (3G).
@@ -161,7 +162,84 @@ Ensuring support for popular personal computer operating systems should not be a
 
 For this reason; I will group my analysis of the three largest PC operating systems in to one, those three being Windows, Mac OS and Linux. Although all three come in various versions and incarnations, we can assume that given sufficient hardware, they can run any required code.
 
+Lots more stuff goes here.
 
+\section{Goals and Objectives}
+\subsection{System Requirements}
+\subsubsection{Presenter}
+\begin{itemize}
+\item Presenters should be able to create and edit content using an easy-to-use interface.
+\item A set of rich content-types should be made available for creation; including images, websites and QAs.
+\item The presenter interface should facilitate the creation of 'plans', consisting of a set of content which can be broadcast to a certain audience.
+\item Presenters should be able to specify what users are authorised to access plans.
+\item A presenter should be able to push any created content to the audience through this interface.
+\item Responses from the audience should be visible in this interface.
+\item Types of content available for creation should be extensible without having to change any core components.
+\item Authorisiation should be required to access the presenter interface.
+\end{itemize}
+\subsubsection{Client}
+\begin{itemize}
+\item Users should receive broadcast content within 5 seconds of the push.
+\item Users should be able to interact with any interactive content, such as QAs.
+\item The client system should be accessible on any device which meets the specifications in section \ref{sec:devices}.
+\item The client should be not need to be updated when additional content types are added or changes are made to the presenter system.
+\item A user will have to sign in and enter the ID of a plan which they are authorised to access before content is displayed.
+\item A user should remain signed in for the duration of the session.
+\item The history of content broadcast to the user during the session should be freely navigable using the client, even when a new piece of content has been broadcast to them.
+\end{itemize}
+
+\subsection{System Evaluation and Testing}
+The system will be tested against a test specification taking whatever form is necessary from my chosen process model to ensure that it meets all requirements.
+
+\section{Process Model}
+For this project, I wanted to enjoy the development of the system as much as possible, so adopting a process model that best suited the way I write software was important to me. As my typical development methodology is 'hack at it until it works', I wanted to find a process that injected a degree of organisation in to the process, giving me a way to plan and view my progress while maintaining focus on the code rather than the documentation.
+
+\subsection{Waterfall Model}
+The 'traditional' methodology for software development goes through five steps, each of which must be completed before the project can progress to the next:
+\begin{enumerate}
+\item Requirements - A software requirement specification is produced, outlining all the requirements for the system.
+\item Design - A design specification is created which details how all elements of the system will be designed and how they interact.
+\item Implementation - The stage where the software is built to the design specification.
+\item Verification - Ensuring the system meets the requirements.
+\item Maintenance - Correct issues and ensure the system continues to run as required.
+\end{enumerate}
+
+This process would allow me to concentrate on the code once I reached the implementation stage, but it does require a lot of planning to begin with. It would also require me to have a very clear design before I even wrote a line of code without much of a chance to change that design during development. For example; I would prefer to be able to experiment with the server side of the project before I make a final decision on the design for other dependant parts such as the client.
+
+\subsection{Test Driven Development}
+TDD is very different to the waterfall model in that there is very little documentation required and the entire development process is built around the code.
+
+Development consists of a rapid cycle:
+\begin{enumerate}
+\item Test written - every new feature begins with a test.
+\item Run tests - ensuring the new test fails meaning the test is valid and that the feature is currently not implemented.
+\item Write code - the simplest possible code that will pass the tst is written.
+\item Run tests - ensure the new test now passes.
+\item Refactor code - tidy the code on every iteration, ensuring the test still pass after refactoring.
+\end{enumerate}
+This process is repeated until all features are implemented.
+
+I feel that TDD, while highly oriented around the code, would be unsuitable for my individual development style as it would prevent me from experimenting with the technologies I use. This project is also highly dependent on network communications between multiple systems written in different languages, writing tests for this type of interaction would likely overcomplicate the implementation.
+
+\subsection{Iterative and incremental development}
+Iterative development is a compromise between the well-planned approach of the waterfall model and the rapid iterations of TDD. Requirements are established at the beginning of the project and then separated in to iterations, usually based on their importance. Iterations are then implemented, integrated and then tested, at which point progress can be evaluated and the next iteration can be adjusted as required. Iterations continue until the system is complete (or time runs out).
+
+This process seems more oriented around the way I develop; building a set of features before moving on to the next set of features. It provides the discipline and development periods focused on code found in the waterfall model while allowing the product to feed back in to the design as in TDD without hindering the experimentation of development.
+
+As the system being built is divided in to its own distinct components, dividing them in to iterations not only makes sense from a planning perspective, but would encourage me to remain focused on individual parts of the system as I build them. The process also lends itself to the style of the project, in that the implementation of the server system (such as data interchange format, etc.) can feed back in to the plan for the client.
+
+As I know the requirements of my system, I will develop a requirement specification, break down requirements in to iterations and develop test plans for each iteration. Between each, I will execute the test plan, integrate the system and revise the plans for the next iteration as required. At the end of development, I will re-execute all test plans to ensure all requirements are still met.
+
+\subsection{Conclusion}
+I have concluded that the most appropriate development methodology of those that I have researched is iterative development. I feel it best suits how I build software, allowing me blocks of time in which I can focus on writing code, while adding a sense of organisation and planning to the process. While the waterfall model might also have been suitable, I considered the requirement to complete the design before moving on to development too restrictive as I believe any software project needs room to evolve during its implementation.
+
+\section{Technical Challenges}
+\subsection{Real-Time Communication}
+As this application requires content to appear on all client devices within a reasonable period of time after they are broadcast, it will need to use some form of real-time communication method. As it seems likely that the only possible multi-platform solution is to use a web-based system, this makes this requirement much more complicated as the HTTP protocol is entirely request-response oriented. If I was using code which was not being executed in the browser, I could use networking technologies such as sockets to allow the client to 'listen' for communication from the broadcaster.
+
+However, there are various ways to support a  communication channel in web applications, WebSockets and Flash Sockets being the most direct solutions although unfortunately they are not yet implemented or available in the large majority of browsers, particularly those on mobile devices. Sockets can also be emulated using techniques such as long polling or multipart streaming. Working out which of these of these techniques to use and writing an implementation which can fallback to each if required will be a complicated part of this project. Ideally, I will be able to find a library for whatever server-side implementation I use which does the majority of this work for me.
+
+As real-time communication is one of the primary features of an ARS, this whole project hinges around this being successful. While I am confident that it is feasible due to experience in building real-time web applications in the past, I will fall back to a simple request-response architecture for content if absolutely necessary, requiring users to click a button to 'request' the next item from the server.
 
 \bibliography{bibliography}
 
