@@ -4,6 +4,9 @@
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{mdwlist}
+\usepackage{amssymb}
+\usepackage[colorinlistoftodos, textwidth=4cm, shadow]{todonotes}
+
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \bibliographystyle{plain-annote}
 
@@ -234,12 +237,62 @@ As I know the requirements of my system, I will develop a requirement specificat
 I have concluded that the most appropriate development methodology of those that I have researched is iterative development. I feel it best suits how I build software, allowing me blocks of time in which I can focus on writing code, while adding a sense of organisation and planning to the process. While the waterfall model might also have been suitable, I considered the requirement to complete the design before moving on to development too restrictive as I believe any software project needs room to evolve during its implementation.
 
 \section{Technical Challenges}
+\subsection{Multiple Device Support}
+One of the main goals of this system is to have the client usable on a wide range of computing devices. My extensive research in to these devices in section \ref{sec:devices} shows that there is very little crossover in language support between platforms. I could potentially write a core library in C and integrate that in to device specific applications, but that would mean writing many applications to cover as many platforms as possible - it would also require a lot of maintenance in the future when new platforms or updates required support.
+
+A common solution for writing cross-platform applications is to use a web-based interface; from my research the majority of the targetted devices support a modern web browser, typically based on WebKit. Writing a web application should give me the cross-platform support I need without requiring any device specific code, short of some per-platform optimisations and layouts for different screen sizes. This does mean I will lose some of the flexibility of a device-native application - I will have to emulate a rich, interactive user interface using HTML, JavaScript and CSS, rather than any built-in APIs provided by the device.
+
+As I do not have access to the majority of these devices and optimizing the UI for different screen sizes would be a time consuming process, I will likely only attempt to create a UI for the screen size of the Apple iPad, ensuring that there is no device specific code and that creating layouts for different screen sizes requires no more than the addition of a CSS file. Should time allow, I will also create a layout for smaller mobile phone screens, such as the iPhone.
+
 \subsection{Real-Time Communication}
 As this application requires content to appear on all client devices within a reasonable period of time after they are broadcast, it will need to use some form of real-time communication method. As it seems likely that the only possible multi-platform solution is to use a web-based system, this makes this requirement much more complicated as the HTTP protocol is entirely request-response oriented. If I was using code which was not being executed in the browser, I could use networking technologies such as sockets to allow the client to 'listen' for communication from the broadcaster.
 
-However, there are various ways to support a  communication channel in web applications, WebSockets and Flash Sockets being the most direct solutions although unfortunately they are not yet implemented or available in the large majority of browsers, particularly those on mobile devices. Sockets can also be emulated using techniques such as long polling or multipart streaming. Working out which of these of these techniques to use and writing an implementation which can fallback to each if required will be a complicated part of this project. Ideally, I will be able to find a library for whatever server-side implementation I use which does the majority of this work for me.
+However, there are various ways to support a  communication channel in web applications, WebSockets (from the HTML5 specification) and Flash Sockets being the most direct solutions although unfortunately they are not yet implemented or available in the large majority of browsers, particularly those on mobile devices. Sockets can also be emulated using techniques such as long polling or multipart streaming. Working out which of these of these techniques to use, learning the protocol and writing an implementation which can fallback to another if required will be a complicated part of this project. Ideally, I will be able to find a library for whatever server-side implementation I use which does the majority of this work for me.
 
 As real-time communication is one of the primary features of an ARS, this whole project hinges around this being successful. While I am confident that it is feasible due to experience in building real-time web applications in the past, I will fall back to a simple request-response architecture for content if absolutely necessary, requiring users to click a button to 'request' the next item from the server.
+
+\subsection{Traffic Bottlenecking/Performance}
+My concern with broadcasting content in real-time to hundreds of devices at a time using a typical web server is that it is likely to struggle with the number of requests. Techniques used to emulate real-time communication either require a permanent connection open to the server, or hundreds of requests to the server per minute. Traditional web servers such as Apache use a process-based model, where each additional request requires a new thread meaning many hundreds of connections being opened and closed per minute not only causes high memory usage, but incurs quite a large processing overhead, increasing the time it takes to serve a request as the volume increases.
+
+Event-based servers may be the solution to this issue which use a single thread and an event loop, removing the requirement for context switching. While this does mean significantly lower memory usage and overhead, it doesn't prevent operations in code from blocking, particularly those that involve I/O. For example; a request which queries the database will temporarily hold up the loop until the database responds, as we require a very quick response from the server, this may prove unacceptable.
+
+To resolve this, I can tackle the problem on two fronts; reducing the amount of I/O time required through caching, and attempting to prevent I/O from blocking. Some libraries such as node.js provide an event-loop based language construct, allowing requests to provide a callback which is only executed when the response is returned, allowing the server to continue while waiting for a response. To cache, I could use any number of caching solutions such as an in-memory key-value store.
+
+The requirement to be able to serve many request at a high-speed, while important to a large scale system, is not necessarily required for the system to work, so if this proves too much of a challenge I can safely fall back to a more standard server, such as Apache.
+
+\section{Outline Design}
+The current state of the system design is outlined in this section.
+
+\subsection{Use Cases}
+There are two user roles for this ARS system;
+\begin{itemize}
+\item Presenter - users who will be presenting lessons/meetings - typically a lecturer or teacher.
+\item Audience - users with client devices who will be receiving broadcasted content - typically students or meeting attendees.
+\end{itemize}
+
+Both roles will have different abilities on the system although the audience role is a subset of the presenter role, meaning a presenter can perform all actions on the system. In some cases, additional authorisation is required for certain actions, as noted below.
+
+\begin{tabular}{l l l}
+Task & Presenter & Audience \\
+\hline
+Access presenter system & \checkmark &  \\
+Access client system & \checkmark & \checkmark \\
+Create content & \checkmark & \\
+Create plans & \checkmark & \\
+Edit content & \checkmark if owner & \\
+Edit plans & \checkmark if owner & \\
+Delete content & \checkmark if owner & \\
+Delete plans & \checkmark if owner & \\
+Set plan permissions & \checkmark if owner & \\
+Push content for broadcast & \checkmark & \\
+Access plan from client & \checkmark & \checkmark if authorised \\
+Receive broadcast content & \checkmark & \checkmark if authorised \\
+Respond to content from client & \checkmark & \checkmark if authorised \\
+View responses on presenter system & \checkmark & \\
+View plan history & \checkmark & \checkmark if authorised \\
+\end{tabular}
+
+\todo{Use case diagram goes here}
 
 \bibliography{bibliography}
 
