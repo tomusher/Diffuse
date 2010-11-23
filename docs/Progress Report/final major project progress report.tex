@@ -5,7 +5,7 @@
 \usepackage{epstopdf}
 \usepackage{mdwlist}
 \usepackage{amssymb}
-\usepackage[colorinlistoftodos, textwidth=4cm, shadow]{todonotes}
+\usepackage{todonotes}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \bibliographystyle{plain-annote}
@@ -22,6 +22,8 @@ broadcasting rich interactive content}\\[0.3cm]
 \emph{Author:} Thomas \textsc{Usher} \hspace{1cm} \emph{Supervisor:} Dave \textsc{Price}\\
 \emph{Date:} October 3, 2010 \hspace{1cm} \emph{Version:} 1.0
 \end{center}
+\tableofcontents
+
 \section{Project Summary}
 \subsection{Introduction}
 Audience Response Systems (ARS), more commonly referred to as 'clickers' have been used with varying degrees of success in educational establishments around the world for numerous years. Their use as a means to improve interactivity between students and instructors in an educational environment has been widely documented, with research indicating notable effects on student responsiveness, involvement and success. While this project will not involve additional research in to the value of PRS systems, it will attempt to highlight and enhance upon ``The give-and-take atmosphere encouraged by use of clickers which... makes the students more responsive in general''\cite{wood:clickers}.
@@ -165,7 +167,7 @@ Ensuring support for popular personal computer operating systems should not be a
 
 For this reason; I will group my analysis of the three largest PC operating systems in to one, those three being Windows, Mac OS and Linux. Although all three come in various versions and incarnations, we can assume that given sufficient hardware, they can run any required code.
 
-Lots more stuff goes here.
+\todo{Lots more stuff goes here.}
 
 \section{Goals and Objectives}
 \subsection{System Requirements}
@@ -252,6 +254,7 @@ However, there are various ways to support a  communication channel in web appli
 As real-time communication is one of the primary features of an ARS, this whole project hinges around this being successful. While I am confident that it is feasible due to experience in building real-time web applications in the past, I will fall back to a simple request-response architecture for content if absolutely necessary, requiring users to click a button to 'request' the next item from the server.
 
 \subsection{Traffic Bottlenecking/Performance}
+\label{sec:performance}
 My concern with broadcasting content in real-time to hundreds of devices at a time using a typical web server is that it is likely to struggle with the number of requests. Techniques used to emulate real-time communication either require a permanent connection open to the server, or hundreds of requests to the server per minute. Traditional web servers such as Apache use a process-based model, where each additional request requires a new thread meaning many hundreds of connections being opened and closed per minute not only causes high memory usage, but incurs quite a large processing overhead, increasing the time it takes to serve a request as the volume increases.
 
 Event-based servers may be the solution to this issue which use a single thread and an event loop, removing the requirement for context switching. While this does mean significantly lower memory usage and overhead, it doesn't prevent operations in code from blocking, particularly those that involve I/O. For example; a request which queries the database will temporarily hold up the loop until the database responds, as we require a very quick response from the server, this may prove unacceptable.
@@ -293,6 +296,94 @@ View plan history & \checkmark & \checkmark if authorised \\
 \end{tabular}
 
 \todo{Use case diagram goes here}
+
+\subsection{System Tasks}
+\subsubsection{Authorisation}
+On initially accessing either the presenter system, the user is in an unauthorised state and therefore unable to view any content. They are prompted to enter user credentials and on doing so, the system validates their permissions to ensure they have the presenter role. Once they are validated, the user enters an authorised state and they can view, create and edit content. If their credentials are invalid or they do not have the correct role, an error is displayed and they are returned to the login UI.
+
+On accessing the client, the user is prompted to enter their login credentials. Once verified, they enter an authorised state and are then prompted to enter a plan ID - this is the identifier for the 'lesson' created by the presenter. Once entered, the users' ID is checked against the authorised users for the plan - if they are authorised to access it, then the plan is displayed.
+\todo{Some diagrams}
+
+\subsubsection{Presenter Content Management}
+An authorised user with the presenter role can manage content and plans using the presenter system. On initiating the creation of the required content type, the presenter is given a set of fields to complete, once completed, clicking a button creates the content and adds it to the list of all content.
+
+Selecting the 'edit' option next to a content item from the list of all content takes the user to a set of fields pre-populated with the existing values for the content, they can then make any changes required and click a button to save the changes.
+
+On pressing a 'delete' button next to the content item in a list, the user is prompted for confirmation of the operation and on confirmining, the content item is deleted.
+
+Plans (a set of content items) can be managed in a similar way. Opting to create one gives the presenter a set of fields from which they can choose what content items to include in the plan. They also enter a list of users authorised to access the plan. On clicking a button, the plan is saved.
+
+Editing and deleting plans is done in the same way as with content items.
+\todo{Some sort of diagram}
+
+\subsubsection{Broadcasting Content}
+To broadcast content to users, the presenter must be authorised and have a plan created with a set of content items. Each content item in the list has a 'Push' button next to it. On pressing this button, all users currently logged in and viewing this plan will see the content item on their client devices.
+\todo{Some sort of diagram}
+
+\subsubsection{Working with Content on the Client}
+On authorisation and selection of a plan from the client system, the user is presented with an empty display until content is pushed from the plan by the presenter. There are no options for interaction with the content at this point.
+
+Once new content is pushed to the client, it can be interacted with as specified by the content type. It is also made available in a 'history' of pushed content on the client, which can be navigated as required.
+\todo{More diagrams}
+
+\section{Implementation Options and Choices}
+\subsection{Client System}
+Research in to mobile platforms indicate that there is very little similarity between development solutions for the majority of platforms. I will briefly look at my options for the client application and detail the option I have chosen.
+
+\subsubsection{Common Library}
+Although the majority of the systems I have studied require development in various languages and using device-specific APIs, it is likely that I could build a library in a low-level language such as C++ and create thin UI layers for each device. While this means I could take advantage of the benefits of each platform, it does have a number of disadvantages:
+/begin{itemize}
+/item Time required to create and maintain clients for each platform is prohibitive. It pushes the boundaries of the 'multi-platform' philosophy too far.
+/item I am not proficient in C++ or C, learning these languages to the level required for implementation of these network protocols would take a lot of time.
+/item This system uses many high-level ideas not suited for C/C++.
+/end{itemize}
+
+\subsubsection{Cross-Platform Languages}
+Many devices that I studied support Java. As Java code runs in a virtual machine, there is a significant 'write once run anywhere' benefit with using Java. There would still be a requirement to write device-specific code to interface with their layout APIs. I have used Java extensively, so I would feel comfortable writing an application using it, but I would still need to learn a lot about mobile operating system APIs in order to ensure the system is flexible enough. Java is also not supported on iOS, one of the largest mobile operating systems and the one I use most myself.
+
+\subsubsection{Rich Web Multimedia Platforms}
+Rich web-based platforms such as Flash, Siverlight and JavaFX have implementations on multiple devices. With these platforms, everything from the operational code to the interface are entirely interprted by the platform. This would mean that writing, for example, a Flash-based solution once, would run on every platform which supports Flash without any additional code. Although I feel the idea behind these systems is good, I don't personally believe in requiring proprietary extensions to run the application and I can not find one of these platforms which is available across all platforms I have studied.
+
+\subsubsection{Browser-Based}
+Browsers are available on the vast majority of user agents in variatons incarnations - in my research I noted that every platform I studied had a proficient browser, most being based on the WebKit open source project (providing HTML rendering and JavaScript implementations) which is also used for Google's Chrome and Apple's Safari browsers. From past experience, I know how web applications can be used for excellent cross-platform support, backed up by research in to existing multi-platform ARS' systems, which all appear to be web-based.
+
+A web-based client solution would be accessible from any device with a browser that supported full HTML, JavaScript and some form of real-time communication protocol (even if emulated), features which all of the devices I researched have. No device-specific code would be required, although styles for different screen sizes would be necessary. It would also be possible to use technologies only present in more modern browsers (such as HTML5 features) by making use of graceful degradation on devices that do not support it.
+
+\subsubsection{Decision}
+I will be using a browser-based solution for the client as I feel it is the most appropriate option for a truly multi-platform system. While I may lose some of the flexibility of device-native applications, this is an appropriate compromise. Past experience with web applications using JavaScript and an understanding of how to implement a real-time application also contribute to this decision.
+
+The web application will be a thick client, with the majority of operations performed on the client, this means heavy use of JavaScript and HTML5 features where applicable. The client will connect to a server from which it can retreive content.
+
+\subsection{Presenter System}
+As the presenter system need only be executed on a presenters' computer and does not need to be multi-platform, I could potentially implement it in any language I choose. However, as the client will be web-based, I can reuse a lot of components as well as share resources such as templates if I also implement the presenter as a web-based system. It also means I can use the presenter web server as the server through which my client application can receive content.
+
+I do need to choose what language I will implement the presenter web-system in, although as it is a relatively simple application which just needs to interface with the database, I don't believe the language choice is of particular importance. I could write it in Java, PHP, .NET, Ruby or Python and they would all perform similarly and provide similar libraries - the only factors on which I would select a language would be portability and my knowledge of it. As all of the listed languages are usable on Unix, OSX and Windows servers, I will be using a web development language with which I am most familiar, Python.
+
+A web framework known as Django is available for Python which abstracts away many of the repetitive parts of building a web application; user authentication, databases (using it's own ORM) and templating, all of which are already provided when using Django. As I don't consider these aspects of the system to be a focal point of development in my system, I will be using Django so that I can spend more time concentrating on the important parts; real-time communication and the client.
+
+\subsection{Real-Time Communication on the Server}
+To facilitate fast real-time communication between client and server, I will need a server and language which allows such rapid communication (detailed in section \ref{sec:performance}). Here I will detail which solutions I looked at and my final decision.
+
+\subsubsection{Thread based servers}
+The simplest possible solution is to a thread based server (such as Apache) to host the system. This would work how most typical web applications work; on a new request, all clients connect to the Apache server and a thread is created for each client. If a message is pushed to 100 clients, all 100 clients simultaneously request a resource from the server, creating 100 threads which are closed as soon as these requests are complete. Some clients, due to emulated real-time communication techniques such as long polling, will hold a connection open for the entire duration of their connection, permanently holding resources on the server. I don't believe this would be suitable for a real-time application and am therefore ruling out thread based servers altogether.
+
+\subsubsection{Event based servers}
+Event based servers (Nginx, for example), on receiving a request from the client adds the request to a queue, an event loop runs over the queue, processing the request and executing their callback, allowing requests to come in as other requests are being processed. This means that when a connection is inactive, no resources are being used and that there is significantly less overhead and memory required to handle a request. This leads to the ability to handle a significantly larger number of requests.
+
+\subsubection{Event-driven language frameworks}
+Being able to handle many concurrent connections through the use of an event based server solves part of the problem, but there are still issues if the code being written is blocking (the main execution loop of the program must wait for an event to complete before it can return, holding up other processing). Event driven programming works in the same way as an event driven server - using a main event loop to support callbacks from functions so that operations can continue while I/O is being performed, operating on the results only when they return.
+
+This type of programming paradigm is implementable in the majority of programming languages, although it is more prevalent and easier to implement in functional languages such as Erlang and Scala. There are also a number of frameworks for other languages available which support event-driven networking, such as Twisted (for Python), EventMachine (for Ruby) and Node.js (for JavaScript). 
+
+As I am not familiar with functional languages, I will not be attempting to implement a server in Erlang or Scala, but the existing event-driven networking frameworks interest me as they do not require learning a new language and seem relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seem too bloated for what I need. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it interests me because it uses JavaScript which is also used by my client system (an opportunity for more code reuse and resource sharing) and is a language with which I'm familiar. There is also a library available for it which abstracts a lot of the client-side communication issues as I will detail in the next section.
+
+\subsection{Real-Time Communication on the Client}
+Web-based applications aren't usually known for taking advantage of real-time communication, it wasn't until the increased popularity of AJAX that we saw anything beyond standard request-response style websites. Even now, the most common type of interactions require the web browser to make a request to the server before it updates anything. However, we are now beginning to see interactions where the client can 'listen' to a server, updating whenever something changes. This is made possible using various techniques which either create or emulate 'socket' style connections.
+\todo{stuff here}
+
+\subsection{Hosting}
+As both the client and presenter system require a web server, I will need to configure one for development and testing. I could use a shared hosting provider, but as I'm using relatively complicated communication techniques and a language/framework not usually support on shared hosts, I will use a VPS provided by Linode. The VPS runs Ubuntu 10.04 and allows me full access to everything running on the server.
+
 
 \bibliography{bibliography}
 
