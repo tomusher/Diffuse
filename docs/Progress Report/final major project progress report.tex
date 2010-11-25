@@ -57,7 +57,7 @@ Developing an effective system requires extensive research in to existing ARS so
 A quick Google search for 'Audience Response System' quickly reveals the extent of the ARS market, with many companies producing their own specific hardware and software implementations. While the majority of products available are similar, I will take a more detailed look at a few.
 
 \subsubsection{Qwizdom}
-Qwizdom is the ARS system used by the Computer Science department at Aberystwyth University and is therefore the only one with which I have any direct experience. They provide two hardware solutions for learners:
+Qwizdom\cite{qwizdom:web} is the ARS system used by the Computer Science department at Aberystwyth University and is therefore the only one with which I have any direct experience. They provide two hardware solutions for learners:
 \begin{itemize}
 \item A keypad with a small E-ink display which shows the currently selected answer (the units currently used by Aberystwyth University are older versions of these units with an LCD display).
 \item A keypad with a larger LCD display with the ability to display the current question and answers.
@@ -72,7 +72,7 @@ This keypad style of ARS seems to be the most basic, tried and tested implementa
 The issues with this keypad-style are what I noted in the introduction of this report; limited displays and the requirement for dedicated hardware. The integration with PowerPoint seems to be a good way of encouraging the use of these devices as a supplement to existing slideshow-based teaching, but I feel it makes the interactivity too oriented around slides where they could easily exist as separate entities if the device could display more information.
 
 \subsubsection{IML, Genee World}
-IML and Genee World are companies which both provide standard keypad based ARS', but have additional systems which are more in line with what I am trying to achieve with my project.
+IML\cite{iml:web} and Genee World\cite{genee:web} are companies which both provide standard keypad based ARS', but have additional systems which are more in line with what I am trying to achieve with my project.
 
 ``IML enotes'' is a product focused on group meetings; allowing users on laptops to type feedback on a discussion topic and submit them anonymously over wi-fi to a central computer where they can be collated. The use of laptops is interesting but it appears to require specific software, laptops rented from IML, and an 'IML producer' to be present during the meeting. All of which seem very restrictive.
 
@@ -81,7 +81,7 @@ Genee World provide their ``Virtual G Pad'' solution; a web-based interface whic
 The use of a web-based interface for the ``Virtual G Pad'' seems like an excellent way to ensure cross-device and multi-platform compatibility, definitely something to consider when planning my system.
 
 \subsubsection{TurningPoint ResponseWare}
-Again, TurningPoint offer hardware keypad solutions, but now have their ``ResponseWare Web'' solution. Similar to the ``Virtual G Pad'', this is primarily a web-based interface but it seems device specific applications for iPhone, BlackBerry and Windows Mobile devices are available. The website does not mention whether these applications are required to use this system on these devices or whether the web-based interface will adjust to be used on a touch-based device. There is also no mention of tablet devices or the Android mobile operating system.
+Again, TurningPoint\cite{responseware:web} offer hardware keypad solutions, but now have their ``ResponseWare Web'' solution. Similar to the ``Virtual G Pad'', this is primarily a web-based interface but it seems device specific applications for iPhone, BlackBerry and Windows Mobile devices are available. The website does not mention whether these applications are required to use this system on these devices or whether the web-based interface will adjust to be used on a touch-based device. There is also no mention of tablet devices or the Android mobile operating system.
 
 The system runs over Wi-Fi or a mobile data connection - as it is likely that the majority of educational establishments to which this system is targeted are likely to have an established wireless infrastructure there would be no additional hardware or configuration required. This method of communication seems appropriate for the hardware independent solution I am working towards.
 
@@ -111,7 +111,7 @@ First, I look at mobile operating systems. To determine what were the most popul
 Company & Market Share 2010 Q1(\%) \\
 \hline
 Symbian & 44.3 \\
-Research In Motion & 19.4 \\
+BlackBerry OS & 19.4 \\
 iPhone OS & 15.4 \\
 Android & 9.6 \\
 Microsoft Windows Mobile & 6.8 \\
@@ -121,8 +121,9 @@ Other OSs & 0.7 \\
 
 I will take a more detailed look at all listed OSs with a market share of 5\% or larger. 
 
-\subsubsection{Symbian}
-Symbian, the most popular mobile operating system has gone through many iterations since its original release as Symbian OS 6.0 in 2001 and is now found in all Nokia phones, as well as various mobile devices from Sony Ericsson, Sharp and Samsung.
+\begin{description}
+\item[Symbian] \hfill \\
+Symbian\cite{symbian:web}, the most popular mobile operating system has gone through many iterations since its original release as Symbian OS 6.0 in 2001 and is now found in all Nokia phones, as well as various mobile devices from Sony Ericsson, Sharp and Samsung.
 
 The majority of Symbian devices are basic mobile phones which do not meet the necessary specifications (particularly a lack of a 3G data connection and large screen), but newer Nokia devices running Symbian OS 9.1 and later seem to be suitable, so this is the version of the operating system which I would likely need to target.
 
@@ -130,29 +131,29 @@ Software can be written for Symbian in various languages, primarily C++ with Qt 
 
 While various browsers are available for Symbian devices, they typically use the built-in browser supplied by the vendor. In Nokia's case, the Nokia Browser in Series 60 devices and above is built upon Apple's WebKit project\cite{nokia:browser}, particularly the WebCore and JavaScriptCore components - suggesting that the majority of newer Symbian devices use relatively modern browser components, including support for JavaScript. Some later versions of Symbian on Nokia devices can make use of Flash, Silverlight and JavaFX.
 
-\subsubsection{Research In Motion}
-RIM develops the BlackBerry line of business smartphone devices, all of which run on BlackBerry OS. Most recent BlackBerry devices meet all the specifications listed above.
+\item[BlackBerry OS] \hfill \\
+RIM develops the BlackBerry\cite{blackberry:web} line of business smartphone devices, all of which run on BlackBerry OS. Most recent BlackBerry devices meet all the specifications listed above.
 
 BlackBerry OS applications are typically written in Java using a set of APIs to interface with the operating system - this suggests a lot of device specific-code, so this approach is unlikely to be suitable.
 
-As of BlackBerry OS 6, the bundled browser is also based on WebKit\cite{rim:browser}, and therefore supports modern web features and JavaScript. Later versions of BlackBerry OS also support Flash content, with plans to support Silverlight.
+As of BlackBerry OS 6, the bundled browser is also based on WebKit\cite{rim:browser}, and therefore supports modern web features and JavaScript. Later versions of BlackBerry OS also support Flash content, with plans to support Silverlight
 
-\subsubsection{iPhone OS}
-iPhone OS, now known as iOS is Apple's mobile operating system which runs on all mobile devices built by Apple; iPod touch, iPhone \& iPad. 
+\item[iPhone OS] \hfill \\
+iPhone OS\cite{ios:web}, now known as iOS is Apple's mobile operating system which runs on all mobile devices built by Apple; iPod touch, iPhone \& iPad. 
 
 Applications are built using the iOS SDK and written in Objective-C. They can only be distributed through the Apple Store, which requires approval from Apple and a fee to be a member of the iOS Developer Program. Again, as this requires device independent code in an entirely different language from the OS' I've researched so far, it doesn't seem like a suitable solution.
 
 The browser on iOS is a version of Apple's Safari, also based on WebKit (Apple being the founder of and contributor to the project). iOS does not allow any third-party modifications to the operating system and built-in applications, so browser extensions such as Flash, JavaFX and Silverlight can not be used.
 
-\subsubsection{Android}
-Android is Google's open source mobile operating system licensed under the Apache License, allowing vendors to freely use and extend the OS, and as a result, it has been widely adopted by multiple manufacturers since its initial release.
+\item[Android] \hfill \\
+Android\cite{android:web} is Google's open source mobile operating system licensed under the Apache License, allowing vendors to freely use and extend the OS, and as a result, it has been widely adopted by multiple manufacturers since its initial release.
 
 Applications are typically written using Java and the Android SDK, although due to the open nature of the operating system, most languages can be used. Applications can either be distributed through a store, such as the Android Store bundled with the majority of phones, through a vendor-specific store, or transferred directly to the phone. While the flexibility of this platform could mean only a thin UI layer would need to be written for it, it would still require quite a significant amount of device-specific code to do so.
 
 The bundled browser on Android devices is also based on WebKit, using Google's V8 engine for fast JavaScript execution. The browser can also be extended to use many web application platforms including Flash, Silverlight and potentially JavaFX (although there is no implementation currently available).
 
-\subsubsection{Windows Mobile}
-Microsoft's mobile OS, Windows Mobile has been used on various mobile devices built by a number of the world's largest mobile manufacturers. It is now being phased out in favour of the recently released Windows Phone 7.
+\item[Windows Mobile] \hfill \\
+Microsoft's mobile OS, Windows Mobile\cite{winmo:web} has been used on various mobile devices built by a number of the world's largest mobile manufacturers. It is now being phased out in favour of the recently released Windows Phone 7.
 
 Developing for Windows Mobile requires the use of Visual C++, or code on the .NET Compact Framework - more device independent code.
 
@@ -160,8 +161,10 @@ The Windows Mobile browser has had seen many iterations, although they are all b
 
 {\it{\bf Note regarding Windows Phone 7:} For the purpose of this assignment, as it was released less than two weeks before this report was written, market share figures are not yet available, and based on initial reviews of the operating system, we will assume that Windows Phone 7 has a significant enough market share to be considered, and that it has feature parity with iOS, namely restrictions on custom applications and a modern browser.}
 
-\subsubsection{Other}
+\item[Other] \hfill \\
 There are a number of mobile operating systems which do not currently have a market share above 5\%, either because they have not yet been widely adopted, or because they have only recently been released. These include Nokia's Maemo (based on Debian), Blackberry's upcoming QNX-based Blackberry Tablet OS, and Palm's webOS. While I will not specifically research the applicability of these devices, I am confident that as the majority are either Unix-based, or released within the past two years, they all have a relatively modern web browser.
+
+\end{description}
 
 \subsubsection{PC Operating Systems}
 Ensuring support for popular personal computer operating systems should not be as significant a task as supporting mobile operating systems. New innovations and technologies are almost always first implemented on PC OS' before eventually making their way to mobile devices, a transition which can take many years due to limited or differing hardware and alternative UI paradigms used on mobiles. PC OS' also tend not to be as restrictive as to what software can be compiled on them, usually down to compilers being available for most popular processor architectures.
@@ -317,11 +320,10 @@ View plan history & \checkmark & \checkmark if authorised \\
 \end{tabular}
 
 Figure \ref{fig:usecase} shows a use case diagram of interactions with the system.
-
 \begin{figure}[htb]
 \begin{center}
 \leavevmode
-\includegraphics[width=0.8\textwidth]{use-case}
+\includegraphics[width=0.7\textwidth]{use-case}
 \end{center}
 \caption{Use Case Diagram}
 \label{fig:usecase}
@@ -371,7 +373,7 @@ Many devices that I studied support Java. As Java code runs in a virtual machine
 Rich web-based platforms such as Flash, Siverlight and JavaFX have implementations on multiple devices. With these platforms, everything from the operational code to the interface are entirely interprted by the platform. This would mean that writing, for example, a Flash-based solution once, would run on every platform which supports Flash without any additional code. Although I feel the idea behind these systems is good, I don't personally believe in requiring proprietary extensions to run the application and I can not find one of these platforms which is available across all platforms I have studied.
 
 \subsubsection{Browser-Based}
-Browsers are available on the vast majority of user agents in variatons incarnations - in my research I noted that every platform I studied had a proficient browser, most being based on the WebKit open source project (providing HTML rendering and JavaScript implementations) which is also used for Google's Chrome and Apple's Safari browsers. From past experience, I know how web applications can be used for excellent cross-platform support, backed up by research in to existing multi-platform ARS' systems, which all appear to be web-based.
+Browsers are available on the vast majority of user agents in variatons incarnations - in my research I noted that every platform I studied had a proficient browser, most being based on the WebKit\cite{webkit:web} open source project (providing HTML rendering and JavaScript implementations) which is also used for Google's Chrome and Apple's Safari browsers. From past experience, I know how web applications can be used for excellent cross-platform support, backed up by research in to existing multi-platform ARS' systems, which all appear to be web-based.
 
 A web-based client solution would be accessible from any device with a browser that supported full HTML, JavaScript and some form of real-time communication protocol (even if emulated), features which all of the devices I researched have. No device-specific code would be required, although styles for different screen sizes would be necessary. It would also be possible to use technologies only present in more modern browsers (such as HTML5 features) by making use of graceful degradation on devices that do not support it.
 
@@ -385,7 +387,7 @@ As the presenter system need only be executed on a presenters' computer and does
 
 I do need to choose what language I will implement the presenter web-system in, although as it is a relatively simple application which just needs to interface with the database, I don't believe the language choice is of particular importance. I could write it in Java, PHP, .NET, Ruby or Python and they would all perform similarly and provide similar libraries - the only factors on which I would select a language would be portability and my knowledge of it. As all of the listed languages are usable on Unix, OSX and Windows servers, I will be using a web development language with which I am most familiar, Python.
 
-A web framework known as Django is available for Python which abstracts away many of the repetitive parts of building a web application; user authentication, databases (using it's own ORM) and templating, all of which are already provided when using Django. As I don't consider these aspects of the system to be a focal point of development in my system, I will be using Django so that I can spend more time concentrating on the important parts; real-time communication and the client.
+A web framework known as Django\cite{django:web} is available for Python which abstracts away many of the repetitive parts of building a web application; user authentication, databases (using it's own ORM) and templating, all of which are already provided when using Django. As I don't consider these aspects of the system to be a focal point of development in my system, I will be using Django so that I can spend more time concentrating on the important parts; real-time communication and the client.
 
 The presenter system will also be using a relational database to maintain a persistent store of content and plans. As Django's ORM abstracts the database away and supports many systems, the choice of RDBMS is not as important as it would be if I were not using a framework, therefore I will use the RDBMS with which I am most familiar, MySQL.
 
@@ -393,7 +395,7 @@ The presenter system will also be using a relational database to maintain a pers
 To facilitate fast real-time communication between client and server, I will need a server and language which allows such rapid communication (detailed in section \ref{sec:performance}). Here I will detail which solutions I looked at and my final decision.
 
 \subsubsection{Thread based servers}
-The simplest possible solution is to a thread based server (such as Apache) to host the system. This would work how most typical web applications work; on a new request, all clients connect to the Apache server and a thread is created for each client. If a message is pushed to 100 clients, all 100 clients simultaneously request a resource from the server, creating 100 threads which are closed as soon as these requests are complete. Some clients, due to emulated real-time communication techniques such as long polling, will hold a connection open for the entire duration of their connection, permanently holding resources on the server. I don't believe this would be suitable for a real-time application and am therefore ruling out thread based servers altogether.
+The simplest possible solution is to a thread based server (such as Apache) to host the system. This would work how most typical web applications work; on a new request, all clients connect to the Apache server and a thread is created for each client. If a message is pushed to 100 clients, all 100 clients simultaneously request a resource from the server, creating 100 threads which are closed as soon as these requests are complete\cite{nginxapache:web}. Some clients, due to real-time communication techniques such as long polling, will hold a connection open for the entire duration of their connection, permanently holding resources on the server. I don't believe this would be suitable for a real-time application and am therefore ruling out thread based servers altogether.
 
 \subsubsection{Event based servers}
 Event based servers (Nginx, for example), on receiving a request from the client adds the request to a queue, an event loop runs over the queue, processing the request and executing their callback, allowing requests to come in as other requests are being processed. This means that when a connection is inactive, no resources are being used and that there is significantly less overhead and memory required to handle a request. This leads to the ability to handle a significantly larger number of requests.
@@ -406,7 +408,7 @@ This type of programming paradigm is implementable in the majority of programmin
 As I am not familiar with functional languages, I will not be attempting to implement a server in Erlang or Scala, but the existing event-driven networking frameworks interest me as they do not require learning a new language and seem relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seem too bloated for what I need. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it interests me because it uses JavaScript which is also used by my client system (an opportunity for more code reuse and resource sharing) and is a language with which I'm familiar. There is also a library available for it which abstracts a lot of the client-side communication issues as I will detail in the next section.
 
 \subsection{Real-Time Communication on the Client}
-Web-based applications aren't usually known for taking advantage of real-time communication, it wasn't until the increased popularity of AJAX that we saw anything beyond standard request-response style websites. Even now, the most common type of interactions require the web browser to make a request to the server before it updates anything. However, we are now beginning to see interactions where the client can 'listen' to a server, updating whenever something changes in applications such as chatting. This is made possible using various techniques which either create or emulate 'socket' style connections:
+Web-based applications aren't usually known for taking advantage of real-time communication, it wasn't until the increased popularity of Ajax that we saw anything beyond standard request-response style websites. Even now, the most common type of interactions require the web browser to make a request to the server before it updates anything. However, we are now beginning to see 'comet'\cite{crane:comet} style web sites, where the client can 'listen' to a server, updating whenever something changes in applications such as chatting. This is made possible using various techniques which either create or emulate 'socket' style connections:
 \begin{description}
 \item[WebSockets] \hfill \\
 An implementation of a communication channel over TCP for use implementation in web browsers as part of the W3C HTML5 specification. Currently only implemented in the latest version of modern browsers, excluding Internet Explorer.
