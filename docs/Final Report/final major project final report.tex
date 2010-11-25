@@ -102,11 +102,74 @@ While the goal of my project is to develop a device/OS agnostic system, all the 
 \item Some way of executing code/applications.
 \end{itemize}
 
-Ideally, the system should use a minimal amount of device-specific code and should any be required, it should be easily changed without needing to re-deploy to client devices, so I took a closer look at common platforms, devices and operating systems which met these requirements in order to find a common set of features on which to build the project.
+I will take a closer look at common platforms, devices and operating systems which meet these requirements in order to find a common set of features on which to build the project. Ideally, the system should use a minimal amount of device-specific code and should any be required, it should be easily changed without needing to re-deploy to client devices.
 
-{\it{\bf Note:} The full three page analysis of these platforms will be included in the Final Report, the summary of which is included below:}
+\subsubsection{Mobile Operating Systems}
+First, I look at mobile operating systems. To determine what were the most popular mobile OS', I used an analysis of the smartphone market published in May 2010 by Gartner Inc.\cite{gartner:mobile}:
 
-Although all major platforms support some form of native applications, there are no common languages, platforms or APIs between platforms on which to build the system. However, all studied platforms include a modern web browser with JavaScript support, an ideal platform on which to build a cross-device system. 
+\begin{tabular}{l l}
+Company & Market Share 2010 Q1(\%) \\
+\hline
+Symbian & 44.3 \\
+BlackBerry OS & 19.4 \\
+iPhone OS & 15.4 \\
+Android & 9.6 \\
+Microsoft Windows Mobile & 6.8 \\
+Linux & 3.7 \\
+Other OSs & 0.7 \\
+\end{tabular}
+
+I will take a more detailed look at all listed OSs with a market share of 5\% or larger. 
+
+\begin{description}
+\item[Symbian] \hfill \\
+Symbian\cite{symbian:web}, the most popular mobile operating system has gone through many iterations since its original release as Symbian OS 6.0 in 2001 and is now found in all Nokia phones, as well as various mobile devices from Sony Ericsson, Sharp and Samsung.
+
+The majority of Symbian devices are basic mobile phones which do not meet the necessary specifications (particularly a lack of a 3G data connection and large screen), but newer Nokia devices running Symbian OS 9.1 and later seem to be suitable, so this is the version of the operating system which I would likely need to target.
+
+Software can be written for Symbian in various languages, primarily C++ with Qt but including Python, Java ME, Ruby and .NET. Developing a UI however, would need to use Symbian specific APIs, something which I would like to avoid. Device security is also left up to the vendor, meaning most devices can not run custom code, or only code approved by the vendor (such as through Nokia's Ovi store).
+
+While various browsers are available for Symbian devices, they typically use the built-in browser supplied by the vendor. In Nokia's case, the Nokia Browser in Series 60 devices and above is built upon Apple's WebKit project\cite{nokia:browser}, particularly the WebCore and JavaScriptCore components - suggesting that the majority of newer Symbian devices use relatively modern browser components, including support for JavaScript. Some later versions of Symbian on Nokia devices can make use of Flash, Silverlight and JavaFX.
+
+\item[BlackBerry OS] \hfill \\
+RIM develops the BlackBerry\cite{blackberry:web} line of business smartphone devices, all of which run on BlackBerry OS. Most recent BlackBerry devices meet all the specifications listed above.
+
+BlackBerry OS applications are typically written in Java using a set of APIs to interface with the operating system - this suggests a lot of device specific-code, so this approach is unlikely to be suitable.
+
+As of BlackBerry OS 6, the bundled browser is also based on WebKit\cite{rim:browser}, and therefore supports modern web features and JavaScript. Later versions of BlackBerry OS also support Flash content, with plans to support Silverlight
+
+\item[iPhone OS] \hfill \\
+iPhone OS\cite{ios:web}, now known as iOS is Apple's mobile operating system which runs on all mobile devices built by Apple; iPod touch, iPhone \& iPad. 
+
+Applications are built using the iOS SDK and written in Objective-C. They can only be distributed through the Apple Store, which requires approval from Apple and a fee to be a member of the iOS Developer Program. Again, as this requires device independent code in an entirely different language from the OS' I've researched so far, it doesn't seem like a suitable solution.
+
+The browser on iOS is a version of Apple's Safari, also based on WebKit (Apple being the founder of and contributor to the project). iOS does not allow any third-party modifications to the operating system and built-in applications, so browser extensions such as Flash, JavaFX and Silverlight can not be used.
+
+\item[Android] \hfill \\
+Android\cite{android:web} is Google's open source mobile operating system licensed under the Apache License, allowing vendors to freely use and extend the OS, and as a result, it has been widely adopted by multiple manufacturers since its initial release.
+
+Applications are typically written using Java and the Android SDK, although due to the open nature of the operating system, most languages can be used. Applications can either be distributed through a store, such as the Android Store bundled with the majority of phones, through a vendor-specific store, or transferred directly to the phone. While the flexibility of this platform could mean only a thin UI layer would need to be written for it, it would still require quite a significant amount of device-specific code to do so.
+
+The bundled browser on Android devices is also based on WebKit, using Google's V8 engine for fast JavaScript execution. The browser can also be extended to use many web application platforms including Flash, Silverlight and potentially JavaFX (although there is no implementation currently available).
+
+\item[Windows Mobile] \hfill \\
+Microsoft's mobile OS, Windows Mobile\cite{winmo:web} has been used on various mobile devices built by a number of the world's largest mobile manufacturers. It is now being phased out in favour of the recently released Windows Phone 7.
+
+Developing for Windows Mobile requires the use of Visual C++, or code on the .NET Compact Framework - more device independent code.
+
+The Windows Mobile browser has had seen many iterations, although they are all based on Internet Explorer and therefore support most modern features and JavaScript. While JavaFX and Silverlight are supported on later versions of the platform, Flash support is not available.
+
+{\it{\bf Note regarding Windows Phone 7:} For the purpose of this assignment, as it was released less than two weeks before this report was written, market share figures are not yet available, and based on initial reviews of the operating system, we will assume that Windows Phone 7 has a significant enough market share to be considered, and that it has feature parity with iOS, namely restrictions on custom applications and a modern browser.}
+
+\item[Other] \hfill \\
+There are a number of mobile operating systems which do not currently have a market share above 5\%, either because they have not yet been widely adopted, or because they have only recently been released. These include Nokia's Maemo (based on Debian), Blackberry's upcoming QNX-based Blackberry Tablet OS, and Palm's webOS. While I will not specifically research the applicability of these devices, I am confident that as the majority are either Unix-based, or released within the past two years, they all have a relatively modern web browser.
+
+\end{description}
+
+\subsubsection{PC Operating Systems}
+Ensuring support for popular personal computer operating systems should not be as significant a task as supporting mobile operating systems. New innovations and technologies are almost always first implemented on PC OS' before eventually making their way to mobile devices, a transition which can take many years due to limited or differing hardware and alternative UI paradigms used on mobiles. PC OS' also tend not to be as restrictive as to what software can be compiled on them, usually down to compilers being available for most popular processor architectures.
+
+For this reason; I will consider the three largest PC operating systems to be suitable for running this system, those three being Windows, Mac OS and Linux. Although all three come in various versions and incarnations, we can assume that given sufficient hardware, they can run any required code.
 
 \section{Goals and Objectives}
 \subsection{Outline System Requirements}
@@ -452,8 +515,6 @@ Project Completion & Test, evaluate and write report & 19th Feb - 5th May \\
 Testing & Thoroughly test system to test specification & 19-22nd Feb \\
 Write dissertation & Write dissertation and supporting material & 23rd Feb - 5th May \\
 \end{longtable}
-
-\nocite{*}
 
 \bibliography{bibliography}
 
