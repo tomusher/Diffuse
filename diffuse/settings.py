@@ -102,6 +102,8 @@ INSTALLED_APPS = (
     'motes',
     'mote_weburl',
     'mote_message',
+    'mote_html',
+    'mote_qa',
 )
 
 DEBUG_TOOLBAR_CONFIG = {
