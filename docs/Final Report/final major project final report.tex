@@ -63,7 +63,7 @@ Qwizdom\cite{qwizdom:web} is the ARS system used by the Computer Science departm
 \item A keypad with a larger LCD display with the ability to display the current question and answers.
 \end{itemize}
 
-These interact via RF to a unit attached to a computer. The computer needs to be running ActionPoint, a PowerPoint/Keynote plugin which instructors can use to integrate questions in to their slideshows. When an ActionPoint slide is being displayed during a lecture, students' can submit answers to the question which is then immediately updated in ActionPoint. The lecturer can choose to display a graph of responses which can be reacted to immediately, or saved for reporting.
+These interact via RF to a unit attached to a computer. The computer needs to be running ActionPoint, a PowerPoint/Keynote plugin which instructors can use to integrate questions in to their slideshows. When an ActionPoint slide is being displayed during a lecture, students' can submit answers to the question which is then immediately updated in ActionPoint. The lecturer can choose to display a graph of responses which can be reacted on immediately, or saved for reporting.
 
 Qwizdom also supplies additional hardware for instructors to interact with their slides, including a tablet-style device.
 
@@ -94,7 +94,7 @@ Existing solutions have also provided me with some suggestions as to how to buil
 
 \subsection{Devices and Operating Systems}
 \label{sec:devices}
-While the goal of my project is to develop a device/OS agnostic system, all the devices supported will need to be able to run the features required in an ARS with rich content support. This means they all need:
+While the goal of my project is to develop a device/OS agnostic system, all the devices supported will need to be able to facilitate running the features required in an ARS with rich content support. This means they all need:
 \begin{itemize}
 \item A way to connect to a network, either over a cable, wi-fi or data connection (3G).
 \item A reasonably sized colour screen - for the purposes of displaying rich content, an initial suggestion of a minimum resolution of 480 x 320 seems reasonable.
@@ -102,11 +102,74 @@ While the goal of my project is to develop a device/OS agnostic system, all the 
 \item Some way of executing code/applications.
 \end{itemize}
 
-Ideally, the system should use a minimal amount of device-specific code and should any be required, it should be easily changed without needing to re-deploy to client devices, so I took a closer look at common platforms, devices and operating systems which met these requirements in order to find a common set of features on which to build the project.
+I will take a closer look at common platforms, devices and operating systems which meet these requirements in order to find a common set of features on which to build the project. Ideally, the system should use a minimal amount of device-specific code and should any be required, it should be easily changed without needing to re-deploy to client devices.
 
-The full three page analysis of these platforms will be included in the Final Report, the summary of which is included below:
+\subsubsection{Mobile Operating Systems}
+First, I look at mobile operating systems. To determine what were the most popular mobile OS', I used an analysis of the smartphone market published in May 2010 by Gartner Inc.\cite{gartner:mobile}:
 
-Although all major platforms support some form of native applications, there are no common languages, platforms or APIs between platforms on which to build the system. However, all studied platforms include a modern web browser with JavaScript support, an ideal platform on which to build a cross-device system. 
+\begin{tabular}{l l}
+Company & Market Share 2010 Q1(\%) \\
+\hline
+Symbian & 44.3 \\
+BlackBerry OS & 19.4 \\
+iPhone OS & 15.4 \\
+Android & 9.6 \\
+Microsoft Windows Mobile & 6.8 \\
+Linux & 3.7 \\
+Other OSs & 0.7 \\
+\end{tabular}
+
+I will take a more detailed look at all listed OSs with a market share of 5\% or larger. 
+
+\begin{description}
+\item[Symbian] \hfill \\
+Symbian\cite{symbian:web}, the most popular mobile operating system has gone through many iterations since its original release as Symbian OS 6.0 in 2001 and is now found in all Nokia phones, as well as various mobile devices from Sony Ericsson, Sharp and Samsung.
+
+The majority of Symbian devices are basic mobile phones which do not meet the necessary specifications (particularly a lack of a 3G data connection and large screen), but newer Nokia devices running Symbian OS 9.1 and later seem to be suitable, so this is the version of the operating system which I would likely need to target.
+
+Software can be written for Symbian in various languages, primarily C++ with Qt but including Python, Java ME, Ruby and .NET. Developing a UI however, would need to use Symbian specific APIs, something which I would like to avoid. Device security is also left up to the vendor, meaning most devices can not run custom code, or only code approved by the vendor (such as through Nokia's Ovi store).
+
+While various browsers are available for Symbian devices, they typically use the built-in browser supplied by the vendor. In Nokia's case, the Nokia Browser in Series 60 devices and above is built upon Apple's WebKit project\cite{nokia:browser}, particularly the WebCore and JavaScriptCore components - suggesting that the majority of newer Symbian devices use relatively modern browser components, including support for JavaScript. Some later versions of Symbian on Nokia devices can make use of Flash, Silverlight and JavaFX.
+
+\item[BlackBerry OS] \hfill \\
+RIM develops the BlackBerry\cite{blackberry:web} line of business smartphone devices, all of which run on BlackBerry OS. Most recent BlackBerry devices meet all the specifications listed above.
+
+BlackBerry OS applications are typically written in Java using a set of APIs to interface with the operating system - this suggests a lot of device specific-code, so this approach is unlikely to be suitable.
+
+As of BlackBerry OS 6, the bundled browser is also based on WebKit\cite{rim:browser}, and therefore supports modern web features and JavaScript. Later versions of BlackBerry OS also support Flash content, with plans to support Silverlight
+
+\item[iPhone OS] \hfill \\
+iPhone OS\cite{ios:web}, now known as iOS is Apple's mobile operating system which runs on all mobile devices built by Apple; iPod touch, iPhone \& iPad. 
+
+Applications are built using the iOS SDK and written in Objective-C. They can only be distributed through the Apple Store, which requires approval from Apple and a fee to be a member of the iOS Developer Program. Again, as this requires device independent code in an entirely different language from the OS' I've researched so far, it doesn't seem like a suitable solution.
+
+The browser on iOS is a version of Apple's Safari, also based on WebKit (Apple being the founder of and contributor to the project). iOS does not allow any third-party modifications to the operating system and built-in applications, so browser extensions such as Flash, JavaFX and Silverlight can not be used.
+
+\item[Android] \hfill \\
+Android\cite{android:web} is Google's open source mobile operating system licensed under the Apache License, allowing vendors to freely use and extend the OS, and as a result, it has been widely adopted by multiple manufacturers since its initial release.
+
+Applications are typically written using Java and the Android SDK, although due to the open nature of the operating system, most languages can be used. Applications can either be distributed through a store, such as the Android Store bundled with the majority of phones, through a vendor-specific store, or transferred directly to the phone. While the flexibility of this platform could mean only a thin UI layer would need to be written for it, it would still require quite a significant amount of device-specific code to do so.
+
+The bundled browser on Android devices is also based on WebKit, using Google's V8 engine for fast JavaScript execution. The browser can also be extended to use many web application platforms including Flash, Silverlight and potentially JavaFX (although there is no implementation currently available).
+
+\item[Windows Mobile] \hfill \\
+Microsoft's mobile OS, Windows Mobile\cite{winmo:web} has been used on various mobile devices built by a number of the world's largest mobile manufacturers. It is now being phased out in favour of the recently released Windows Phone 7.
+
+Developing for Windows Mobile requires the use of Visual C++, or code on the .NET Compact Framework - more device independent code.
+
+The Windows Mobile browser has had seen many iterations, although they are all based on Internet Explorer and therefore support most modern features and JavaScript. While JavaFX and Silverlight are supported on later versions of the platform, Flash support is not available.
+
+{\it{\bf Note regarding Windows Phone 7:} For the purpose of this assignment, as it was released less than two weeks before this report was written, market share figures are not yet available, and based on initial reviews of the operating system, we will assume that Windows Phone 7 has a significant enough market share to be considered, and that it has feature parity with iOS, namely restrictions on custom applications and a modern browser.}
+
+\item[Other] \hfill \\
+There are a number of mobile operating systems which do not currently have a market share above 5\%, either because they have not yet been widely adopted, or because they have only recently been released. These include Nokia's Maemo (based on Debian), Blackberry's upcoming QNX-based Blackberry Tablet OS, and Palm's webOS. While I will not specifically research the applicability of these devices, I am confident that as the majority are either Unix-based, or released within the past two years, they all have a relatively modern web browser.
+
+\end{description}
+
+\subsubsection{PC Operating Systems}
+Ensuring support for popular personal computer operating systems should not be as significant a task as supporting mobile operating systems. New innovations and technologies are almost always first implemented on PC OS' before eventually making their way to mobile devices, a transition which can take many years due to limited or differing hardware and alternative UI paradigms used on mobiles. PC OS' also tend not to be as restrictive as to what software can be compiled on them, usually down to compilers being available for most popular processor architectures.
+
+For this reason; I will consider the three largest PC operating systems to be suitable for running this system, those three being Windows, Mac OS and Linux. Although all three come in various versions and incarnations, we can assume that given sufficient hardware, they can run any required code.
 
 \section{Goals and Objectives}
 \subsection{Outline System Requirements}
@@ -121,7 +184,7 @@ An initial list of system requirements which will be elaborated on in a full sys
 \item A presenter should be able to push any created content to the audience through this interface.
 \item Responses from the audience should be visible in this interface.
 \item Types of content available for creation should be extensible without having to change any core components.
-\item Authorisation should be required to access the presenter interface.
+\item Authorisiation should be required to access the presenter interface.
 \end{itemize}
 \subsubsection{Client}
 \begin{itemize}
@@ -158,14 +221,29 @@ Although I would like this system to be as flexible as possible, I have identifi
 For this project, I wanted to enjoy the development of the system as much as possible, so adopting a process model that best suited the way I write software was important to me. As my typical development methodology is 'hack at it until it works', I wanted to find a process that injected a degree of organisation in to the process, giving me a way to plan and view my progress while maintaining focus on the code rather than the documentation.
 
 \subsection{Waterfall Model}
-The 'traditional' methodology for software development goes through five steps, each of which must be completed before the project can progress to the next; Requirements, Design, Implementation, Verification and Maintenance.
+The 'traditional' methodology for software development goes through five steps, each of which must be completed before the project can progress to the next:
+\begin{enumerate}
+\item Requirements - A software requirement specification is produced, outlining all the requirements for the system.
+\item Design - A design specification is created which details how all elements of the system will be designed and how they interact.
+\item Implementation - The stage where the software is built to the design specification.
+\item Verification - Ensuring the system meets the requirements.
+\item Maintenance - Correct issues and ensure the system continues to run as required.
+\end{enumerate}
 
 This process would allow me to concentrate on the code once I reached the implementation stage, but it does require a lot of planning to begin with. It would also require me to have a very clear design before I even wrote a line of code without much of a chance to change that design during development. For example; I would prefer to be able to experiment with the server side of the project before I make a final decision on the design for other dependant parts such as the client.
 
 \subsection{Test Driven Development}
 TDD is very different to the waterfall model in that there is very little documentation required and the entire development process is built around the code.
 
-Development consists of a rapid cycle of writing a test, writing code to pass the test and repeating until all features are implemented.
+Development consists of a rapid cycle:
+\begin{enumerate}
+\item Test written - every new feature begins with a test.
+\item Run tests - ensuring the new test fails meaning the test is valid and that the feature is currently not implemented.
+\item Write code - the simplest possible code that will pass the tst is written.
+\item Run tests - ensure the new test now passes.
+\item Refactor code - tidy the code on every iteration, ensuring the test still pass after refactoring.
+\end{enumerate}
+This process is repeated until all features are implemented.
 
 I feel that TDD, while highly oriented around the code, would be unsuitable for my individual development style as it would prevent me from experimenting with the technologies I use. This project is also highly dependent on network communications between multiple systems written in different languages, writing tests for this type of interaction would likely overcomplicate the implementation.
 
@@ -188,22 +266,26 @@ As I know the requirements of my system, I will develop a requirement specificat
 \subsection{Multiple Device Support}
 One of the main goals of this system is to have the client usable on a wide range of computing devices. My extensive research in to these devices in section \ref{sec:devices} shows that there is very little crossover in language support between platforms. I could potentially write a core library in C and integrate that in to device specific applications, but that would mean writing many applications to cover as many platforms as possible - it would also require a lot of maintenance in the future when new platforms or updates required support.
 
-As I do not have access to the majority of these devices and optimizing the system for different devices/screen sizes would be a time consuming process, I will likely only attempt to create a client for the Apple iPad, ensuring that where there is device specific code, it is sufficiently abstracted, and that creating clients for other devices require a minimal amount of code.
+A common solution for writing cross-platform applications is to use a web-based interface; from my research the majority of the targetted devices support a modern web browser, typically based on WebKit. Writing a web application should give me the cross-platform support I need without requiring any device specific code, short of some per-platform optimisations and layouts for different screen sizes. This does mean I will lose some of the flexibility of a device-native application - I will have to emulate a rich, interactive user interface using HTML, JavaScript and CSS, rather than any built-in APIs provided by the device.
+
+As I do not have access to the majority of these devices and optimizing the UI for different screen sizes would be a time consuming process, I will likely only attempt to create a UI for the screen size of the Apple iPad, ensuring that there is no device specific code and that creating layouts for different screen sizes requires no more than the addition of a CSS file. Should time allow, I will also create a layout for smaller mobile phone screens, such as the iPhone.
 
 \subsection{Real-Time Communication}
 As this application requires content to appear on all client devices within a reasonable period of time after they are broadcast, it will need to use some form of real-time communication method. As it seems likely that the only possible multi-platform solution is to use a web-based system, this makes this requirement much more complicated as the HTTP protocol is entirely request-response oriented. If I was using code which was not being executed in the browser, I could use networking technologies such as sockets to allow the client to 'listen' for communication from the broadcaster.
 
-However, there are various techniques to support a  communication channel in web applications. Working out which of these of these techniques to use, learning the protocol and writing an implementation which can fallback to another if required will be a complicated part of this project. Ideally, I will be able to find a library for whatever server-side implementation I use which does the majority of this work for me.
+However, there are various ways to support a  communication channel in web applications, WebSockets (from the HTML5 specification) and Flash Sockets being the most direct solutions although unfortunately they are not yet implemented or available in the large majority of browsers, particularly those on mobile devices. Sockets can also be emulated using techniques such as long polling or multipart streaming. Working out which of these of these techniques to use, learning the protocol and writing an implementation which can fallback to another if required will be a complicated part of this project. Ideally, I will be able to find a library for whatever server-side implementation I use which does the majority of this work for me.
 
 As real-time communication is one of the primary features of an ARS, this whole project hinges around this being successful. While I am confident that it is feasible due to experience in building real-time web applications in the past, I will fall back to a simple request-response architecture for content if absolutely necessary, requiring users to click a button to 'request' the next item from the server.
 
 \subsection{Traffic Bottlenecking/Performance}
 \label{sec:performance}
-My concern with broadcasting content in real-time to hundreds of devices at a time using a typical server is that it is likely to struggle with the number of requests. Real-time communication either requires a permanent connection open to the server, or hundreds of requests to the server per minute. Finding a balance between processing overhead, memory usage and speed will be a challenge here.
+My concern with broadcasting content in real-time to hundreds of devices at a time using a typical web server is that it is likely to struggle with the number of requests. Techniques used to emulate real-time communication either require a permanent connection open to the server, or hundreds of requests to the server per minute. Traditional web servers such as Apache use a process-based model, where each additional request requires a new thread meaning many hundreds of connections being opened and closed per minute not only causes high memory usage, but incurs quite a large processing overhead, increasing the time it takes to serve a request as the volume increases.
 
-Many requests to the server also mean many requests to the database. I can tackle this problem on two fronts; reducing the amount of I/O time required through caching, and attempting to prevent I/O from blocking. Some libraries provide an event-loop based language construct, allowing requests to provide a callback which is only executed when the response is returned, allowing the server to continue while waiting for a response. To cache, I could use any number of caching solutions such as an in-memory key-value store.
+Event-based servers may be the solution to this issue which use a single thread and an event loop, removing the requirement for context switching. While this does mean significantly lower memory usage and overhead, it doesn't prevent operations in code from blocking, particularly those that involve I/O. For example; a request which queries the database will temporarily hold up the loop until the database responds, as we require a very quick response from the server, this may prove unacceptable.
 
-The requirement to be able to serve many request at a high-speed, while important to a large scale system, is not necessarily required for the system to work, so if this proves too much of a challenge I can safely fall back to a more standard server.
+To resolve this, I can tackle the problem on two fronts; reducing the amount of I/O time required through caching, and attempting to prevent I/O from blocking. Some libraries such as node.js provide an event-loop based language construct, allowing requests to provide a callback which is only executed when the response is returned, allowing the server to continue while waiting for a response. To cache, I could use any number of caching solutions such as an in-memory key-value store.
+
+The requirement to be able to serve many request at a high-speed, while important to a large scale system, is not necessarily required for the system to work, so if this proves too much of a challenge I can safely fall back to a more standard server, such as Apache.
 
 \section{Outline Design}
 The current state of the system design is outlined in this section.
@@ -248,12 +330,17 @@ Figure \ref{fig:usecase} shows a use case diagram of interactions with the syste
 \end{figure}
 
 \subsection{System Tasks}
+\subsubsection{Authorisation}
+On initially accessing either the presenter system, the user is in an unauthorised state and therefore unable to view any content. They are prompted to enter user credentials and on doing so, the system validates their permissions to ensure they have the presenter role. Once they are validated, the user enters an authorised state and they can view, create and edit content. If their credentials are invalid or they do not have the correct role, an error is displayed and they are returned to the login UI.
+
+On accessing the client, the user is prompted to enter their login credentials. Once verified, they enter an authorised state and are then prompted to enter a plan ID - this is the identifier for the 'lesson' created by the presenter. Once entered, the users' ID is checked against the authorised users for the plan - if they are authorised to access it, then the plan is displayed.
+
 \subsubsection{Presenter Content Management}
 An authorised user with the presenter role can manage content and plans using the presenter system. On initiating the creation of the required content type, the presenter is given a set of fields to complete, once completed, clicking a button creates the content and adds it to the list of all content.
 
 Selecting the 'edit' option next to a content item from the list of all content takes the user to a set of fields pre-populated with the existing values for the content, they can then make any changes required and click a button to save the changes.
 
-On pressing a 'delete' button next to the content item in a list, the user is prompted for confirmation of the operation and on confirming, the content item is deleted.
+On pressing a 'delete' button next to the content item in a list, the user is prompted for confirmation of the operation and on confirmining, the content item is deleted.
 
 Plans (a set of content items) can be managed in a similar way. Opting to create one gives the presenter a set of fields from which they can choose what content items to include in the plan. They also enter a list of users authorised to access the plan. On clicking a button, the plan is saved.
 
@@ -269,11 +356,31 @@ Once new content is pushed to the client, it can be interacted with as specified
 
 \section{Implementation Options and Choices}
 \subsection{Client System}
-Research in to mobile platforms indicate that there is very little similarity between development solutions for the majority of platforms. I took a look at my options for the client application, a common library, the use of cross-platform languages, using a rich web multimedia platform and a browser-based application. The full analysis will be available in my Final Report, the conclusion of which is:
+Research in to mobile platforms indicate that there is very little similarity between development solutions for the majority of platforms. I will briefly look at my options for the client application and detail the option I have chosen.
 
+\subsubsection{Common Library}
+Although the majority of the systems I have studied require development in various languages and using device-specific APIs, it is likely that I could build a library in a low-level language such as C++ and create thin UI layers for each device. While this means I could take advantage of the benefits of each platform, it does have a number of disadvantages:
+/begin{itemize}
+/item Time required to create and maintain clients for each platform is prohibitive. It pushes the boundaries of the 'multi-platform' philosophy too far.
+/item I am not proficient in C++ or C, learning these languages to the level required for implementation of these network protocols would take a lot of time.
+/item This system uses many high-level ideas not suited for C/C++.
+/end{itemize}
+
+\subsubsection{Cross-Platform Languages}
+Many devices that I studied support Java. As Java code runs in a virtual machine, there is a significant 'write once run anywhere' benefit with using Java. There would still be a requirement to write device-specific code to interface with their layout APIs. I have used Java extensively, so I would feel comfortable writing an application using it, but I would still need to learn a lot about mobile operating system APIs in order to ensure the system is flexible enough. Java is also not supported on iOS, one of the largest mobile operating systems and the one I use most myself.
+
+\subsubsection{Rich Web Multimedia Platforms}
+Rich web-based platforms such as Flash, Siverlight and JavaFX have implementations on multiple devices. With these platforms, everything from the operational code to the interface are entirely interprted by the platform. This would mean that writing, for example, a Flash-based solution once, would run on every platform which supports Flash without any additional code. Although I feel the idea behind these systems is good, I don't personally believe in requiring proprietary extensions to run the application and I can not find one of these platforms which is available across all platforms I have studied.
+
+\subsubsection{Browser-Based}
+Browsers are available on the vast majority of user agents in variatons incarnations - in my research I noted that every platform I studied had a proficient browser, most being based on the WebKit\cite{webkit:web} open source project (providing HTML rendering and JavaScript implementations) which is also used for Google's Chrome and Apple's Safari browsers. From past experience, I know how web applications can be used for excellent cross-platform support, backed up by research in to existing multi-platform ARS' systems, which all appear to be web-based.
+
+A web-based client solution would be accessible from any device with a browser that supported full HTML, JavaScript and some form of real-time communication protocol (even if emulated), features which all of the devices I researched have. No device-specific code would be required, although styles for different screen sizes would be necessary. It would also be possible to use technologies only present in more modern browsers (such as HTML5 features) by making use of graceful degradation on devices that do not support it.
+
+\subsubsection{Decision}
 I will be using a browser-based solution for the client as I feel it is the most appropriate option for a truly multi-platform system. While I may lose some of the flexibility of device-native applications, this is an appropriate compromise. Past experience with web applications using JavaScript and an understanding of how to implement a real-time application also contribute to this decision.
 
-The web application will be a thick client, with the majority of operations performed on the client, this means heavy use of JavaScript and HTML5 features where applicable. The client will connect to a server from which it can retrieve content.
+The web application will be a thick client, with the majority of operations performed on the client, this means heavy use of JavaScript and HTML5 features where applicable. The client will connect to a server from which it can retreive content.
 
 \subsection{Presenter System}
 As the presenter system need only be executed on a presenters' computer and does not need to be multi-platform, I could potentially implement it in any language I choose. However, as the client will be web-based, I can reuse a lot of components as well as share resources such as templates if I also implement the presenter as a web-based system. It also means I can use the presenter web server as the server through which my client application can receive content.
@@ -285,14 +392,35 @@ A web framework known as Django\cite{django:web} is available for Python which a
 The presenter system will also be using a relational database to maintain a persistent store of content and plans. As Django's ORM abstracts the database away and supports many systems, the choice of RDBMS is not as important as it would be if I were not using a framework, therefore I will use the RDBMS with which I am most familiar, MySQL.
 
 \subsection{Real-Time Communication on the Server}
-To facilitate fast real-time communication between client and server, I will need a server and language which allows such rapid communication (detailed in section \ref{sec:performance}). A brief analysis of thread-based servers, event-based servers and event-oriented language frameworks (which will be included in the Final Report) lead me to the conclusion below
+To facilitate fast real-time communication between client and server, I will need a server and language which allows such rapid communication (detailed in section \ref{sec:performance}). Here I will detail which solutions I looked at and my final decision.
+
+\subsubsection{Thread based servers}
+The simplest possible solution is to a thread based server (such as Apache) to host the system. This would work how most typical web applications work; on a new request, all clients connect to the Apache server and a thread is created for each client. If a message is pushed to 100 clients, all 100 clients simultaneously request a resource from the server, creating 100 threads which are closed as soon as these requests are complete\cite{nginxapache:web}. Some clients, due to real-time communication techniques such as long polling, will hold a connection open for the entire duration of their connection, permanently holding resources on the server. I don't believe this would be suitable for a real-time application and am therefore ruling out thread based servers altogether.
+
+\subsubsection{Event based servers}
+Event based servers (Nginx, for example), on receiving a request from the client adds the request to a queue, an event loop runs over the queue, processing the request and executing their callback, allowing requests to come in as other requests are being processed. This means that when a connection is inactive, no resources are being used and that there is significantly less overhead and memory required to handle a request. This leads to the ability to handle a significantly larger number of requests.
+
+\subsubsection{Event-driven language frameworks}
+Being able to handle many concurrent connections through the use of an event based server solves part of the problem, but there are still issues if the code being written is blocking (the main execution loop of the program must wait for an event to complete before it can return, holding up other processing). Event driven programming works in the same way as an event driven server - using a main event loop to support callbacks from functions so that operations can continue while I/O is being performed, operating on the results only when they return.
+
+This type of programming paradigm is implementable in the majority of programming languages, although it is more prevalent and easier to implement in functional languages such as Erlang and Scala. There are also a number of frameworks for other languages available which support event-driven networking, such as Twisted (for Python), EventMachine (for Ruby) and Node.js (for JavaScript). 
 
 As I am not familiar with functional languages, I will not be attempting to implement a server in Erlang or Scala, but the existing event-driven networking frameworks interest me as they do not require learning a new language and seem relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seem too bloated for what I need. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it interests me because it uses JavaScript which is also used by my client system (an opportunity for more code reuse and resource sharing) and is a language with which I'm familiar. There is also a library available for it which abstracts a lot of the client-side communication issues as I will detail in the next section.
 
 \subsection{Real-Time Communication on the Client}
-Web-based applications aren't usually known for taking advantage of real-time communication, however, we are now beginning to see 'comet'\cite{crane:comet} style web sites, where the client can 'listen' to a server, updating whenever something changes in applications such as chatting. This is made possible using various techniques which either create or emulate 'socket' style connections; WebSockets, Flash Sockets, Ajax long polling and Muiltipart streaming. My more detailed analysis of these techniques will be made available in the Final Report.
+Web-based applications aren't usually known for taking advantage of real-time communication, it wasn't until the increased popularity of Ajax that we saw anything beyond standard request-response style websites. Even now, the most common type of interactions require the web browser to make a request to the server before it updates anything. However, we are now beginning to see 'comet'\cite{crane:comet} style web sites, where the client can 'listen' to a server, updating whenever something changes in applications such as chatting. This is made possible using various techniques which either create or emulate 'socket' style connections:
+\begin{description}
+\item[WebSockets] \hfill \\
+An implementation of a communication channel over TCP for use implementation in web browsers as part of the W3C HTML5 specification. Currently only implemented in the latest version of modern browsers, excluding Internet Explorer.
+\item[Flash Sockets] \hfill \\
+TCP sockets can also be implemented using the ActionScript 3.0 Socket class, requiring the browser to load a Flash file and therefore requiring the Flash browser plugin. While this is the next best thing to using WebSockets, many mobile browsers do not fully support Flash.
+\item[Ajax long polling] \hfill \\
+A technique which is most commonly used for real-time web applications as it only requires a browser to support the XMLHttpRequest object, commonly used for Ajax interactions. This technique makes an asynchronous request to the server which the server keeps open until it has new data to send. As soon as new data has been received, the browser starts a new long polling request. While this technique is available on more devices, it is also slower and causes the browser to constantly be in a 'loading' state.
+\item[Multipart streaming] \hfill \\
+The XMLHttpRequest object can also be used to react to a server using a multipart content type; suggesting to the browser that the response will be delivered in multiple parts. The browser keeps the connection open and calls a callback function whenever a new part of the response is delivered.
+\end{description}
 
-Unfortunately, the only one which reliably works on a large subset of browsers is long polling. I could implement the system using just this techniques, but it would then be unable to take advantage of the faster protocols such as WebSockets, available on the latest mobile browsers (such as Safari on iOS 4.2.1).
+There are other techniques, but the above are most commonly used. Unfortunately, the only one which reliably works on a large subset of browsers is long polling. I could implement the system using just this techniques, but it would then be unable to take advantage of the faster protocols such as WebSockets, available on the latest mobile browsers (such as Safari on iOS 4.2.1).
 
 A library is available for Node.js, socket.io which allows both the client and server to determine which technique to be used and fall back to it as required, with an API to abstract these details away. This would allow me to support many different browsers with whatever technique they require without having to re-implement all the methods and is therefore what I will be using for this part of the system.
 
@@ -301,7 +429,11 @@ To have content pushed from the presenter system to the client, I will need a wa
 
 To begin with, it is necessary to figure out in what format I should be serialising data for transfer between all the systems involved. As both Python and JavaScript have native support for serialising to/from JSON (JavaScript Object Notation), a lightweight format designed for data transmitted between a server and web application, this seems like a natural fit for this project.
 
-Sending the data from presenter to the node.js server will be done by publishing the latest object ID to be broadcast directly to a pub/sub channel which the distribution server is subscribed to. Redis, a key-value store by VMWare will provide the channel, as it has pubsub support as well as libraries for both Django and Node.js. On receiving an update from the channel, the node server can request the JSON object from the presenter server, cache it in Redis and then distribute it out to clients from the cached copy.
+Sending the data from presenter to the node.js server could be done by sending it a POST request with the JSON as the value, which could then parse the object and determine which clients to send it to. The node.js server will then need to cache this object so that all future request for it from the client will not cause an additional request back to the presenter, leading back to the original bottlenecking problem.
+
+It would be possible to simply have the distribution server store the JSON in memory, but if this system were serving tens of sets of audiences at a time, this caching implementation would best be suited to a tool designed for this type of use. Key-value databases are particularly useful at this type of task, allowing very quick retrieval of content by key from memory. Memcached is a commonly used implementation, but I have experience with Redis, a VMWare product which performs a similar task, has a very simple, clean interface and has libraries for both Django and Node.js.
+
+Redis can also be used as a Publish/Subscribe server - allowing me to do away with the POST request by having Django publish the latest object ID to be broadcast directly to a pub/sub channel which the distribution server is subscribed to. On receiving an update from the channel, the node server can request the JSON object from the presenter server, cache it in Redis and then distribute it out to clients from the cached copy.
 
 \subsection{Hosting}
 As both the client and presenter system require a web server, I will need to configure one for development and testing. I could use a shared hosting provider, but as I'm using relatively complicated communication techniques and a language/framework not usually support on shared hosts, I will use a VPS provided by Linode. The VPS runs Ubuntu 10.04 and allows me full access to everything running on the server.
@@ -319,17 +451,14 @@ My chosen process model, iterative development allows me to break down the proje
 I have not used a system to calculate how long each task will take, instead choosing to estimate based on experience of similar tasks. Instead, I have moved non-critical, 'nice to have' tasks to iteration 6. Should I have any unfinished tasks from iteration 1-5 to complete, I will do these in iteration 6 instead.
  
 \subsection{Iteration Breakdown}
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+\begin{longtable}{l p{7cm} l}
 Task & Description & Days \\
 \hline
 Iteration 0 & Initial Planning \& Configuration & 26-28th Nov \\
 \hline
 Produce project requirements & Create a document expanding on this list with project requirements, break them down in to iterations & 26-28th Nov  \\
 Produce test plan & Create a test plan for each iteration to test whether requirements for that iteration have been met. Include integration tests and test for the complete system. & 26-28th Nov \\
-Configure server & Install Nginx, Node.js, MySQL and Redis on VPS and configure as required & 28th Nov \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Configure server & Install Nginx, Node.js, MySQL and Redis on VPS and configure as required & 28th Nov \\[1cm]
 \hline
 Iteration 1 & Presenter System & 29th Nov - 10th Dec \\
 \hline
@@ -338,10 +467,7 @@ Administration interface & Develop basic interface for managing and creating con
 Serialisation system & Create system for serialising content objects in to JSON for transfer to the distribution server & 7th Dec \\
 Authorisation system & Develop system for authorising presenter users & 8th Dec \\
 Pushing content & Create interface with Redis pub/sub channel for pushing content as required & 9th Dec \\
-Testing & Execute test plan, produce updated documents as required & 10th Dec \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Testing & Execute test plan, produce updated documents as required & 10th Dec \\[1cm]
 \hline
 Iteration 2 & Distribution Server & 11 - 18th Dec \\
 \hline
@@ -349,10 +475,7 @@ Redis interface & Configure interface to Redis pub/sub channel for receiving upd
 Caching system & Use Redis for caching content to be broadcast & 11-13th Dec \\
 Broadcast configuration & Use socket.io for broadcasting content to the required channels & 14-15th Dec \\
 Content server & Enable client to connect to server for accessing resources for thick client & 16-17th Dec \\
-Testing & Execute test plan, produce updated documents as required & 18th Dec \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Testing & Execute test plan, produce updated documents as required & 18th Dec \\[1cm]
 \hline
 Iteration 3 & Client System & 19 - 30th Dec \\
 \hline
@@ -360,10 +483,7 @@ Authorisation & Enable users to authorise themselves to receive content & 19th D
 Real-time connection & Use socket.io to listen to content from distribution server & 20th Dec \\
 Templating system & Create system for parsing the JSON, fetching a template from the server and displaying the content as required & 21-23rd Dec \\
 History & Create interface for navigating broadcast history on the client & 27-29th Dec \\
-Testing & Execute test plan, produce updated documents as required & 30th Dec \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Testing & Execute test plan, produce updated documents as required & 30th Dec \\[1cm]
 \hline
 Iteration 4 & Interactivity & 1 - 13th Jan \\
 \hline
@@ -371,10 +491,7 @@ Specify interactivity & Allow templates to specify how a user can interact with 
 Serialise interactions & Create module for serialising interactions to JSON for returning to the server & 4-5th Jan \\
 Distribute responses & Enable distribution server to return responses to presenter & 6-9th Jan \\
 Parse responses & Enable presenter system to parse and store responses from content & 10-12th Jan \\
-Testing & Execute test plan, produce updated documents as required & 13th Jan \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Testing & Execute test plan, produce updated documents as required & 13th Jan \\[1cm]
 \hline
 Iteration 5 & Additional Features & 14th Jan - 8th Feb \\
 \hline
@@ -383,10 +500,7 @@ Examination Period & & 17th-29th Jan \\
 Improved presenter interface & Create Ajax-style interactions to improve content creation process & 30th Jan - 2nd Feb \\
 Device independent client & Abstract device-specific code (CSS) on client away & 3rd Feb \\
 Create iPad style & Develop CSS for laying out content on an iPad display & 4-7th Feb \\
-Testing & Execute test plan, produce updated documents as required & 8th Feb \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Testing & Execute test plan, produce updated documents as required & 8th Feb \\[1cm]
 \hline
 Iteration 6 & Polish System & 9 - 18th Feb \\
 \hline
@@ -394,18 +508,13 @@ Support other devices & Create additional CSS files to demo support on other dev
 Clean presenter interface & Tidy up presenter UI for ease of use & 12-13th Feb \\
 Clean client interface & Tidy up client UI to ensure content is easy to see and interact with & 14-15th Feb \\
 Add more content types & Add a content type which could be used in a different situation, such as a business meeting, for demonstration purposes & 16-17th Feb \\
-Testing & Execute test plan, produce updated documents as required & 18th Feb \\
-\end{tabular}
-
-\begin{tabular}{p{5cm} p{7cm} p{4cm}}
+Testing & Execute test plan, produce updated documents as required & 18th Feb \\[1cm]
 \hline
 Project Completion & Test, evaluate and write report & 19th Feb - 5th May \\
 \hline
 Testing & Thoroughly test system to test specification & 19-22nd Feb \\
 Write dissertation & Write dissertation and supporting material & 23rd Feb - 5th May \\
-\end{tabular}
-
-\nocite{*}
+\end{longtable}
 
 \bibliography{bibliography}
 
