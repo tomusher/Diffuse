@@ -9,7 +9,7 @@ class Question(Mote):
         output = super(Question, self).as_dict()
         answer = []
         for a in self.answer_set.all():
-            answer.append(a.answer_text)
+            answer.append(a.as_dict())
 
         output['data'] = {
             "question_text": self.question_text,
@@ -20,3 +20,12 @@ class Question(Mote):
 class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer_text = models.CharField(max_length=255)
+    correct = models.NullBooleanField()
+
+    def as_dict(self):
+        output = {
+            "pk": self.pk,
+            "answer_text": self.answer_text,
+            "correct": self.correct,
+        }
+        return output
