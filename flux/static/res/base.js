@@ -30,4 +30,7 @@ function update(obj) {
     });
 }
 
+function respond(obj) {
+    socket.send(JSON.stringify(obj));
+}
 
