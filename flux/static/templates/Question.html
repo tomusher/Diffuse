@@ -1,8 +1,10 @@
+{{#data}}
 <div id="mote-question">
-<h1>${data.question_text}</h1>
+<h1>{{question_text}}</h1>
 <ul>
-{{each data.answers}}
-<li>${$value}</li>
-{{/each}}
+{{#answers}}
+<li data-id="{{pk}}">{{answer_text}}</li>
+{{/answers}}
 </ul>
 </div>
+{{/data}}

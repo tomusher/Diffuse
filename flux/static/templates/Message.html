@@ -1,2 +1,4 @@
-<h1>${content_type}</h1>
-<blockquote>${data.message_text}</blockquote>
+<h1>{{content_type}}</h1>
+{{#data}}
+<blockquote>{{message_text}}</blockquote>
+{{/data}}
