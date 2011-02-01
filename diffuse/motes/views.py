@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.core import serializers
 
 from annoying.decorators import render_to
-from motes.models import Mote
+from motes.models import Mote, Plan
 
 import simplejson as json
 import redis
@@ -10,6 +10,12 @@ import redis
 @render_to('motes/mote_list.html')
 def mote_list(request):
     motes = Mote.objects.all()
+    return {'motes': motes}
+
+@render_to('motes/plan_list.html')
+def plan_list(request, slug):
+    plan = Plan.objects.get(slug=slug)
+    motes = plan.motes.all()
     return {'motes': motes}
 
 def mote_json(request, mote_id):

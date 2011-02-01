@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from polymorphic import PolymorphicModel
 
 class Mote(PolymorphicModel):
@@ -13,6 +14,14 @@ class Mote(PolymorphicModel):
         }
         return output
 
+    def __unicode__(self):
+        return "{0} ({1})".format(self.name, self.__class__.__name__)
+
 class Plan(models.Model):
     name = models.CharField(max_length=100)
+    slug = models.SlugField()
     motes = models.ManyToManyField(Mote)
+    user = models.ForeignKey(User)
+
+    def __unicode__(self):
+        return self.name

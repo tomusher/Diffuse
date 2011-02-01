@@ -1,5 +1,7 @@
 # Django settings for glide project.
 import os.path
+import django.conf.global_settings as DEFAULT_SETTINGS
+
 PROJECT_DIR = os.path.dirname(__file__)
 
 DEBUG = True
@@ -105,6 +107,10 @@ INSTALLED_APPS = (
     'mote_html',
     'mote_qa',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS+(
+        "motes.context_processors.user_plans",
+    )
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
