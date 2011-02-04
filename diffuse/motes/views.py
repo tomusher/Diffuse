@@ -1,16 +1,11 @@
 from django.http import HttpResponse
 from django.core import serializers
-
+from django.contrib.auth import authenticate, login, logout
 from annoying.decorators import render_to
 from motes.models import Mote, Plan
 
 import simplejson as json
 import redis
-
-@render_to('motes/mote_list.html')
-def mote_list(request):
-    motes = Mote.objects.all()
-    return {'motes': motes}
 
 @render_to('motes/plan_list.html')
 def plan_list(request, slug):

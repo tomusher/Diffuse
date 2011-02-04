@@ -23,5 +23,7 @@ class Plan(models.Model):
     motes = models.ManyToManyField(Mote)
     user = models.ForeignKey(User)
 
+    access_code = models.CharField(max_length=100, unique=True)
+
     def __unicode__(self):
         return self.name

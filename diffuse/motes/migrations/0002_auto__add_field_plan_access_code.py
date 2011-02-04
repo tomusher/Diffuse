@@ -8,14 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'Plan.slug'
-        db.add_column('motes_plan', 'slug', self.gf('django.db.models.fields.SlugField')(default='none', max_length=50, db_index=True), keep_default=False)
+        # Adding field 'Plan.access_code'
+        db.add_column('motes_plan', 'access_code', self.gf('django.db.models.fields.CharField')(default='default', max_length=100), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Deleting field 'Plan.slug'
-        db.delete_column('motes_plan', 'slug')
+        # Deleting field 'Plan.access_code'
+        db.delete_column('motes_plan', 'access_code')
 
 
     models = {
@@ -63,6 +63,7 @@ class Migration(SchemaMigration):
         },
         'motes.plan': {
             'Meta': {'object_name': 'Plan'},
+            'access_code': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'motes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['motes.Mote']", 'symmetrical': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),

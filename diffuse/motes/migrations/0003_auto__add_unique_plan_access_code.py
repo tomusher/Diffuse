@@ -8,14 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Adding field 'Plan.user'
-        db.add_column('motes_plan', 'user', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['auth.User']), keep_default=False)
+        # Adding unique constraint on 'Plan', fields ['access_code']
+        db.create_unique('motes_plan', ['access_code'])
 
 
     def backwards(self, orm):
         
-        # Deleting field 'Plan.user'
-        db.delete_column('motes_plan', 'user_id')
+        # Removing unique constraint on 'Plan', fields ['access_code']
+        db.delete_unique('motes_plan', ['access_code'])
 
 
     models = {
@@ -63,9 +63,11 @@ class Migration(SchemaMigration):
         },
         'motes.plan': {
             'Meta': {'object_name': 'Plan'},
+            'access_code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'motes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['motes.Mote']", 'symmetrical': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }

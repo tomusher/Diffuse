@@ -14,4 +14,8 @@ urlpatterns = patterns('',
     url(r'^motes/push/(?P<plan_id>\d+)/(?P<mote_id>\d+)/$', 'motes.views.mote_push', name='mote_push'),
     url(r'^motes/(?P<mote_id>\d+)/$', 'motes.views.mote_json', name='mote_json'),
 
+    url(r'^login/', 'django.contrib.auth.views.login', name='login'),
+    url(r'^logout/', 'django.contrib.auth.views.logout_then_login',
+        name='logout'),
+
 )

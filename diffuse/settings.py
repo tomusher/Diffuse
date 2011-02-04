@@ -86,7 +86,6 @@ STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, "static")
 
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, "../templates"),
-    os.path.join(PROJECT_DIR, "../lib/python2.6/site-packages/debug_toolbar/templates"),
 )
 
 
@@ -98,6 +97,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'debug_toolbar',
     'south',
     'annoying',
     'polymorphic',
@@ -112,6 +112,13 @@ TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS+(
         "motes.context_processors.user_plans",
     )
 
+def custom_show_toolbar(request):
+    return True
+
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
+    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 }
+
+LOGIN_REDIRECT_URL = "/plans/my-first-plan"
+LOGIN_URL = "/login/"

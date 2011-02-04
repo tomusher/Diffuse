@@ -9,7 +9,7 @@ class MoteInline(admin.TabularInline):
     model = Plan.motes.through
 
 class PlanAdmin(admin.ModelAdmin):
-    fields = ('name','slug')
+    fields = ('name','slug','access_code')
     prepopulated_fields = {'slug':('name',),}
     inlines = [
         MoteInline,
