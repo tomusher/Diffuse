@@ -1,9 +1,13 @@
-body,html { margin: 0; padding: 0; }
+body,html { margin: 0; padding: 0; height: 100%; }
 
 body { 
     font-family: Georgia;
     background: url("images/ipad_bg.jpg");
     text-align: center;
+    display: -webkit-box; display: -moz-box; display: box;
+    -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
+    -webkit-box-pack: center; -moz-box-pack: center; box-pack: center;
+    -webkit-box-align: center; -moz-box-align: center; box-align: center;
 }
 
 #iframe {
@@ -12,7 +16,7 @@ body {
     border: 0;
 }
 
-h1,h2,h3,p {
+h1,h2,h3,p,label {
     color: #fff;
     -webkit-text-shadow: 2px 2px 2px #000;
     text-shadow: 2px 2px 2px #000;
@@ -20,6 +24,13 @@ h1,h2,h3,p {
 h2, h3 {
     color: #e5e5e5;
 }
+
+#set-channel {  background-color: rgba(0,0,0,0.7); border: 1px solid #000; }
+    #set-channel form { padding: 10px; border: 1px solid rgba(255,255,255,0.4) }
+    #set-channel fieldset { border: none; }
+    #set-channel label { font-size: 1.4em; display: block; margin-bottom: 0.6em }
+    #set-channel input { font-size: 1.8em; height: 1.4em; }
+    #set-channel button { font-size: 1.8em; height: 1.4em; }
 
 #loading {
     font-size: 2em;
@@ -46,3 +57,10 @@ h2, h3 {
     border: 3px solid rgba(255,255,255,0.6);
     background-color: rgba(255,255,255,0.3)
 }
+
+/* Rounded box style */
+#set-channel, #set-channel form {
+    -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; }
+/* Shadow box style */
+#set-channel {
+    -webkit-box-shadow: 2px 2px 5px #000; }

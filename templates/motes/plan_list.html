@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 {% for mote in motes %}
-<ul>
-<li><a href="{% url mote_json mote.id %}">{{ mote.name }}</a> - <a class="push" href="{% url mote_push 12345 mote.id %}">Push</a></li>
+<li><a href="{% url mote_json mote.id %}">{{ mote.name }}</a> - <a class="push"
+    href="{% url mote_push plan.pk mote.id %}">Push</a></li>
 </ul>
 {% endfor %}
 {% endblock %}

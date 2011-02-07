@@ -35,7 +35,7 @@
 </head>
 
 <body lang="en" >
-
+{% load active %}
   <div id="container">
     <header>
         <h1>Diffuse</h1>
@@ -48,21 +48,28 @@
             {% endif %}
         </div>
     </header>
-    
-    <div id="main" role="main">
-        {% block content %}
-        {% endblock %}
+    <div id="content"> 
+        <div id="main" role="main">
+            {% block content %}
+            {% endblock %}
+        </div>
+        
+        <aside id="active-mote">
+            <h2>Active Mote Details</h2>
+        </aside>
+        <aside id="plans">
+            {% if plans %}
+            <h2>My Plans</h2>
+                <ul>
+                {% for plan in plans %}
+                {% url plan-list plan.slug as url %}
+                <li><a class="{% active request url %}active{% endactive %}"
+                    href="{{ url }}">{{ plan }}</a></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </aside>
     </div>
-    
-    <aside>
-        {% if plans %}
-        <h2>My Plans</h2>
-        {% for plan in plans %}
-            {% url plan-list plan.slug as url %}
-            <a href="{{ url }}">{{ plan }}</a>
-        {% endfor %}
-        {% endif %}
-    </aside>
     <footer>
 
     </footer>
@@ -73,6 +80,7 @@
 
   <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="js/libs/jquery-1.4.4.js"%3E%3C/script%3E'))</script>
   
   

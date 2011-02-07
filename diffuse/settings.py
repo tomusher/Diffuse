@@ -101,7 +101,7 @@ INSTALLED_APPS = (
     'south',
     'annoying',
     'polymorphic',
-    'motes',
+    'diffuse.motes',
     'mote_weburl',
     'mote_message',
     'mote_html',
@@ -109,6 +109,7 @@ INSTALLED_APPS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS+(
+        "django.core.context_processors.request",
         "motes.context_processors.user_plans",
     )
 

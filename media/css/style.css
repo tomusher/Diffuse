@@ -76,8 +76,7 @@ pre, code, kbd, samp { font-family: monospace, sans-serif; }
 body, select, input, textarea {
   /* #444 looks better than black: twitter.com/H_FJ/statuses/11800719859 */
   color: #444;
-  /* set your base font here, to apply evenly */
-  /* font-family: Georgia, serif;  */
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 /* headers (h1,h2,etc) have no default font-size or margin. define those yourself. */
@@ -86,13 +85,11 @@ h1,h2,h3,h4,h5,h6 { font-weight: bold; }
 /* always force a scrollbar in non-IE: */
 html { overflow-y: scroll; }
 
-
 /* accessible focus treatment: people.opera.com/patrickl/experiments/keyboard/test */
 a:hover, a:active { outline: none; }
 
 a, a:active, a:visited { color: #607890; }
 a:hover { color: #036; }
-
 
 ul, ol { margin-left: 2em; }
 ol { list-style-type: decimal; }
@@ -139,15 +136,14 @@ input:invalid, textarea:invalid {
 }
 .no-boxshadow input:invalid, .no-boxshadow textarea:invalid { background-color: #f0dddd; }
 
-
 /* These selection declarations have to be separate.
    No text-shadow: twitter.com/miketaylr/status/12228805301
    Also: hot pink. */
-::-moz-selection{ background: #FF5E99; color:#fff; text-shadow: none; }
-::selection { background:#FF5E99; color:#fff; text-shadow: none; }
+::-moz-selection{ background: #FF3019; color:#fff; text-shadow: none; }
+::selection { background:#FF3019; color:#fff; text-shadow: none; }
 
 /*  j.mp/webkit-tap-highlight-color */
-a:link { -webkit-tap-highlight-color: #FF5E99; }
+a:link { -webkit-tap-highlight-color: #FF3019; }
 
 /* make buttons play nice in IE:
    www.viget.com/inspire/styling-the-button-element-in-internet-explorer/ */
@@ -161,31 +157,60 @@ button {  width: auto; overflow: visible; }
  /* Primary Styles
     Author: Tom Usher
  */
-
-#container {  }
+#container { }
 
 header {display: block; 
+        position: relative;
         background: #ff3019;
         background: -moz-linear-gradient(top, #ff3019 0%, #A30000 100%);
         background: -webkit-gradient(linear, left top, left bottom, 
                                       color-stop(0%,#ff3019),
                                       color-stop(100%,#A30000));
-        filter: progid:DXImageTransform.Microsoft.gradient( 
-                                      startColorstr='#ff3019', 
-                                      endColorstr='#A30000',
-                                      GradientType=0 ); 
         color: #fff;
         padding: 5px;
-        border: 1px solid #666; }
-    header h1 { font-size: 1.8em; text-shadow: 1px 1px 3px #000; display: inline; }
+        border: 1px solid #666;
+        -moz-box-shadow: 0 2px 2px #999;
+        -webkit-box-shadow: 0 2px 2px #999; }
+    header h1 { font-size: 1.2em; font-weight: bold; 
+                text-shadow: 1px 1px 3px #000; display: inline; }
+    header #user-tools { float: right; }
+        header #user-tools a { color: #fff; }
 
+#content {
+    display: -moz-box; display: -webkit-box; display: box; 
+    box-align: stretch; 
+    -moz-box-orient: horizontal; -webkit-box-orient: horizontal; box-orient: horizontal;
+    -moz-box-pack: start; -webkit-box-pack: start; box-pack: start; 
+    -mox-box-align: start; -webkit-box-align: start; box-align: start; }
+    aside#plans {
+        position: relative;
+        z-index: 1;
+        -moz-box-ordinal-group: 1; -webkit-box-ordinal-group: 1; box-ordinal-group: 1;
+        width: 150px; }
+    #main {
+        z-index: 5;
+        position: relative;
+        -moz-box-ordinal-group: 2; -webkit-box-ordinal-group: 2; box-ordinal-group: 2;
+        -moz-box-flex: 2; -webkit-box-flex: 2; box-flex: 2; }
+    aside#active-mote {
+        position: relative;
+        z-index: 10;
+        -moz-box-ordinal-group: 3; -webkit-box-ordinal-group: 3; box-ordinal-group: 3;
+        -moz-box-flex: 3; -webkit-box-flex: 3; box-flex; 3; }
 
+    aside#plans, #main, aside#active-mote {
+        padding-top: 10px;
+        min-height: 700px;
+        background: #D3D3D3;
+        background: -moz-linear-gradient(left, #DDD 0%, #EAEAEA 100%);
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,#DDD), color-stop(100%,#EAEAEA));
+        -webkit-box-shadow: -2px 0 2px #bbb; } 
 
-
-
-
-
-
+        aside#plans ul { list-style: none; margin: 0; padding: 0; }
+            aside#plans li a { display: block; padding: 5px 10px; }
+            aside#plans li a.active {   background-color: rgba(255,255,255,0.5);
+                                        border-top: 1px solid #ccc; 
+                                        border-bottom: 1px solid #fff; }
 
 
 

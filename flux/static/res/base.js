@@ -1,12 +1,34 @@
 var socket = new io.Socket(null, {port: 80});
-
+var active;
+var channel = "firstplan";
+var call = Array();
 $(document).ready(function() {
     socket.connect();
     socket.on("message", function(obj){
-        console.log("message");
-        update(obj.message);
+        call[obj.method](obj.value);
     });
+
+    $("#set-channel").submit(set_channel);
 });
+
+call['new_mote'] = function(value) {
+    if(value.channel == self.channel) {
+        active = value.message;
+        update(active);
+    }
+}
+
+function set_channel() {
+    temp_channel = $("input", this).val();
+    socket.send({method: 'plan_exists', value: temp_channel}); 
+    call['plan_exists'] = function(value) {
+        if(value) {
+            self.channel = temp_channel;
+            $("#set-channel").fadeOut();
+        }
+    }
+    return false;
+}
 
 function message(obj){
     var el = document.createElement('p');
@@ -31,6 +53,5 @@ function update(obj) {
 }
 
 function respond(obj) {
-    socket.send(JSON.stringify(obj));
+    socket.send({method: "mote_response", value: JSON.stringify(obj)});
 }
-
