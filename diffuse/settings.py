@@ -61,6 +61,8 @@ MEDIA_URL = '/media/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/media/admin'
 
+STATIC_URL = "/static/"
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'h^hsvu&@y2s!548-mk%fhyr(g^$a_zpthmyi-d)e)4ebwo=ua4'
 
@@ -97,6 +99,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'django.contrib.staticfiles',
     'debug_toolbar',
     'south',
     'annoying',

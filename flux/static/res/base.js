@@ -1,43 +1,51 @@
-var socket = new io.Socket(null, {port: 80});
+var socket = new io.Socket(null, {port: 8040});
 var active;
-var channel = "firstplan";
+var channel = "plan:1";
 var call = Array();
-$(document).ready(function() {
-    socket.connect();
-    socket.on("message", function(obj){
-        call[obj.method](obj.value);
-    });
+(function( $ ){
+    $.customEventHandler = function() {
+        handler = {};
 
-    $("#set-channel").submit(set_channel);
+        socket.connect();
+        socket.on('message', function(obj){
+            console.log(obj);
+            if('event' in obj) {
+                $(handler).trigger(obj.event, obj.data);
+            }
+        });
+
+        handler._trigger = function(event, data) {
+            socket.send({"event" : event, "data" : data});
+        }
+
+        return handler;
+    }
+})( jQuery );
+
+$(document).ready(function() {
+    var customEventHandler = $.customEventHandler();
+    $(customEventHandler).bind('setPlan', set_plan);
+    $("#set-channel").submit(plan_exists);
 });
 
-call['new_mote'] = function(value) {
-    if(value.channel == self.channel) {
-        active = value.message;
-        update(active);
-    }
-}
-
-function set_channel() {
+/* Triggers */
+function plan_exists() {
     temp_channel = $("input", this).val();
-    socket.send({method: 'plan_exists', value: temp_channel}); 
-    call['plan_exists'] = function(value) {
-        if(value) {
-            self.channel = temp_channel;
-            $("#set-channel").fadeOut();
-        }
-    }
+    socket.send({event: 'planExists', data: temp_channel}); 
     return false;
 }
 
-function message(obj){
-    var el = document.createElement('p');
-    el.innerHTML = obj.message;
-    console.log(obj.message);
-    document.getElementById('messages').appendChild(el);
+/* Events Responses */
+function set_plan(event, data) {
+    if(data) {
+        self.channel = data.plan_id;
+        $("#set-channel").fadeOut();
+        update(data.latest_mote);
+    }
 }
 
 function update(obj) {
+    active = obj;
     script = $("<script>");
     script.attr("src", "templates/"+obj.content_type+".js");
     script.attr("type", "text/javascript");
@@ -53,5 +61,6 @@ function update(obj) {
 }
 
 function respond(obj) {
-    socket.send({method: "mote_response", value: JSON.stringify(obj)});
+    socket.send({event: "mote_response", data:
+        {mote_id: active.pk, plan: channel, message: JSON.stringify(obj)}});
 }
