@@ -8,7 +8,8 @@ var PubSub = function() {
     self.subscriber = redis.createClient();
     self.subscriber.psubscribe("*");
     self.subscriber.on("pmessage", function(pattern, channel, message) {
-        self.emit("newMessage", channel, message);
+        var message = JSON.parse(message);
+        self.emit(message.event, channel, message.data);
     });
 }
 

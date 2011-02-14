@@ -9,8 +9,8 @@ var DataStore = function() {
 
 sys.inherits(DataStore, events.EventEmitter);
 
-DataStore.prototype.getMoteById = function(channel, moteId, callback) {
-    this.store.get("mote:"+moteId, function(error, message) {
+DataStore.prototype.getMoteById = function(channel, mote_id, callback) {
+    this.store.get("mote:"+mote_id, function(error, message) {
         callback(channel, message);
     });
 }

@@ -54,9 +54,10 @@
             {% endblock %}
         </div>
         
-        <aside id="active-mote">
+        <div id="active-mote">
             <h2>Active Mote Details</h2>
-        </aside>
+            <div id="chart"></div>
+        </div>
         <aside id="plans">
             {% if plans %}
             <h2>My Plans</h2>
@@ -86,6 +87,7 @@
   
   <!-- scripts concatenated and minified via ant build script-->
   <script src="/media/js/libs/socket.io-client/socket.io.js"></script>
+  <script src="/media/js/libs/highcharts/js/highcharts.js"></script>
   <script src="/media/js/plugins.js"></script>
   <script src="/media/js/script.js"></script>
   <!-- end concatenated and minified scripts-->

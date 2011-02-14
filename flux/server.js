@@ -15,7 +15,7 @@ var COOKIE_AGE = 10800000 // 3 hours
 
 server = connect.createServer(
     connect.cookieDecoder(),
-    connect.session({   secret: 'secretkey',
+    connect.session({   secret: '5516,3BP#w#W7.6I`6jbpP8m=V83Oe',
                         store: new redis_store({
                             maxAge: COOKIE_AGE,
                             cookie: { path: '/', httpOnly: false },
@@ -33,6 +33,7 @@ function app(app) {
         fs.readFile(__dirname+'/static/get.html', function(err, data){
             if(err) return send404(res);
             var headers = {'Content-Type':'text/html',};
+            headers['Access-Control-Allow-Origin'] = "*";
             res.writeHead(200, headers);
             res.write(data, 'utf8');
             res.end();
@@ -50,14 +51,20 @@ var socket = new Socket(server);
 var dataStore = new DataStore();
 var pubSub = new PubSub();
 
-pubSub.on('newMessage', function(channel, message) {
+// On new message over pubsub
+pubSub.on('newMote', function(channel, message) {
     sys.puts("New message from "+channel+": "+message);
-    dataStore.getMoteById(channel, message, 
+    dataStore.getMoteById(channel, message.mote_id, 
         function() { 
             socket.sendMote.apply(socket, arguments); 
         });
 });
 
+pubSub.on('responsesUpdated', function(channel, message) {
+    socket.sendToAdmins({event: 'updateResponse', data: message});
+});
+
+// On request for whether a plan exists
 socket.on('planExists', function(client, data) {
     sys.puts("Client "+client+" asking for plan "+data);
     dataStore.planExists(client, data, 
@@ -66,12 +73,22 @@ socket.on('planExists', function(client, data) {
         });
 });
 
-socket.on('moteResponse', function(client, data) {
+// On receiving a response from client
+socket.on('newResponse', function(client, data) {
     dataStore.setResponse(data.plan, data.mote_id, client, data.message);
-    dataStore.store.publish(data.plan, "updateadmin");
+    dataStore.store.publish(data.plan, JSON.stringify({event: 'responsesUpdated', data: data}));
     console.log(data);
 });
 
+// On receiving a request for responses from admin
+socket.on('responseData', function(client, data) {
+});
+
+// On new client connection
 socket.on('clientConnect', function(client, data) {
-    client.persistentSessionId = data;
+    if(data='admin') {
+        socket.addAdmin(client);
+    } else {
+        client.persistentSessionId = data;
+    }
 });

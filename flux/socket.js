@@ -5,6 +5,7 @@ var sys = require('sys'),
 var Socket = module.exports = function(server) {
     events.EventEmitter.call(this);
     var self = this;
+    this.admins = [];
     this.server = server;
     this.test = "Test";
     this.io = io.listen(server);
@@ -49,4 +50,19 @@ Socket.prototype.setPlan = function(client, plan_id, latest_mote) {
     }
 
     this.send(client, message);
+};
+
+Socket.prototype.addAdmin = function(client) {
+    this.admins.push(client);
+};
+
+Socket.prototype.sendToAdmins = function(message) {
+    for(var i = 0; i < this.admins.length; i++) {
+        if(this.admins[i].connected) {
+            console.log(this.admins[i].sessionId);
+            this.send(this.admins[i], message);
+        } else {
+            this.admins.splice(i, 1);
+        }
+    };
 };

@@ -7,7 +7,7 @@ socket.on('connect', function(obj){
 });
 socket.on('message', function(obj){
     console.log(obj);
-    if('event' in obj) {
+    if(typeof obj != 'string' && 'event' in obj) {
         $(document).trigger(obj.event, obj.data);
     }
 });
@@ -58,6 +58,6 @@ function update_mote(obj) {
 }
 
 function respond(obj) {
-    socket.send({event: "moteResponse", data:
-        {mote_id: active.pk, plan: channel, message: JSON.stringify(obj)}});
+    socket.send({event: "newResponse", data:
+        {mote_id: active.pk, plan: channel, message: obj}});
 }
