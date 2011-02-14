@@ -3,76 +3,40 @@ var http = require('http'),
     sys = require('sys'),
     events = require('events'),
     connect = require('connect'),
-    io = require('./lib/socket.io'),
     url = require('url'),
     async = require('async'),
-    handler = require('./handler'),
+    Socket = require('./socket'),
+    DataStore = require('./datastore'),
+    PubSub = require('./pubsub'),
+    redis = require('./lib/node_redis'),
+    redis_store = require('connect-redis');
 
-    redis = require("./lib/node_redis"),
-    redis_sub = redis.createClient(),
-    redis_req = redis.createClient();
+var COOKIE_AGE = 10800000 // 3 hours
 
-
-server = connect.createServer();
-server.use(connect.router(templates));
-server.use(connect.staticProvider({ root: __dirname+'/static', cache: false }));
-server.use(connect.bodyDecoder());
+server = connect.createServer(
+    connect.cookieDecoder(),
+    connect.session({   secret: 'secretkey',
+                        store: new redis_store({
+                            maxAge: COOKIE_AGE,
+                            cookie: { path: '/', httpOnly: false },
+                        })
+                    }),
+    connect.staticProvider({ root: __dirname+'/static', cache: false }),
+    connect.router(app),
+    connect.bodyDecoder()
+);
 server.listen('8040');
 
-io = io.listen(server);
-
-function templates(app) {
+function app(app) {
     app.get('/', function(req, res){
         var path = url.parse(req.url).pathname;
-        fs.readFile(__dirname + path, function(err, data){
+        fs.readFile(__dirname+'/static/get.html', function(err, data){
             if(err) return send404(res);
-            res.writeHead(200, {'Content-Type': path == 'json.js'? 'text/javascript':'text/html'});
+            var headers = {'Content-Type':'text/html',};
+            res.writeHead(200, headers);
             res.write(data, 'utf8');
             res.end();
         });
-    });
-}
-
-function plan_exists(client, plan_access_code) {
-    async.waterfall([
-        function(callback) {
-            plan_access_code_key = "plan:"+plan_access_code;
-            redis_req.get(plan_access_code_key, function(err, plan_id) {
-                callback(null, plan_id);
-            });
-        },
-        function(plan_id, callback) {
-            plan_id_latest_key = "plan:"+plan_id+":latest_mote";
-            redis_req.get(plan_id_latest_key, function(err, latest_mote_id) {
-                callback(null, latest_mote_id, plan_id)
-            });
-        },
-        function(latest_mote_id, plan_id, callback) {
-            if(latest_mote_id!=null) {
-                redis_req.get(latest_mote_id, function(err, latest_mote) {
-                    callback(null, latest_mote, plan_id)}
-                );
-            } else {
-                client.send({event: 'setPlan', data: null});
-            }
-        },
-        function(latest_mote, plan_id, callback) {
-            client.send({   event: 'setPlan', 
-                            data: {    'plan_id': 'plan:'+plan_id, 
-                                        'latest_mote': JSON.parse(latest_mote)
-                            }
-                        });
-        }
-    ]);
-}
-
-function mote_response(client, data) {
-    plan_access_code = data.plan;
-    mote_id = data.mote_id;
-    message = data.message;
-    redis_req.get(plan_access_code+":id", function(err, data) {
-        plan_id = data; 
-        redis_req.hset(plan_id+":"+mote_id, client.sessionId, message, redis.print);
     });
 }
 
@@ -82,21 +46,32 @@ send404 = function(res){
    res.end();
 };
 
-var handler = new handler(io, redis_sub);
-handler.subscribe();
-handler.on('newMote', function(channel, mote_key) {
-    redis_req.get(mote_key, function(err, value){
-        io.broadcast({event: 'new_mote', data: {channel: channel, message: JSON.parse(value)}});
-    });
+var socket = new Socket(server);
+var dataStore = new DataStore();
+var pubSub = new PubSub();
+
+pubSub.on('newMessage', function(channel, message) {
+    sys.puts("New message from "+channel+": "+message);
+    dataStore.getMoteById(channel, message, 
+        function() { 
+            socket.sendMote.apply(socket, arguments); 
+        });
 });
-handler.on('planExists', function(client, data) {
-    sys.puts(data);
-    plan_exists(client, data);
+
+socket.on('planExists', function(client, data) {
+    sys.puts("Client "+client+" asking for plan "+data);
+    dataStore.planExists(client, data, 
+        function() { 
+            socket.setPlan.apply(socket, arguments); 
+        });
 });
-io.on('connection', function(client) {
-    sys.puts("New client: "+client);
-    client.on('message', function(message) {
-        sys.puts("Client: "+client.sessionId+" sent message: "+message);
-        handler.emit(message.event, client, message.data);
-    });
+
+socket.on('moteResponse', function(client, data) {
+    dataStore.setResponse(data.plan, data.mote_id, client, data.message);
+    dataStore.store.publish(data.plan, "updateadmin");
+    console.log(data);
+});
+
+socket.on('clientConnect', function(client, data) {
+    client.persistentSessionId = data;
 });

@@ -1,30 +1,27 @@
-var socket = new io.Socket(null, {port: 8040});
+var socket = new io.Socket(null);
 var active;
-var channel = "plan:1";
-var call = Array();
-(function( $ ){
-    $.customEventHandler = function() {
-        handler = {};
-
-        socket.connect();
-        socket.on('message', function(obj){
-            console.log(obj);
-            if('event' in obj) {
-                $(handler).trigger(obj.event, obj.data);
-            }
-        });
-
-        handler._trigger = function(event, data) {
-            socket.send({"event" : event, "data" : data});
-        }
-
-        return handler;
+var channel;
+var session_id;
+socket.on('connect', function(obj){
+    socket.send({event: "clientConnect", data: session_id});
+});
+socket.on('message', function(obj){
+    console.log(obj);
+    if('event' in obj) {
+        $(document).trigger(obj.event, obj.data);
     }
-})( jQuery );
+});
+socket.connect();
 
 $(document).ready(function() {
-    var customEventHandler = $.customEventHandler();
-    $(customEventHandler).bind('setPlan', set_plan);
+    session_id = $.cookie('connect.sid');
+    console.log(session_id);
+    $(document).bind('setPlan', set_plan);
+    $(document).bind('newMote', function(event, data) {
+        if(data.channel===channel) {
+            update_mote(data.message);
+        }
+    });
     $("#set-channel").submit(plan_exists);
 });
 
@@ -38,22 +35,22 @@ function plan_exists() {
 /* Events Responses */
 function set_plan(event, data) {
     if(data) {
-        self.channel = data.plan_id;
+        self.channel = "plan:"+data.plan_id;
         $("#set-channel").fadeOut();
-        update(data.latest_mote);
+        update_mote(data.latest_mote);
     }
 }
 
-function update(obj) {
+function update_mote(obj) {
     active = obj;
     script = $("<script>");
-    script.attr("src", "templates/"+obj.content_type+".js");
+    script.attr("src", "templates/"+active.content_type+".js");
     script.attr("type", "text/javascript");
     $("head").append(script);
-    $.get("templates/"+obj.content_type+".html", function(template) {
-        output = $.mustache(template, obj);
+    $.get("templates/"+active.content_type+".html", function(template) {
+        output = $.mustache(template, active);
         $("body").html(output);
-        fn = window[obj.content_type];
+        fn = window[active.content_type];
         if(typeof fn === 'function') {
             fn();
         }
@@ -61,6 +58,6 @@ function update(obj) {
 }
 
 function respond(obj) {
-    socket.send({event: "mote_response", data:
+    socket.send({event: "moteResponse", data:
         {mote_id: active.pk, plan: channel, message: JSON.stringify(obj)}});
 }
