@@ -3,7 +3,7 @@ var active;
 var channel;
 var session_id;
 socket.on('connect', function(obj){
-    socket.send({event: "clientConnect", data: session_id});
+    socket.send({event: "newClient", data: session_id});
 });
 socket.on('message', function(obj){
     console.log(obj);
@@ -17,7 +17,7 @@ $(document).ready(function() {
     session_id = $.cookie('connect.sid');
     console.log(session_id);
     $(document).bind('setPlan', set_plan);
-    $(document).bind('newMote', function(event, data) {
+    $(document).bind('displayMote', function(event, data) {
         if(data.channel===channel) {
             update_mote(data.message);
         }
@@ -28,7 +28,7 @@ $(document).ready(function() {
 /* Triggers */
 function plan_exists() {
     temp_channel = $("input", this).val();
-    socket.send({event: 'planExists', data: temp_channel}); 
+    socket.send({event: 'planExists?', data: temp_channel}); 
     return false;
 }
 
@@ -58,6 +58,6 @@ function update_mote(obj) {
 }
 
 function respond(obj) {
-    socket.send({event: "newResponse", data:
+    socket.send({event: "sendResponseToServer", data:
         {mote_id: active.pk, plan: channel, message: obj}});
 }

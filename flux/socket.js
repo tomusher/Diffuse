@@ -7,7 +7,6 @@ var Socket = module.exports = function(server) {
     var self = this;
     this.admins = [];
     this.server = server;
-    this.test = "Test";
     this.io = io.listen(server);
     this.io.on('connection', function(client) {
         sys.puts("New client: "+client);
@@ -30,7 +29,7 @@ Socket.prototype.send = function(client, message) {
 
 Socket.prototype.sendMote = function(channel, mote) {
     var message = {
-        event: 'newMote', 
+        event: 'displayMote', 
         data: { 
             channel: channel,
             message: JSON.parse(mote)
@@ -41,7 +40,7 @@ Socket.prototype.sendMote = function(channel, mote) {
 };
 
 Socket.prototype.setPlan = function(client, plan_id, latest_mote) {
-    var message = {
+    var data = {
         event: 'setPlan',
         data: {
             plan_id: plan_id,
@@ -49,7 +48,21 @@ Socket.prototype.setPlan = function(client, plan_id, latest_mote) {
         }
     }
 
-    this.send(client, message);
+    this.send(client, data);
+};
+
+Socket.prototype.sendResponses = function(client, plan, mote_id, responses) {
+    console.log("Trying to send responses");
+    var data = {
+        event: 'sendResponsesToAdmin',
+        data: {
+            mote_id: mote_id,
+            plan: plan,
+            response: responses
+        }
+    }
+
+    this.send(client, data);
 };
 
 Socket.prototype.addAdmin = function(client) {

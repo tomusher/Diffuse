@@ -46,7 +46,7 @@ def mote_push(request, plan_id, mote_id):
 
     r.set(access_code_key, plan_id)
     r.set(latest_mote_key, mote_id)
-    json_string = {'event': 'newMote', 'data': { 'mote_id': mote_id }}
+    json_string = {'event': 'pubMote', 'data': { 'mote_id': mote_id }}
     json_string = json.JSONEncoder().encode(json_string);
     r.publish(plan_channel, json_string); 
 

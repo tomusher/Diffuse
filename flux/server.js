@@ -51,8 +51,8 @@ var socket = new Socket(server);
 var dataStore = new DataStore();
 var pubSub = new PubSub();
 
-// On new message over pubsub
-pubSub.on('newMote', function(channel, message) {
+// On new mote over pubsub
+pubSub.on('pubMote', function(channel, message) {
     sys.puts("New message from "+channel+": "+message);
     dataStore.getMoteById(channel, message.mote_id, 
         function() { 
@@ -60,12 +60,12 @@ pubSub.on('newMote', function(channel, message) {
         });
 });
 
-pubSub.on('responsesUpdated', function(channel, message) {
-    socket.sendToAdmins({event: 'updateResponse', data: message});
+pubSub.on('pubResponse', function(channel, message) {
+    socket.sendToAdmins({event: 'pubResponse', data: message});
 });
 
 // On request for whether a plan exists
-socket.on('planExists', function(client, data) {
+socket.on('planExists?', function(client, data) {
     sys.puts("Client "+client+" asking for plan "+data);
     dataStore.planExists(client, data, 
         function() { 
@@ -74,21 +74,25 @@ socket.on('planExists', function(client, data) {
 });
 
 // On receiving a response from client
-socket.on('newResponse', function(client, data) {
+socket.on('sendResponseToServer', function(client, data) {
     dataStore.setResponse(data.plan, data.mote_id, client, data.message);
-    dataStore.store.publish(data.plan, JSON.stringify({event: 'responsesUpdated', data: data}));
-    console.log(data);
+    data.client = client.persistentSessionId;
+    dataStore.store.publish(data.plan, JSON.stringify({event: 'pubResponse', data: data}));
 });
 
 // On receiving a request for responses from admin
-socket.on('responseData', function(client, data) {
+socket.on('getResponses?', function(client, data) {
+    dataStore.getResponses(client, data,
+        function() {
+            socket.sendResponses.apply(socket, arguments);
+        });
 });
 
 // On new client connection
-socket.on('clientConnect', function(client, data) {
-    if(data='admin') {
+socket.on('newClient', function(client, data) {
+    if(data=='admin') {
         socket.addAdmin(client);
     } else {
-        client.persistentSessionId = data;
+        client.persistentSessionId = encodeURIComponent(data);
     }
 });

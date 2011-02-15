@@ -28,7 +28,13 @@ DataStore.prototype.planExists = function(client, data, callback) {
 };
 
 DataStore.prototype.setResponse = function(plan, mote, client, response) {
-    this.store.hset(plan+":mote:"+mote, client.persistentSessionId, response);
+    this.store.hset(plan+":mote:"+mote, client.persistentSessionId, JSON.stringify(response));
+};
+
+DataStore.prototype.getResponses = function(client, data, callback) {
+    this.store.hgetall(data.plan+":mote:"+data.mote_id, function(error, responses) {
+        callback(client, data.plan, data.mote_id, responses);
+    });
 };
 
 module.exports = DataStore;

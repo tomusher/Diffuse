@@ -1,6 +1,6 @@
 var socket = new io.Socket("flux.tomusher.com", {port: 80});
 socket.on('connect', function(obj){
-    socket.send({event: "clientConnect", data: "admin"});
+    socket.send({event: "newClient", data: "admin"});
 });
 socket.on('message', function(obj){
     console.log(obj);
@@ -9,14 +9,26 @@ socket.on('message', function(obj){
 socket.connect();
 
 var active_mote;
-var chartOptions;
-var chart;
+var active_plan="plan:1";
+var renderer;
+
 $(document).ready(function(){
-    $(document).bind('updateResponse', function(event, data) {
-        var point = chart.get(data.message.id);
-        point.update(point.y+1);
-        //val = chart.series[0].data[0];
-        //chart.series[0].data[0].update(val+1);
+    $(document).bind('pubResponse', function(event, data) {
+        var responses = {};
+        responses[data.client] = data.message;
+        renderer.update_data(responses);
+    });
+
+    $(document).bind('sendResponsesToAdmin', function(event, data) {
+        var responses = {};
+        $.each(data.response, function(client, response) {
+            try {
+                var response = JSON.parse(response);
+                responses[client] = response;
+            } catch(e) {}
+        });
+        renderer.update_data(responses);
+        
     });
     $('.push').click(function(){
         var url = $(this).attr('href');
@@ -24,40 +36,20 @@ $(document).ready(function(){
             active_mote = JSON.parse(data);
             console.log(active_mote);
             display(active_mote);
+            socket.send(
+                {event: "getResponses?",
+                data: {
+                    mote_id: active_mote.pk,
+                    plan: active_plan 
+                 }
+            });
         });
         return false;
     });
 
     function display(active_mote) {
-        if(active_mote.content_type=="Question") {
-        chartOptions = { 
-            chart: {
-                renderTo: 'chart',
-                defaultSeriesType: 'column'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: { 
-                categories: [],
-            },
-            yAxis: {
-                title: {
-                    text: 'No. of Responses',
-                },
-                tickInterval: 1
-            },
-            series: [{
-                name: "Answers",
-                data: []
-            }]
-        };
-        $.each(active_mote.data.answers, function(no, answer) {
-            chartOptions.xAxis.categories.push(answer.answer_text);
-            chartOptions.series[0].data.push({y: 0, id: answer.pk});
-        });
-        chart = new Highcharts.Chart(chartOptions);
-        }
+        renderer = new window[active_mote.content_type](active_mote);
+        renderer.render();
     }
 });
 
