@@ -47,12 +47,12 @@ send404 = function(res){
    res.end();
 };
 
-var socket = new Socket(server);
 var dataStore = new DataStore();
+var socket = new Socket(server, dataStore);
 var pubSub = new PubSub();
 
 // On new mote over pubsub
-pubSub.on('pubMote', function(channel, message) {
+pubSub.on('adminPublishedMote', function(channel, message) {
     sys.puts("New message from "+channel+": "+message);
     dataStore.getMoteById(channel, message.mote_id, 
         function() { 
@@ -60,12 +60,12 @@ pubSub.on('pubMote', function(channel, message) {
         });
 });
 
-pubSub.on('pubResponse', function(channel, message) {
-    socket.sendToAdmins({event: 'pubResponse', data: message});
+pubSub.on('serverPublishedResponse', function(channel, message) {
+    socket.sendToAdmins({event: 'serverPushedResponse', data: message});
 });
 
 // On request for whether a plan exists
-socket.on('planExists?', function(client, data) {
+socket.on('clientRequestedPlan', function(client, data) {
     sys.puts("Client "+client+" asking for plan "+data);
     dataStore.planExists(client, data, 
         function() { 
@@ -74,14 +74,23 @@ socket.on('planExists?', function(client, data) {
 });
 
 // On receiving a response from client
-socket.on('sendResponseToServer', function(client, data) {
+socket.on('clientRespondedToMote', function(client, data) {
     dataStore.setResponse(data.plan, data.mote_id, client, data.message);
     data.client = client.persistentSessionId;
-    dataStore.store.publish(data.plan, JSON.stringify({event: 'pubResponse', data: data}));
+    dataStore.store.publish(data.plan, JSON.stringify({event: 'serverPublishedResponse', data: data}));
 });
 
 // On receiving a request for responses from admin
-socket.on('getResponses?', function(client, data) {
+socket.on('adminRequestedResponses', function(client, data) {
+    dataStore.getResponses(client, data,
+        function() {
+            socket.sendResponses.apply(socket, arguments);
+        });
+});
+
+// On receiving a request to clear responses from admin
+socket.on('adminClearedResponses', function(client, data) {
+    dataStore.clearMoteResponses(data.plan, data.mote_id);
     dataStore.getResponses(client, data,
         function() {
             socket.sendResponses.apply(socket, arguments);
@@ -89,10 +98,23 @@ socket.on('getResponses?', function(client, data) {
 });
 
 // On new client connection
-socket.on('newClient', function(client, data) {
+socket.on('clientConnected', function(client, data) {
     if(data=='admin') {
         socket.addAdmin(client);
     } else {
         client.persistentSessionId = encodeURIComponent(data);
+        dataStore.newClientId(client);
+    }
+});
+
+// On client disconnection
+socket.on('clientDisconnected', function(client, message) {
+    if(client.persistentSessionId) {
+        dataStore.clearClientResponses(client);
+        dataStore.removeClientId(client, function(allDisconnected) {
+            if(allDisconnected) {
+                socket.sendToAdmins({event: 'clientDisconnected', data: { client: client.persistentSessionId }});
+            }
+        });
     }
 });

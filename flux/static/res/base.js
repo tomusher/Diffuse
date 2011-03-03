@@ -3,10 +3,10 @@ var active;
 var channel;
 var session_id;
 socket.on('connect', function(obj){
-    socket.send({event: "newClient", data: session_id});
+    socket.send({event: "clientConnected", data: session_id});
 });
 socket.on('message', function(obj){
-    console.log(obj);
+    //console.log(obj);
     if(typeof obj != 'string' && 'event' in obj) {
         $(document).trigger(obj.event, obj.data);
     }
@@ -15,9 +15,9 @@ socket.connect();
 
 $(document).ready(function() {
     session_id = $.cookie('connect.sid');
-    console.log(session_id);
-    $(document).bind('setPlan', set_plan);
-    $(document).bind('displayMote', function(event, data) {
+    //console.log(session_id);
+    $(document).bind('serverSetPlan', set_plan);
+    $(document).bind('serverPushedMote', function(event, data) {
         if(data.channel===channel) {
             update_mote(data.message);
         }
@@ -28,7 +28,7 @@ $(document).ready(function() {
 /* Triggers */
 function plan_exists() {
     temp_channel = $("input", this).val();
-    socket.send({event: 'planExists?', data: temp_channel}); 
+    socket.send({event: 'clientRequestedPlan', data: temp_channel}); 
     return false;
 }
 
@@ -47,6 +47,11 @@ function update_mote(obj) {
     script.attr("src", "templates/"+active.content_type+".js");
     script.attr("type", "text/javascript");
     $("head").append(script);
+    style = $("<link>");
+    style.attr("rel", "stylesheet");
+    style.attr("media", "all");
+    style.attr("href", "templates/"+active.content_type+".css");
+    $("head").append(style);
     $.get("templates/"+active.content_type+".html", function(template) {
         output = $.mustache(template, active);
         $("body").html(output);
@@ -58,6 +63,6 @@ function update_mote(obj) {
 }
 
 function respond(obj) {
-    socket.send({event: "sendResponseToServer", data:
+    socket.send({event: "clientRespondedToMote", data:
         {mote_id: active.pk, plan: channel, message: obj}});
 }

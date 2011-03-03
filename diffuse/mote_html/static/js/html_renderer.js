@@ -7,5 +7,8 @@ HTML.prototype.render = function() {
     $("#chart").html(self.raw_html);
 };
 
-HTML.prototype.update_data = function(responses) {
+HTML.prototype.updateData = function(responses,append) {
+};
+
+HTML.prototype.clientDisconnected = function(client) {
 };

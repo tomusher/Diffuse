@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.core import serializers
 from django.contrib.auth import authenticate, login, logout
+from django.views.generic.list import ListView
 from annoying.decorators import render_to
 from motes.models import Mote, Plan
 import logging
@@ -8,11 +9,11 @@ import logging
 import simplejson as json
 import redis
 
-@render_to('motes/plan_list.html')
-def plan_list(request, slug):
+@render_to('motes/mote_list.html')
+def mote_list(request, plan_id):
     """Lists all motes in a selected plan (as specified by the slug)."""
 
-    plan = Plan.objects.get(slug=slug)
+    plan = Plan.objects.get(pk=plan_id)
     motes = plan.motes.all()
     return {'plan': plan, 'motes': motes}
 
@@ -46,7 +47,7 @@ def mote_push(request, plan_id, mote_id):
 
     r.set(access_code_key, plan_id)
     r.set(latest_mote_key, mote_id)
-    json_string = {'event': 'pubMote', 'data': { 'mote_id': mote_id }}
+    json_string = {'event': 'adminPublishedMote', 'data': { 'mote_id': mote_id }}
     json_string = json.JSONEncoder().encode(json_string);
     r.publish(plan_channel, json_string); 
 

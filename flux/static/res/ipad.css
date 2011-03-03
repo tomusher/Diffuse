@@ -39,24 +39,7 @@ h2, h3 {
     background: transparent url("images/ajax-loader.gif") no-repeat bottom center;
 }
 
-#mote-question {
-    margin: 10px;
-}
-#mote-question h1 {
-    font-size: 4em;
-}
-#mote-question ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-#mote-question li {
-    font-size: 2.5em;
-    padding: 20px;
-    margin: 10px 0;
-    border: 3px solid rgba(255,255,255,0.6);
-    background-color: rgba(255,255,255,0.3)
-}
+
 
 /* Rounded box style */
 #set-channel, #set-channel form {

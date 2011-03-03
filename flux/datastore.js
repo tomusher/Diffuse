@@ -28,12 +28,47 @@ DataStore.prototype.planExists = function(client, data, callback) {
 };
 
 DataStore.prototype.setResponse = function(plan, mote, client, response) {
+    this.store.sadd("responses:"+client.persistentSessionId, plan+":mote:"+mote);
     this.store.hset(plan+":mote:"+mote, client.persistentSessionId, JSON.stringify(response));
 };
 
 DataStore.prototype.getResponses = function(client, data, callback) {
     this.store.hgetall(data.plan+":mote:"+data.mote_id, function(error, responses) {
         callback(client, data.plan, data.mote_id, responses);
+    });
+};
+
+DataStore.prototype.clearMoteResponses = function(plan, mote) {
+    var self = this;
+    this.store.del(plan+":mote:"+mote, function(error, response) {
+    });
+};
+
+DataStore.prototype.clearClientResponses = function(client) {
+    var self = this;
+    console.log("responses:"+client.persistentSessionId);
+    this.store.smembers("responses:"+client.persistentSessionId, function(error, responses){
+        for(var i=0;i<responses.length;i++) { 
+           self.store.hdel(responses[i], client.persistentSessionId); 
+        };
+    });
+};
+
+DataStore.prototype.newClientId = function(client) {
+    var self = this;
+    this.store.sadd("ids:"+client.persistentSessionId, client.sessionId);
+};
+
+DataStore.prototype.removeClientId = function(client, callback) {
+    var self = this;
+    this.store.srem("ids:"+client.persistentSessionId, client.sessionId, function(error, response) {
+        self.store.scard("ids:"+client.persistentSessionId, function(error, response) {
+            if(response==0) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        });
     });
 };
 

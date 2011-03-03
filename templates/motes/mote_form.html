@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="post">
+    <fieldset>
+        {{ form.non_field_errors }}
+        <ul>
+            <li>
+                {{ form.access_code.errors }}
+                <label for="id_access_code1">Access Code:</label>
+                {{ form.access_code }}
+            </li>
+            <li>
+            <button type="submit">Create</button>
+            </li>
+            <input type="hidden" name="{{ form.user.html_name }}" value="{{ request.user.id }}">
+            {{ form.errors }}
+        </ul>
+        {% csrf_token %}
+    </fieldset>
+</form>
+{% endblock %}

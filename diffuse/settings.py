@@ -59,9 +59,13 @@ MEDIA_URL = '/media/'
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
+
+STATIC_ROOT = os.path.join(PROJECT_DIR, "../static")
 
 STATIC_URL = "/static/"
+
+STATICFILES_DIRS = ( os.path.join(PROJECT_DIR, "../static"), )
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'h^hsvu&@y2s!548-mk%fhyr(g^$a_zpthmyi-d)e)4ebwo=ua4'

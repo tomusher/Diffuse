@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 from polymorphic import PolymorphicModel
 
 class Mote(PolymorphicModel):
@@ -19,11 +20,14 @@ class Mote(PolymorphicModel):
 
 class Plan(models.Model):
     name = models.CharField(max_length=100)
-    slug = models.SlugField()
-    motes = models.ManyToManyField(Mote)
+    slug = models.SlugField(blank=True)
+    motes = models.ManyToManyField(Mote, blank=True)
     user = models.ForeignKey(User)
 
     access_code = models.CharField(max_length=100, unique=True)
+
+    def get_absolute_url(self):
+        return "/plans/{0}".format(self.pk)
 
     def __unicode__(self):
         return self.name
