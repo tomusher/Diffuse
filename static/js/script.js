@@ -3,26 +3,32 @@ socket.on('connect', function(obj){
     socket.send({event: "clientConnected", data: "admin"});
 });
 socket.on('message', function(obj){
-    //console.log(obj);
+    console.log(obj);
     $(document).trigger(obj.event, obj.data);
 });
 socket.connect();
 
 var active_mote;
 var active_plan="";
-var renderer;
+var renderer=undefined;
 
 $(document).ready(function(){
     active_plan = $("#plans .active").attr("data-id");
 
     $(document).bind('serverPushedResponse', function(event, data) {
-        var responses = {};
-        responses[data.client] = data.message;
-        renderer.updateData(responses, true);
+        if(active_mote.pk == data.mote_id) {
+            var responses = {};
+            responses[data.client] = data.message;
+            if(renderer) {
+                renderer.updateData(responses, true);
+            }
+        }
     });
 
     $(document).bind('clientDisconnected', function(event, data) {
-        renderer.clientDisconnected(data.client);
+        if(renderer) {
+            renderer.clientDisconnected(data.client);
+        }
     });
 
     $(document).bind('serverSentResponses', function(event, data) {
@@ -33,7 +39,9 @@ $(document).ready(function(){
                 responses[client] = response;
             } catch(e) {}
         });
-        renderer.updateData(responses, false);
+        if(renderer) {
+            renderer.updateData(responses, false);
+        }
         
     });
     $('.push').click(function(){

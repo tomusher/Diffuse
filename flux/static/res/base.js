@@ -36,6 +36,10 @@ $(document).ready(function() {
         $("input").val(getURLParameter("access-code"));
         $("#set-plan").submit();
     }
+    $("#history h2").click(function() {
+        $(this).toggleClass("active");
+        $("#history .status-area-content").slideToggle();
+    });
 });
 
 function getURLParameter(name) {

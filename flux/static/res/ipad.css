@@ -48,26 +48,38 @@ h2, h3 {
 }
 
 #status {
-    background-color: rgba(0,0,0,0.7); width: 150px; 
-    height: 100%; font-family: sans-serif; text-align: left;
-    font-size: 1em; color: #fff; position: absolute; top: 0; right: 0; z-index: 200; }
-    #status h2 { margin: 0; padding: 4px 8px; font-size: 1em; text-align: left; background-color: rgba(255,255,255,0.2)  }
+    font-family: sans-serif; text-align: left; width: 100%;
+    font-size: 1em; color: #fff; position: absolute; top: 0; right: 0 }
+    #status h2 { position: relative; margin: 0; padding: 4px 8px; font-size: 1em; text-align: left; background-color: rgba(255,255,255,0.2)  }
+    #status .status-area-content { display: none; }
 
-#active-plan { margin-bottom: 10px;} 
-    #active-plan span { display: block; padding: 8px; }
-#history ul { list-style: none; margin: 0 0 10px 0; padding: 0; text-align: left; }
-    #history li { font-size: 1em; padding: 10px 8px }
-    #history li.active { font-weight: bold; }
+#active-plan { margin-bottom: 10px; float: left; background-color: rgba(0,0,0,0.7)} 
+    #active-plan h2 { float: left; }
+    #active-plan .status-area-content { padding: 4px 8px; display: block; float: left }
+#history { background-color: rgba(0,0,0,0.7); width: 150px; z-index: 100; position: absolute; top: 0; right: 0;} 
+    #history h2:after {
+        content: ' '; width: 0; height: 0; display: block; z-index: 1; position: absolute; right: 10px; top: 9px;
+        border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 7px solid white; }
+    #history h2.active:after { border-top: 0; border-bottom: 7px solid white; }
+    #history ul { list-style: none; margin: 0 0 10px 0; padding: 0; text-align: left; }
+        #history li { font-size: 1em; padding: 10px 8px }
+        #history li.active { font-weight: bold; position: relative; }
+        #history li.active:before { 
+            content: ' '; width: 0; height: 0; display: block; z-index: 1; position: absolute; left: -10px; top: 8px;
+            border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 10px solid rgba(0,0,0,0.7); }
 
 /* Rounded box style */
 #set-plan, #set-plan form {
     -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; }
 /* Left bottom rounded style */
-#status {
+#status,#history,#history h2 {
     -webkit-border-radius: 0 0 0 10px; -moz-border-radius: 0 0 0 10px; border-radius: 0 0 0 10px }
+/* Right bottom rounded style */
+#active-plan {
+    -webkit-border-radius: 0 0 10px 0; -moz-border-radius: 0 0 10px 0; border-radius: 0 0 10px 0; }
 /* Bottom rounded style */
 #set-plan #status-area {
     -webkit-border-radius: 0 0 10px 10px; -moz-border-radius: 0 0 10px 10px; border-radius: 0 0 10px 10px }
 /* Shadow box style */
-#set-plan,#status {
+#set-plan,#history,#active-plan {
     -webkit-box-shadow: 2px 2px 5px #000; }
