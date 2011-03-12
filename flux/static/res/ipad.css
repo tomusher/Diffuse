@@ -25,12 +25,20 @@ h2, h3 {
     color: #e5e5e5;
 }
 
-#set-plan {  background-color: rgba(0,0,0,0.7); border: 1px solid #000; }
-    #set-plan form { padding: 10px; border: 1px solid rgba(255,255,255,0.4) }
-    #set-plan fieldset { border: none; }
-    #set-plan label { font-size: 1.4em; display: block; margin-bottom: 0.6em }
+#set-plan {  background-color: rgba(0,0,0,0.7); border: 1px solid #000; position: relative; }
+    #set-plan form { padding: 10px 0; border: 1px solid rgba(255,255,255,0.4) }
+    #set-plan fieldset { border: none; padding: 0; margin: 0; }
+    #set-plan label { font-size: 1.4em; display: block; margin-bottom: 0.6em; padding: 10px 20px 0 20px; }
     #set-plan input { font-size: 1.8em; height: 1.4em; }
     #set-plan button { font-size: 1.8em; height: 1.4em; }
+    #set-plan #status-area { padding: 10px; color: #fff; margin-top: 13px; margin-bottom: -13px; }
+        #set-plan #status-area span { display: none; }
+    #set-plan.loading {}
+        #set-plan.loading #status-area .loading { display: block; } 
+    #set-plan.invalid-plan {}
+        #set-plan.invalid-plan form { border: 3px solid #9C0027; }
+        #set-plan.invalid-plan #status-area { background-color: #9C0027; }
+        #set-plan.invalid-plan #status-area .invalid-plan { display: block; }
 
 #loading {
     font-size: 2em;
@@ -40,11 +48,16 @@ h2, h3 {
 }
 
 #status {
-    background-color: rgba(0,0,0,0.7); padding: 4px;
+    background-color: rgba(0,0,0,0.7); width: 150px; 
+    height: 100%; font-family: sans-serif; text-align: left;
     font-size: 1em; color: #fff; position: absolute; top: 0; right: 0; z-index: 200; }
+    #status h2 { margin: 0; padding: 4px 8px; font-size: 1em; text-align: left; background-color: rgba(255,255,255,0.2)  }
 
-#history ul {
-    list-style: none; margin: 0; padding: 0; }
+#active-plan { margin-bottom: 10px;} 
+    #active-plan span { display: block; padding: 8px; }
+#history ul { list-style: none; margin: 0 0 10px 0; padding: 0; text-align: left; }
+    #history li { font-size: 1em; padding: 10px 8px }
+    #history li.active { font-weight: bold; }
 
 /* Rounded box style */
 #set-plan, #set-plan form {
@@ -52,6 +65,9 @@ h2, h3 {
 /* Left bottom rounded style */
 #status {
     -webkit-border-radius: 0 0 0 10px; -moz-border-radius: 0 0 0 10px; border-radius: 0 0 0 10px }
+/* Bottom rounded style */
+#set-plan #status-area {
+    -webkit-border-radius: 0 0 10px 10px; -moz-border-radius: 0 0 10px 10px; border-radius: 0 0 10px 10px }
 /* Shadow box style */
 #set-plan,#status {
     -webkit-box-shadow: 2px 2px 5px #000; }

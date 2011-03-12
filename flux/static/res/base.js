@@ -36,10 +36,6 @@ $(document).ready(function() {
         $("input").val(getURLParameter("access-code"));
         $("#set-plan").submit();
     }
-    $("#history li").live('click', function() {
-        var index = $(this).attr("data-index");
-        update_mote(mote_history[index]);
-    });
 });
 
 function getURLParameter(name) {
@@ -52,27 +48,34 @@ function getURLParameter(name) {
 function plan_exists() {
     temp_channel = $("input", this).val();
     socket.send({event: 'clientRequestedPlan', data: temp_channel}); 
+    $("#set-plan").removeClass();
+    $("#set-plan").addClass("loading");
     return false;
 }
 
 /* Events Responses */
 function set_plan(event, data) {
-    if(data) {
+    $("#set-plan").removeClass();
+    if(data.plan_id) {
         self.channel = "plan:"+data.plan_id;
         $("#set-plan").hide();
         update_mote(data.latest_mote);
-        $('#current-plan').html(data.plan_name);
+        $('#active-plan span').html(data.plan_name);
+    } else {
+        $("#set-plan").addClass('invalid-plan');
     }
 }
 
 function update_mote(obj) {
-    active = obj;
     update_history(obj);
-    load_scripts(obj.identifier, function() {
-        var renderer_name = obj.identifier.charAt(0).toUpperCase() + obj.identifier.slice(1) + "Renderer";
-        var renderer = new window[renderer_name](obj);
-        renderer.render();
-    });
+    if(!active || active.pk != obj.pk) {
+        active = obj;
+        load_scripts(obj.identifier, function() {
+            var renderer_name = obj.identifier.charAt(0).toUpperCase() + obj.identifier.slice(1) + "Renderer";
+            var renderer = new window[renderer_name](obj);
+            renderer.render();
+        });
+    }
 }
 
 function update_history(obj) {
@@ -87,8 +90,21 @@ function update_history(obj) {
             var li = $("<li>");
             li.html(value.name);
             li.attr("data-index", index);
+            li.attr("data-pk", value.pk)
+            if(value.pk==obj.pk) {
+                li.addClass("active");
+            }
+            li.click(function() {
+                var index = $(this).attr("data-index");
+                update_mote(mote_history[index]);
+                $("#history li").removeClass();
+                $(this).addClass("active");
+            });
             history_list.append(li);
         });
+    } else {
+        $("#history li").removeClass();
+        $("li[data-pk="+obj_exists[0].pk+"]").addClass("active");
     }
 }
 

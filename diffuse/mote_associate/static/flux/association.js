@@ -12,13 +12,13 @@ AssociationRenderer.prototype.render = function() {
     var self = this;
 
     ClientMoteRenderer.prototype.render.call(this, function() {
-        $('ul').randomize('li');
+        $('#mote-associate ul').randomize('li');
         self.paper = Raphael("connections", "100%", "100%");
         self._drawCanvas();
         $(document).resize(function() {
             //self._drawCanvas();
         });
-        $("svg rect").live('mousedown', function(e) {
+        $("#connections svg rect").live('mousedown', function(e) {
             var rect = $(this);
             var start = $(this).data("mapped-to");
             var elX = rect.attr('x').baseVal.value;
@@ -36,13 +36,6 @@ AssociationRenderer.prototype.render = function() {
             if(selected_list == "right-side") {
                 opposite_list = "left-side";
             }
-
-            /*$("svg rect").bind('mouseenter mouseleave', function() {
-                if($(this).data("mapped-to").parent().attr("id")==opposite_list) {
-                    $(this).data("mapped-to").toggleClass("selected");
-                };
-                return false;
-            });*/
 
             var path = self.paper.path(self._buildPathString(elX, elY, elX, elY));
             path.attr('stroke-width', '5px');
@@ -78,10 +71,11 @@ AssociationRenderer.prototype._drawCanvas = function() {
     var self = this;
     self.paper.clear();
     self.paper.setSize("100%", "100%");
-    $('ul li').each(function() {
+    $('#mote-associate ul li').each(function() {
         var rect = self.paper.rect($(this).offset().left, $(this).offset().top, $(this).outerWidth(), $(this).outerHeight());
         rect.attr({
-            fill: "transparent",
+            "fill": "transparent",
+            "stroke-width": 0,
         });
         $(rect.node).data("mapped-to", $(this));
     });
@@ -126,13 +120,12 @@ AssociationRenderer.prototype._connectAnswers = function(start, end) {
     $(left).data("connected-with", path);
 
     self.answer = {};
-    $("#left-side li").each(function() {
+    $("#mote-associate #left-side li").each(function() {
         if($(this).data("connected-to")) {
             self.answer[$(this).attr("data-id")] = $(this).data("connected-to").attr("data-id");
         };
     });
-    console.log(self.answer);
-    //self.answer[left.attr("data-id")] = right.attr("data-id");
+
     var answerLength = 0;
     for(i in self.answer) { answerLength++ };
     if(answerLength == self.pairCount) {

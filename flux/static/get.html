@@ -17,8 +17,12 @@
     </head>
     <body>
         <div id="status">
-            <span id="current-plan"></span> | <a href="#" id="change-plan">Change</a>
+            <div id="active-plan">
+                <h2>Active Plan</h2>
+                <span></span>
+            </div>
             <div id="history">
+                <h2>History</h2>
                 <ul></ul>
             </div>
         </div>
@@ -30,6 +34,12 @@
                     <input id="access-code" name="access-code" type="text"
                     placeholder="Access Code" required autofocus>
                     <button type="submit">Go</button>
+                    <div id="status-area">
+                        <span class="invalid-plan">It doesn't look like this plan is
+                        available, did you type in the correct access
+                        code?</span>
+                        <span class="loading">Loading...</span>
+                    </div>
                 </fieldset>
             </form>
         </div>
