@@ -20,8 +20,9 @@ class Migration(SchemaMigration):
         db.create_table('motes_plan', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('slug', self.gf('django.db.models.fields.SlugField')(max_length=50, db_index=True)),
+            ('slug', self.gf('django.db.models.fields.SlugField')(db_index=True, max_length=50, blank=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('access_code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
         ))
         db.send_create_signal('motes', ['Plan'])
 
@@ -91,10 +92,11 @@ class Migration(SchemaMigration):
         },
         'motes.plan': {
             'Meta': {'object_name': 'Plan'},
+            'access_code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'motes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['motes.Mote']", 'symmetrical': 'False'}),
+            'motes': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['motes.Mote']", 'symmetrical': 'False', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'max_length': '50', 'db_index': 'True'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'db_index': 'True', 'max_length': '50', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         }
     }

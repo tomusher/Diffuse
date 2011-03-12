@@ -20,6 +20,7 @@ class Migration(SchemaMigration):
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mote_qa.Question'])),
             ('answer_text', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('correct', self.gf('django.db.models.fields.NullBooleanField')(null=True, blank=True)),
         ))
         db.send_create_signal('mote_qa', ['Answer'])
 
@@ -44,6 +45,7 @@ class Migration(SchemaMigration):
         'mote_qa.answer': {
             'Meta': {'object_name': 'Answer'},
             'answer_text': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'correct': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'question': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['mote_qa.Question']"})
         },

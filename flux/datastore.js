@@ -20,8 +20,10 @@ DataStore.prototype.planExists = function(client, data, callback) {
     this.store.get("plan:"+data, function(error, plan_id) {
         var plan_id = plan_id;
         self.store.get("plan:"+plan_id+":latest_mote", function(error, latest_mote_id) {
-            self.store.get("mote:"+latest_mote_id, function(error, latest_mote) {
-                callback(client, plan_id, latest_mote);
+            self.getMoteById("plan:"+plan_id, latest_mote_id, function(channel, latest_mote) {
+                self.store.get("plan:"+plan_id+":name", function(error, plan_name) {
+                    callback(client, plan_id, plan_name, latest_mote);
+                });
             });
         });
     });

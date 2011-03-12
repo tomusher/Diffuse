@@ -4,7 +4,9 @@ from diffuse.motes.models import Mote
 
 class Question(Mote):
     question_text = models.CharField(max_length=255)
-
+    descriptive_name = "Question"
+    identifier = "qa"
+    
     def as_dict(self):
         output = super(Question, self).as_dict()
         answer = []

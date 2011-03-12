@@ -2,6 +2,7 @@ Keys:
 mote:[mote_id] = full JSON for mote
 plan:[plan_id]:mote:[mote_id] = hash of client responses to mote by client_id
 plan:[plan_id]:latest_mote = ID of latest mote pushed on plan
+plan:[plan_id]:name = Full name of plan
 plan:[plan_access_code] = Plan ID
 
 Channels:

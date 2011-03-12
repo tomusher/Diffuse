@@ -105,14 +105,11 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'tinymce',
     'south',
     'annoying',
     'polymorphic',
     'diffuse.motes',
-    'mote_weburl',
-    'mote_message',
-    'mote_html',
-    'mote_qa',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS+(
@@ -128,5 +125,28 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 }
 
-LOGIN_REDIRECT_URL = "/plans/my-first-plan"
+LOGIN_REDIRECT_URL = "/plans/"
 LOGIN_URL = "/login/"
+
+ENABLED_MOTE_TYPES = [
+    {
+        'identifier': 'qa',
+        'app': 'mote_qa',
+        'mote_type': 'Question',},
+    {
+        'identifier': 'slide',
+        'app': 'mote_slide',
+        'mote_type': 'Slide',},
+    {
+        'identifier': 'association',
+        'app': 'mote_associate',
+        'mote_type': 'AssociationGroup',},
+]
+
+for mote_type in ENABLED_MOTE_TYPES:
+    print mote_type
+    INSTALLED_APPS = INSTALLED_APPS + (mote_type['app'],)
+    TEMPLATE_DIRS = TEMPLATE_DIRS + (os.path.join(PROJECT_DIR, '/', mote_type['app'], '/templates'),)
+
+TINYMCE_JS_URL = STATIC_URL + 'js/tiny_mce/tiny_mce.js'
+TINYMCE_JS_ROOT = STATIC_ROOT + 'js/tiny_mce'

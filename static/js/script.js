@@ -3,16 +3,18 @@ socket.on('connect', function(obj){
     socket.send({event: "clientConnected", data: "admin"});
 });
 socket.on('message', function(obj){
-    console.log(obj);
+    //console.log(obj);
     $(document).trigger(obj.event, obj.data);
 });
 socket.connect();
 
 var active_mote;
-var active_plan="plan:1";
+var active_plan="";
 var renderer;
 
 $(document).ready(function(){
+    active_plan = $("#plans .active").attr("data-id");
+
     $(document).bind('serverPushedResponse', function(event, data) {
         var responses = {};
         responses[data.client] = data.message;
@@ -44,7 +46,7 @@ $(document).ready(function(){
                 {event: "adminRequestedResponses",
                 data: {
                     mote_id: active_mote.pk,
-                    plan: active_plan 
+                    plan: "plan:"+active_plan 
                  }
             });
         });
@@ -54,17 +56,29 @@ $(document).ready(function(){
         $(this).addClass('active');
         return false;
     });
+    $('.add-mote').click(function(){
+        var mote_type = $('[name=mote-type] option:selected').val();
+        var url = "/plans/"+active_plan+"/add/"+mote_type;
+        window.location.href = url;
+    });
     $("#clear").click(function() {
         clearResponses();
     });
+    $('#mote-list li').hover(function() {
+        $(".actions", this).fadeIn();
+    }, function() {
+        $(".actions", this).fadeOut();
+    });
 
     function clearResponses() {
-        socket.send({event: "adminClearedResponses", data: {plan: active_plan, mote_id: active_mote.pk}});
+        socket.send({event: "adminClearedResponses", data: {plan: "plan:"+active_plan, mote_id: active_mote.pk}});
     };
 
     function display(active_mote) {
-        renderer = new window[active_mote.content_type](active_mote);
-        renderer.render();
+        if(window[active_mote.content_type]) {
+            renderer = new window[active_mote.content_type](active_mote);
+            renderer.render();
+        }
     }
 });
 

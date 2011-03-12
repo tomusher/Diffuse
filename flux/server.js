@@ -1,4 +1,5 @@
 var http = require('http'),
+    httpProxy = require('http-proxy'),
     fs = require('fs'),
     sys = require('sys'),
     events = require('events'),

@@ -22,6 +22,6 @@ class NavSelectedNode(template.Node):
         path = context['request'].path
         for p in self.patterns:
             pValue = template.Variable(p).resolve(context)
-            if path == pValue:
+            if str(pValue) in path:
                 return self.nodelist.render(context)
         return ""

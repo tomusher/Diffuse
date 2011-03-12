@@ -2,7 +2,7 @@ body,html { margin: 0; padding: 0; height: 100%; }
 
 body { 
     font-family: Georgia;
-    background: url("images/ipad_bg.jpg");
+    background: #123456;
     text-align: center;
     display: -webkit-box; display: -moz-box; display: box;
     -webkit-box-orient: vertical; -moz-box-orient: vertical; box-orient: vertical;
@@ -25,12 +25,12 @@ h2, h3 {
     color: #e5e5e5;
 }
 
-#set-channel {  background-color: rgba(0,0,0,0.7); border: 1px solid #000; }
-    #set-channel form { padding: 10px; border: 1px solid rgba(255,255,255,0.4) }
-    #set-channel fieldset { border: none; }
-    #set-channel label { font-size: 1.4em; display: block; margin-bottom: 0.6em }
-    #set-channel input { font-size: 1.8em; height: 1.4em; }
-    #set-channel button { font-size: 1.8em; height: 1.4em; }
+#set-plan {  background-color: rgba(0,0,0,0.7); border: 1px solid #000; }
+    #set-plan form { padding: 10px; border: 1px solid rgba(255,255,255,0.4) }
+    #set-plan fieldset { border: none; }
+    #set-plan label { font-size: 1.4em; display: block; margin-bottom: 0.6em }
+    #set-plan input { font-size: 1.8em; height: 1.4em; }
+    #set-plan button { font-size: 1.8em; height: 1.4em; }
 
 #loading {
     font-size: 2em;
@@ -39,11 +39,19 @@ h2, h3 {
     background: transparent url("images/ajax-loader.gif") no-repeat bottom center;
 }
 
+#status {
+    background-color: rgba(0,0,0,0.7); padding: 4px;
+    font-size: 1em; color: #fff; position: absolute; top: 0; right: 0; z-index: 200; }
 
+#history ul {
+    list-style: none; margin: 0; padding: 0; }
 
 /* Rounded box style */
-#set-channel, #set-channel form {
+#set-plan, #set-plan form {
     -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; }
+/* Left bottom rounded style */
+#status {
+    -webkit-border-radius: 0 0 0 10px; -moz-border-radius: 0 0 0 10px; border-radius: 0 0 0 10px }
 /* Shadow box style */
-#set-channel {
+#set-plan,#status {
     -webkit-box-shadow: 2px 2px 5px #000; }

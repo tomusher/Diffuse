@@ -1,0 +1,16 @@
+{{#data}}
+<div id="mote-associate">
+<h1>{{description_text}}</h1>
+<ul id="left-side">
+{{#associations}}
+<li data-id="{{pk}}">{{left_side}}</li>
+{{/associations}}
+</ul>
+<ul id="right-side">
+{{#associations}}
+<li data-id="{{pk}}">{{right_side}}</li>
+{{/associations}}
+</ul>
+</div>
+<div id="connections" class="canvas"></div>
+{{/data}}

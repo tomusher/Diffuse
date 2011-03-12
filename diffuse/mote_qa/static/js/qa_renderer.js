@@ -50,7 +50,7 @@ Question.prototype.redraw = function() {
         self.chart.series[0].data[i].y=0;
     };
     $.each(self.chartData, function(client, data) {
-        var point = self.chart.get(data.id);
+        var point = self.chart.get(data);
         point.update(point.y+1);
     });
     self.chart.redraw();

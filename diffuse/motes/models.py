@@ -5,11 +5,15 @@ from polymorphic import PolymorphicModel
 
 class Mote(PolymorphicModel):
     name = models.CharField(max_length=100)
+    descriptive_name = "Base Mote"
+    identifier = "basemote"
     
     def as_dict(self):
         output = {
             "pk": self.pk,
             "name": self.name,
+            "descriptive_name": self.descriptive_name,
+            "identifier": self.identifier,
             "content_type": self.__class__.__name__,
             "data": None,
         }

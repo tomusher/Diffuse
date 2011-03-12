@@ -43,11 +43,12 @@ Socket.prototype.sendMote = function(channel, mote) {
     this.broadcast(message);
 };
 
-Socket.prototype.setPlan = function(client, plan_id, latest_mote) {
+Socket.prototype.setPlan = function(client, plan_id, plan_name, latest_mote) {
     var data = {
         event: 'serverSetPlan',
         data: {
             plan_id: plan_id,
+            plan_name: plan_name,
             latest_mote: JSON.parse(latest_mote)
         }
     }

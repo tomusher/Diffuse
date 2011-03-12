@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block selector %}
+{% include "motes/mote_list.html" %}
+{% endblock %}
+
+{% block content %}
+<h2>New Question</h2>
+<form id="edit-mote" method="post" action="">
+    <fieldset id="question">
+        <legend>Question</legend>
+        {% csrf_token %}
+        {{ form.errors }}
+        <ol>
+        {% for field in form %}
+            <li>
+            {{ field.label_tag}}
+            {{ field }}
+            </li>
+        {% endfor %}
+    </ol>
+    </fieldset>
+
+    <fieldset id="answers">
+        <legend>Answers</legend>
+        {{ formset.management_form }}
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ formset.0.fields.answer_text.label }}</th>
+                    <th>{{ formset.0.fields.correct.label }}</th>
+                    <th>{{ formset.0.fields.DELETE.label }}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                <tr>
+                    <td>{{ form.id }}{{ form.answer_text }}</td>
+                    <td>{{ form.correct }}</td>
+                    <td>{{ form.DELETE }}</td>
+                    <td>{{ form.errors }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </fieldset>
+    <button class="submit" type="submit">Create</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endblock %}

@@ -194,7 +194,7 @@ header {display: block;
         position: relative;
         -moz-box-ordinal-group: 2; -webkit-box-ordinal-group: 2; box-ordinal-group: 2;
         width: 200px; }
-    #active-mote {
+    #main-content {
         position: relative;
         z-index: 10;
         -moz-box-ordinal-group: 3; -webkit-box-ordinal-group: 3; box-ordinal-group: 3;
@@ -203,7 +203,7 @@ header {display: block;
             padding: 0 10px;
         }
 
-    aside#plans, #main, #active-mote {
+    aside#plans, #main, #main-content {
         height: 100%;
         background: #D3D3D3;
         background: -moz-linear-gradient(left, #DDD 0%, #EAEAEA 100%);
@@ -212,13 +212,15 @@ header {display: block;
 
         aside#plans ul,
         #mote-list { list-style: none; margin: 0; padding: 0; }
+            #mote-list li { clear: both; position: relative; }
             aside#plans li a,
-            #mote-list li a { display: block; padding: 5px 10px; border: 1px solid transparent; }
+            #mote-list li a.push { display: block; padding: 5px 10px; border: 1px solid transparent; }
             aside#plans li a.active,
-            #mote-list li a.active {   background-color: rgba(255,255,255,0.5);
+            #mote-list li a.push.active {   background-color: rgba(255,255,255,0.5);
                                        border-top: 1px solid #ccc; 
                                        border-bottom: 1px solid #fff; }
 
+/* Buttons */
 .actions { padding: 10px; }
 a.button,button {
     background: #eee; background: -moz-linear-gradient(top, #eee 0%, #ccc 100%);
@@ -228,7 +230,9 @@ a.button,button {
     color: #333; font-size: 0.8em; font-weight: bold; text-decoration: none;
     padding: 4px 8px;
     text-align: center; text-shadow: 0 1px 0 #eee;
+    margin-bottom: 8px;
 }
+a.button { line-height: 2.4em; }
 
 a.button:hover,button:hover {
     background: #ddd; background: -moz-linear-gradient(top, #ddd 0%, #bbb 100%);
@@ -248,8 +252,14 @@ a.button:before,button:before {
 }
 a.button.add:before,button.add:before {         content: "+"; }
 a.button.delete:before,button.delete:before {   content: "x"; }
-a.button.clear:before,button.clear:before {   content: "x"; }
+a.button.clear:before,button.clear:before {     content: "x"; }
 a.button.edit:before,button.edit:before {       content: "p"; }
+a.button.submit#before,button.submit:before {   content: "y"; }
+
+#mote-list li .actions { position: absolute; right: 0; padding: 0 4px 0 0; top: 0; display: none; }
+#mote-list li a.button { text-align: center; padding: 4px 8px; }
+#mote-list li a.button span { display: none; }
+#mote-list li a.button:before { padding-right: 0; }
 
 /* Typographic Styles */
 h2 { font-size: 1.1em; padding: 7px 5px 5px 5px; margin-bottom: 5px;
@@ -264,6 +274,15 @@ h2 { font-size: 1.1em; padding: 7px 5px 5px 5px; margin-bottom: 5px;
         url("../fonts/iconic_stroke.otf") format('opentype');
 }
 
+/* Forms */
+form ul, form ol { list-style: none; margin: 0; padding: 0; }
+#edit-mote { padding: 0 10px; }
+#edit-mote label { display: block; width: 100px; float: left; }
+#edit-mote input, #edit-mote select { margin: 0 5px 5px 0; }
+#edit-mote legend { font-size: 1.05em; font-weight: bold; }
+#edit-mote fieldset { margin-bottom: 10px; }
+
+#edit-mote #answers th { text-align: left; } 
 
 
 

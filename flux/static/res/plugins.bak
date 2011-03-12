@@ -1,0 +1,208 @@
+/*jslint browser: true */ /*global jQuery: true */
+
+/**
+ * jQuery Cookie plugin
+ *
+ * Copyright (c) 2010 Klaus Hartl (stilbuero.de)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ */
+
+// TODO JsDoc
+
+/**
+ * Create a cookie with the given key and value and other optional parameters.
+ *
+ * @example $.cookie('the_cookie', 'the_value');
+ * @desc Set the value of a cookie.
+ * @example $.cookie('the_cookie', 'the_value', { expires: 7, path: '/', domain: 'jquery.com', secure: true });
+ * @desc Create a cookie with all available options.
+ * @example $.cookie('the_cookie', 'the_value');
+ * @desc Create a session cookie.
+ * @example $.cookie('the_cookie', null);
+ * @desc Delete a cookie by passing null as value. Keep in mind that you have to use the same path and domain
+ *       used when the cookie was set.
+ *
+ * @param String key The key of the cookie.
+ * @param String value The value of the cookie.
+ * @param Object options An object literal containing key/value pairs to provide optional cookie attributes.
+ * @option Number|Date expires Either an integer specifying the expiration date from now on in days or a Date object.
+ *                             If a negative value is specified (e.g. a date in the past), the cookie will be deleted.
+ *                             If set to null or omitted, the cookie will be a session cookie and will not be retained
+ *                             when the the browser exits.
+ * @option String path The value of the path atribute of the cookie (default: path of page that created the cookie).
+ * @option String domain The value of the domain attribute of the cookie (default: domain of page that created the cookie).
+ * @option Boolean secure If true, the secure attribute of the cookie will be set and the cookie transmission will
+ *                        require a secure protocol (like HTTPS).
+ * @type undefined
+ *
+ * @name $.cookie
+ * @cat Plugins/Cookie
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+
+/**
+ * Get the value of a cookie with the given key.
+ *
+ * @example $.cookie('the_cookie');
+ * @desc Get the value of a cookie.
+ *
+ * @param String key The key of the cookie.
+ * @return The value of the cookie.
+ * @type String
+ *
+ * @name $.cookie
+ * @cat Plugins/Cookie
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+jQuery.cookie = function (key, value, options) {
+
+    // key and at least value given, set cookie...
+    if (arguments.length > 1 && String(value) !== "[object Object]") {
+        options = jQuery.extend({}, options);
+
+        if (value === null || value === undefined) {
+            options.expires = -1;
+        }
+
+        if (typeof options.expires === 'number') {
+            var days = options.expires, t = options.expires = new Date();
+            t.setDate(t.getDate() + days);
+        }
+
+        value = String(value);
+
+        return (document.cookie = [
+                encodeURIComponent(key), '=',
+                options.raw ? value : encodeURIComponent(value),
+                options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+                options.path ? '; path=' + options.path : '',
+                options.domain ? '; domain=' + options.domain : '',
+                options.secure ? '; secure' : ''
+                ].join(''));
+    }
+
+    // key and possibly options given, get cookie...
+    options = value || {};
+    var result, decode = options.raw ? function (s) { return s; } : decodeURIComponent;
+    return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
+};
+
+(function($){
+/*
+ * includeMany 1.2.2
+ * 
+ * Copyright (c) 2009 Arash Karimzadeh (arashkarimzadeh.com)
+ * Licensed under the MIT (MIT-LICENSE.txt)
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * Date: Dec 03 2009
+ */
+$.chainclude = function(urls,finaly){
+    var onload = function(callback,data){
+                        if(typeof urls.length!='undefined'){
+                            if(urls.length==0)
+                                return $.isFunction(finaly)
+                                        ?finaly(data)
+                                        :null;
+                            urls.shift();
+return $.chainclude.load(urls,onload);
+            }
+            for(var item in urls){
+                urls[item](data);
+                delete urls[item];
+                var count = 0;
+                for(var i in urls)
+                    count++;
+                return (count==0)
+                    ?$.isFunction(finaly)?finaly(data):null
+                    :$.chainclude.load(urls,onload);
+            }
+        }
+        $.chainclude.load(urls,onload);
+    };
+    $.chainclude.load = function(urls,onload){
+        if(typeof urls=='object' && typeof urls.length=='undefined')
+            for(var item in urls)
+                return $.include.load(item,onload,urls[item].callback);
+        urls = $.makeArray(urls);
+        $.include.load(urls[0],onload,null);
+    };
+    $.include = function(urls,finaly){
+        var luid = $.include.luid++;
+        var onload = function(callback,data){
+            if($.isFunction(callback))
+                callback(data);
+            if(--$.include.counter[luid]==0&&$.isFunction(finaly))
+                finaly();
+        }
+        if(typeof urls=='object' && typeof urls.length=='undefined'){
+            $.include.counter[luid] = 0;
+            for(var item in urls)
+                $.include.counter[luid]++;
+            return $.each(urls,function(url,callback){$.include.load(url,onload,callback);});
+        }
+        urls = $.makeArray(urls);
+        $.include.counter[luid] = urls.length;
+        $.each(urls,function(){$.include.load(this,onload,null);});
+    }
+    $.extend(
+            $.include,
+            {
+                luid: 0,
+    counter: [],
+    load: function(url,onload,callback){
+        url = url.toString();
+        if($.include.exist(url))
+        return onload(callback);
+    if(/.css$/.test(url))
+        $.include.loadCSS(url,onload,callback);
+    else if(/.js$/.test(url))
+        $.include.loadJS(url,onload,callback);
+    else
+        $.get(url,function(data){onload(callback,data)});
+    },
+    loadCSS: function(url,onload,callback){
+                 var css=document.createElement('link');
+                 css.setAttribute('type','text/css');
+                 css.setAttribute('rel','stylesheet');
+                 css.setAttribute('href',''+url);
+                 $('head').get(0).appendChild(css);
+                 $.browser.msie
+                     ?$.include.IEonload(css,onload,callback)
+                     :onload(callback);//other browsers do not support it
+             },
+    loadJS: function(url,onload,callback){
+                var js=document.createElement('script');
+                js.setAttribute('type','text/javascript');
+                js.setAttribute('src',''+url);
+                $.browser.msie
+                    ?$.include.IEonload(js,onload,callback)
+                    :js.onload = function(){onload(callback)};
+                $('head').get(0).appendChild(js);
+            },
+    IEonload: function(elm,onload,callback){
+                  elm.onreadystatechange = 
+                      function(){
+                          if(this.readyState=='loaded'||this.readyState=='complete')
+                              onload(callback);
+                      }
+              },
+    exist: function(url){
+               var fresh = false;
+               $('head script').each(
+                       function(){
+                           if(/.css$/.test(url)&&this.href==url)
+                   return fresh=true;
+                           else if(/.js$/.test(url)&&this.src==url)
+                   return fresh=true;
+                       }
+                       );
+               return fresh;
+           }
+            }
+    );
+})(jQuery);
+

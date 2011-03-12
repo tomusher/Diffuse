@@ -1,13 +1,23 @@
-{% extends "base.html" %}
-{% block content %}
 <h2>Motes</h2>
 <ul id="mote-list">
 {% for mote in motes %}
-<li><a class="push" href="{% url mote_push plan.pk mote.id %}">{{ mote.name }}</a></li>
+    <li>
+        <a class="push" href="{% url mote_push plan.pk mote.id %}">{{ mote.name }}</a>
+        <div class="actions">
+            <a class="button edit" href="{% url mote_edit plan.id mote.id %}"><span>Edit Mote</span></a>
+            <a class="button delete" href="{% url mote_delete plan.id mote.id %}"><span>Delete Mote</span></a>
+    </div>
+    </li>
 {% endfor %}
 </ul>
 <div class="actions">
+    <select name="mote-type">
+    {% for mote_type in mote_types %} 
+        <option value="{{ mote_type.identifier }}">{{ mote_type.name }}</option>
+    {% endfor %}
+    </select>
+    <a class="button add add-mote" href="#">Add</a><br>
+
     <a class="button delete" href="{% url plan_delete plan.pk %}">Delete Plan</a>
     <a class="button edit" href="{% url plan_edit plan.pk %}">Edit Plan</a>
 </div>
-{% endblock %}
