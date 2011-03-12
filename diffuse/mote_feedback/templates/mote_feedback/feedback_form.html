@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block selector %}
+{% include "motes/mote_list.html" %}
+{% endblock %}
+
+{% block content %}
+<h2>New Feedback</h2>
+<form id="edit-mote" method="post" action="">
+    <fieldset id="question">
+        <legend>Feedback</legend>
+        {% csrf_token %}
+        {{ form.errors }}
+        <ol>
+        {% for field in form %}
+            <li>
+            {{ field.label_tag}}
+            {{ field }}
+            </li>
+        {% endfor %}
+    </ol>
+    </fieldset>
+
+    <button class="submit" type="submit">Create</button>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endblock %}

@@ -9,6 +9,9 @@ var AssociationGroup = function(data) {
 
 AssociationGroup.prototype.render = function() {
     var self = this;
+    $("#renderer").html("");
+    var container = $("<div>").attr("id", "chart");
+    $("#renderer").append(container);
     self.chartOptions = { 
         chart: {
                    renderTo: 'chart',

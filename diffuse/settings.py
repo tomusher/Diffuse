@@ -141,10 +141,13 @@ ENABLED_MOTE_TYPES = [
         'identifier': 'association',
         'app': 'mote_associate',
         'mote_type': 'AssociationGroup',},
+    {
+        'identifier': 'feedback',
+        'app': 'mote_feedback',
+        'mote_type': 'Feedback',},
 ]
 
 for mote_type in ENABLED_MOTE_TYPES:
-    print mote_type
     INSTALLED_APPS = INSTALLED_APPS + (mote_type['app'],)
     TEMPLATE_DIRS = TEMPLATE_DIRS + (os.path.join(PROJECT_DIR, '/', mote_type['app'], '/templates'),)
 

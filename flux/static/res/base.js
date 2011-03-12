@@ -24,11 +24,15 @@ $(document).ready(function() {
             update_mote(data.message);
         }
     });
-    $("#change-plan").toggle(function() {
-        $("#set-plan").fadeIn();
+    $("#active-plan").toggle(function() {
+        $("#content").fadeOut(function() {
+            $("#set-plan").fadeIn();
+        });
         return false;
     },function(){
-        $("#set-plan").fadeOut();
+        $("#set-plan").fadeOut(function() {
+            $("#content").fadeIn();
+        });
         return false;
     });
     $("#set-plan").submit(plan_exists);
@@ -61,10 +65,12 @@ function plan_exists() {
 function set_plan(event, data) {
     $("#set-plan").removeClass();
     if(data.plan_id) {
+        mote_history = [];
         self.channel = "plan:"+data.plan_id;
         $("#set-plan").hide();
         update_mote(data.latest_mote);
-        $('#active-plan span').html(data.plan_name);
+        $("#active-plan span").html(data.plan_name);
+        $("#content").fadeIn();
     } else {
         $("#set-plan").addClass('invalid-plan');
     }

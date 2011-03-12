@@ -8,6 +8,9 @@ var Question = function(data) {
 
 Question.prototype.render = function() {
     var self = this;
+    $("#renderer").html("");
+    var container = $("<div>").attr("id", "chart");
+    $("#renderer").append(container);
     //console.log(this);
     self.chartOptions = { 
         chart: {
