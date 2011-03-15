@@ -16,6 +16,8 @@ urlpatterns = patterns('',
 
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root':'../static'}),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root':'../media'}),
 
     url(r'^tinymce/', include('tinymce.urls')),
 

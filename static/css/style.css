@@ -220,6 +220,8 @@ header {display: block;
                                        border-top: 1px solid #ccc; 
                                        border-bottom: 1px solid #fff; }
 
+#renderer { position: relative; }
+
 /* Buttons */
 .actions { padding: 10px; }
 a.button,button {

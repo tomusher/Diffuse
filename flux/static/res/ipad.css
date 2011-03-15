@@ -68,6 +68,8 @@ h2, h3 {
             content: ' '; width: 0; height: 0; display: block; z-index: 1; position: absolute; left: -10px; top: 8px;
             border-top: 10px solid transparent; border-bottom: 10px solid transparent; border-right: 10px solid rgba(0,0,0,0.7); }
 
+#content { width: 100%; }
+
 /* Rounded box style */
 #set-plan, #set-plan form {
     -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; }

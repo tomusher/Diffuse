@@ -1,6 +1,3 @@
-<<<<<<< HEAD
 *.pyc
 *.swp
-=======
-s3
->>>>>>> ec023737a4d54df1fe6e6f198cd87ed8677b6676
+media/*

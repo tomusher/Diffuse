@@ -129,22 +129,21 @@ LOGIN_REDIRECT_URL = "/plans/"
 LOGIN_URL = "/login/"
 
 ENABLED_MOTE_TYPES = [
-    {
-        'identifier': 'qa',
+    {   'identifier': 'qa',
         'app': 'mote_qa',
         'mote_type': 'Question',},
-    {
-        'identifier': 'slide',
+    {   'identifier': 'slide',
         'app': 'mote_slide',
         'mote_type': 'Slide',},
-    {
-        'identifier': 'association',
+    {   'identifier': 'association',
         'app': 'mote_associate',
         'mote_type': 'AssociationGroup',},
-    {
-        'identifier': 'feedback',
+    {   'identifier': 'feedback',
         'app': 'mote_feedback',
         'mote_type': 'Feedback',},
+    {   'identifier': 'heatmap',
+        'app': 'mote_heatmap',
+        'mote_type': 'Heatmap',},
 ]
 
 for mote_type in ENABLED_MOTE_TYPES:

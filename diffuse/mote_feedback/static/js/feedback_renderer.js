@@ -1,5 +1,5 @@
 var Feedback = function(data) {
-    this.responses = data.data.responses;
+    this.responses = {};
     this.changed_responses = {};
     this.list;
 };
