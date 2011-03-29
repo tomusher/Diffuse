@@ -1,5 +1,6 @@
 from django.forms.models import inlineformset_factory
 from django.forms import ModelForm
+from django.shortcuts import redirect
 from motes.models import Plan, Mote
 from mote_heatmap.models import Heatmap
 from annoying.decorators import render_to
@@ -18,9 +19,10 @@ def create_mote(request, plan_id):
     if request.method == "POST":
         form = HeatmapForm(request.POST, request.FILES)
         if form.is_valid():
-            feedback = form.save()
-            feedback.plan_set.add(plan)
-            feedback.save()
+            heatmap = form.save()
+            heatmap.plan_set.add(plan)
+            heatmap.save()
+            return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }
 
@@ -35,5 +37,6 @@ def mote_edit(request, plan_id, mote_id):
         form = HeatmapForm(request.POST, request.FILES, instance=feedback)
         if form.is_valid():
             form.save()
+            return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }

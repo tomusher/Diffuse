@@ -1,5 +1,6 @@
 from django.forms.models import inlineformset_factory
 from django.forms import ModelForm
+from django.shortcuts import redirect
 from motes.models import Plan
 from mote_associate.models import AssociationGroup, Association
 from annoying.decorators import render_to
@@ -19,13 +20,14 @@ def create_mote(request, plan_id):
     if request.method == "POST":
         form = AssociationGroupForm(request.POST)
         if form.is_valid():
-            association_group = form.save()
-            association_group.plan_set.add(plan)
-            association_group.save()
+            association_group = form.save(commit=False)
             formset = AssociationFormSet(request.POST, request.FILES,
-                    instance=association_group)
+                        instance=association_group)
             if formset.is_valid():
+                association_group.save()
+                association_group.plan_set.add(plan)
                 formset.save()
+                return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "formset": formset, "plan": plan, "motes": motes, }
 
@@ -44,6 +46,7 @@ def mote_edit(request, plan_id, mote_id):
         if form.is_valid() and formset.is_valid():
             form.save()
             formset.save()
+            return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "formset": formset, "plan": plan, "motes": motes, }
 

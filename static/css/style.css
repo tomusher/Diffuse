@@ -210,15 +210,12 @@ header {display: block;
         background: -webkit-gradient(linear, left top, right top, color-stop(0%,#DDD), color-stop(100%,#EAEAEA));
         -webkit-box-shadow: -2px 0 2px #bbb; } 
 
-        aside#plans ul,
-        #mote-list { list-style: none; margin: 0; padding: 0; }
-            #mote-list li { clear: both; position: relative; }
-            aside#plans li a,
-            #mote-list li a.push { display: block; padding: 5px 10px; border: 1px solid transparent; }
-            aside#plans li a.active,
-            #mote-list li a.push.active {   background-color: rgba(255,255,255,0.5);
-                                       border-top: 1px solid #ccc; 
-                                       border-bottom: 1px solid #fff; }
+.item-list { list-style: none; margin: 0; padding: 0; }
+    .item-list li { clear: both; position: relative; }
+    .item-list li a { display: block; padding: 5px 10px; border: 1px solid transparent; }
+    .item-list li a.active {   background-color: rgba(255,255,255,0.5);
+                               border-top: 1px solid #ccc; 
+                               border-bottom: 1px solid #fff; }
 
 #renderer { position: relative; }
 
@@ -258,10 +255,18 @@ a.button.clear:before,button.clear:before {     content: "x"; }
 a.button.edit:before,button.edit:before {       content: "p"; }
 a.button.submit#before,button.submit:before {   content: "y"; }
 
-#mote-list li .actions { position: absolute; right: 0; padding: 0 4px 0 0; top: 0; display: none; }
-#mote-list li a.button { text-align: center; padding: 4px 8px; }
-#mote-list li a.button span { display: none; }
-#mote-list li a.button:before { padding-right: 0; }
+.item-list li .actions { position: absolute; right: 0; padding: 0 4px 0 0; top: 0; display: none; }
+.item-list li a.button { text-align: center; padding: 4px 8px; display: inline; }
+.item-list li a.button span { display: none; }
+.item-list li a.button:before { padding-right: 0; }
+
+.item-list li a.star { text-decoration: none; color: #ddd; font-size: 1.8em; text-shadow: 0px 0px 1px #000;
+                    position: absolute; left: 0; top: -6px; padding-left: 10px !important; }
+.item-list li a.star.enabled { color: #F0F022; }
+.item-list li a.star span { display: none; }
+.item-list li a.star:before { font-family: "IconicStroke"; content: "s"; }
+
+#all-plans-list li a { padding-left: 30px; }
 
 /* Typographic Styles */
 h2 { font-size: 1.1em; padding: 7px 5px 5px 5px; margin-bottom: 5px;

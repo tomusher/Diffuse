@@ -1,6 +1,6 @@
 #mote-feedback form { padding: 10px 0;  }
 #mote-feedback fieldset { border: none; padding: 0; margin: 0; }
-#mote-feedback input { font-size: 1.8em; height: 1.4em; }
+#mote-feedback textarea { font-size: 1.8em; height: 3.6em; width: 400px; font-family: sans-serif; }
 #mote-feedback button { font-size: 1.8em; height: 1.4em; }
 
 

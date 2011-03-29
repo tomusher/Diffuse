@@ -28,7 +28,7 @@ AssociationGroup.prototype.render = function() {
                 },
         tooltip: {
                    formatter: function() {
-                        return '<b>'+this.point.name+'</b>: '+this.y+'%';
+                        return '<b>'+this.point.name+'</b>: '+Math.round(this.y*10)/10+'%';
                    }
                 },
         plotOptions: {
@@ -36,7 +36,7 @@ AssociationGroup.prototype.render = function() {
                         dataLabels: {
                             enabled: true,
                             formatter: function() {
-                                return '<b>'+this.point.name+'</b>: '+this.y+'%';
+                                return '<b>'+this.point.name+'</b>: '+Math.round(this.y*10)/10+'%';
                             }
                          },
                     },

@@ -48,12 +48,12 @@ DataStore.prototype.clearMoteResponses = function(plan, mote) {
 
 DataStore.prototype.clearClientResponses = function(client) {
     var self = this;
-    console.log("responses:"+client.persistentSessionId);
     this.store.smembers("responses:"+client.persistentSessionId, function(error, responses){
         for(var i=0;i<responses.length;i++) { 
            self.store.hdel(responses[i], client.persistentSessionId); 
         };
     });
+    this.store.del("responses:"+client.persistentSessionId);
 };
 
 DataStore.prototype.newClientId = function(client) {

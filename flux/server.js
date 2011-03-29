@@ -12,7 +12,7 @@ var http = require('http'),
     redis = require('./lib/node_redis'),
     redis_store = require('connect-redis');
 
-var COOKIE_AGE = 10800000 // 3 hours
+var COOKIE_AGE = 10800000; // 3 hours
 
 server = connect.createServer(
     connect.cookieDecoder(),

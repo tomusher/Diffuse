@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from motes.models import Plan, Mote
-from mote_qa.models import Question
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -14,8 +14,6 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root':'../static'}),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
         {'document_root':'../media'}),
 
@@ -35,6 +33,9 @@ urlpatterns = patterns('',
                         DeleteView.as_view(model=Plan,
                                            success_url="/plans/"), 
                         name="plan_delete"),
+    url(r'^plans/star/(?P<pk>\d+)$', 
+                        'motes.views.plan_star',
+                        name="plan_star"),
     url(r'^plans/(?P<plan_id>\d+)$', 
                         'motes.views.plan_view', 
                         name='plan_view'),
@@ -48,18 +49,12 @@ urlpatterns = patterns('',
                         name='mote_delete'),
     
     # Motes
-    url(r'^motes/cache/(?P<mote_id>\d+)/$', 
-                        'motes.views.mote_cache', 
-                        name='mote_cache'),
     url(r'^motes/push/(?P<plan_id>\d+)/(?P<mote_id>\d+)/$', 
                         'motes.views.mote_push', 
                         name='mote_push'),
     url(r'^motes/add/$',
                         CreateView.as_view(model=Mote),
                         name='mote_add'),
-    url(r'^motes/(?P<mote_id>\d+)/$', 
-                        'motes.views.mote_json', 
-                        name='mote_json'),
 
     url(r'^login/', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/', 'django.contrib.auth.views.logout_then_login',
@@ -70,3 +65,5 @@ for mote_type in settings.ENABLED_MOTE_TYPES:
     urlpatterns.append(url(r'^plans/(?P<plan_id>\d+)/add/{0}$'.format(mote_type['identifier']),
                         '{0}.views.create_mote'.format(mote_type['app']),
                         name='plan_add_{0}'.format(mote_type['identifier'])))
+
+urlpatterns += staticfiles_urlpatterns()

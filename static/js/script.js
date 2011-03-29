@@ -47,8 +47,7 @@ $(document).ready(function(){
     $('.push').click(function(){
         var url = $(this).attr('href');
         $.get(url, function(data) {
-            active_mote = JSON.parse(data);
-            //console.log(active_mote);
+            active_mote = data;
             display(active_mote);
             socket.send(
                 {event: "adminRequestedResponses",
@@ -72,10 +71,25 @@ $(document).ready(function(){
     $("#clear").click(function() {
         clearResponses();
     });
-    $('#mote-list li').hover(function() {
+    $('.item-list li').hover(function() {
         $(".actions", this).fadeIn();
     }, function() {
         $(".actions", this).fadeOut();
+    });
+    $(".star").click(function() {
+        var star = $(this);
+        var url = star.attr("href");
+        $.get(url, function(data) {
+            if(data.starred==true) {
+                star.addClass("enabled");
+                $("#plans .item-list").append(star.parent().clone());
+                $("#plans .item-list li .star").remove();
+            } else {
+                star.removeClass("enabled");
+                $("#plans .item-list [data-id="+star.next().attr("data-id")+"]").remove();
+            }
+        });
+        return false;
     });
 
     function clearResponses() {

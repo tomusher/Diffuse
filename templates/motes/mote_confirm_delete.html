@@ -2,11 +2,9 @@
 {% block selector %}
 <form action="" method="post">
     <fieldset>
-        <ul>
-            <li>
-            <button type="submit">Delete</button>
-            </li>
-        </ul>
+        <label>Delete {{ object.name }}?</label>
+        <button type="submit">Yes</button>
+        <a class="button cancel" href="#">No</a>
         {% csrf_token %}
     </fieldset>
 </form>

@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-<h2>New Feedback</h2>
+<h2>New Heatmap</h2>
 <form id="edit-mote" enctype="multipart/form-data" method="post" action="">
     <fieldset id="question">
-        <legend>Feedback</legend>
+        <legend>Heatmap</legend>
         {% csrf_token %}
         {{ form.errors }}
         <ol>
@@ -21,7 +21,7 @@
     </ol>
     </fieldset>
 
-    <button class="submit" type="submit">Create</button>
+    <button class="submit" type="submit">Save</button>
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
 {% endblock %}

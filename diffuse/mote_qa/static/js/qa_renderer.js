@@ -53,9 +53,10 @@ Question.prototype.redraw = function() {
         self.chart.series[0].data[i].y=0;
     };
     $.each(self.chartData, function(client, data) {
-        console.log(self.chart.series[0].data);
         var point = self.chart.get(data);
-        point.update(point.y+1);
+        if(point) {
+            point.update(point.y+1);
+        };
     });
     self.chart.redraw();
 };

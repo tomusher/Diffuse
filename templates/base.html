@@ -71,9 +71,9 @@
         <aside id="plans">
             <h2>My Plans</h2>
             {% if user.is_authenticated %}
-                {% if plans %}
-                <ul>
-                {% for plan in plans %}
+                {% if starred_plans %}
+                <ul class="item-list">
+                {% for plan in starred_plans %}
                 {% url plan_view plan.id as url %}
                 <li><a class="{% active request url %}active{% endactive %}"
                     href="{{ url }}" data-id="{{ plan.id }}">{{ plan }}</a></li>
@@ -102,12 +102,9 @@
   <script src="{{ STATIC_URL }}js/libs/highcharts/js/highcharts.js"></script>
   <script src="{{ STATIC_URL }}js/plugins.js"></script>
   <script src="{{ STATIC_URL }}js/script.js"></script>
-  <script src="{{ STATIC_URL }}js/qa_renderer.js"></script>
-  <script src="{{ STATIC_URL }}js/html_renderer.js"></script>
-  <script src="{{ STATIC_URL }}js/associate_renderer.js"></script>
-  <script src="{{ STATIC_URL }}js/feedback_renderer.js"></script>
-  <script src="{{ STATIC_URL }}js/heatmap_renderer.js"></script>
-  
+  {% for type in mote_types %}
+  <script src="{{ STATIC_URL }}js/{{ type.identifier }}_renderer.js"></script>
+  {% endfor %}
   
   <!--[if lt IE 7 ]>
     <script src="{{ STATIC_URL}}js/libs/dd_belatedpng.js"></script>

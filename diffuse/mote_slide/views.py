@@ -1,5 +1,6 @@
 from django import forms
 from django.forms import ModelForm
+from django.shortcuts import redirect
 from motes.models import Plan
 from mote_slide.models import Slide
 from annoying.decorators import render_to
@@ -31,6 +32,7 @@ def create_mote(request, plan_id):
             slide = form.save()
             slide.plan_set.add(plan)
             slide.save()
+            return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }
 
@@ -45,5 +47,6 @@ def mote_edit(request, plan_id, mote_id):
         form = SlideForm(request.POST, instance=slide)
         if form.is_valid():
             form.save()
+            return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }

@@ -9,7 +9,7 @@ FeedbackRenderer.prototype.constructor = FeedbackRenderer;
 FeedbackRenderer.prototype.render = function() {
     var self = this;
     ClientMoteRenderer.prototype.render.call(this, function() {
-        $("#mote-feedback form input").keyup(throttle(function() {
+        $("#mote-feedback form textarea").keyup(throttle(function() {
             console.log("changed");
             respond($(this).val());
             return false;

@@ -11,7 +11,7 @@ socket.on('message', function(obj){
     if(typeof obj != 'string' && 'event' in obj) {
         $(document).trigger(obj.event, obj.data);
     }
-    console.log(obj);
+    //console.log(obj);
 });
 socket.connect();
 

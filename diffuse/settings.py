@@ -114,7 +114,8 @@ INSTALLED_APPS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS+(
         "django.core.context_processors.request",
-        "motes.context_processors.user_plans",
+        "motes.context_processors.user_starred_plans",
+        "motes.context_processors.mote_types",
     )
 
 def custom_show_toolbar(request):
