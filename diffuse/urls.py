@@ -63,7 +63,7 @@ urlpatterns = patterns('',
 
 for mote_type in settings.ENABLED_MOTE_TYPES:
     urlpatterns.append(url(r'^plans/(?P<plan_id>\d+)/add/{0}$'.format(mote_type['identifier']),
-                        '{0}.views.create_mote'.format(mote_type['app']),
+                        '{0}.views.mote_edit'.format(mote_type['app']),
                         name='plan_add_{0}'.format(mote_type['identifier'])))
 
 urlpatterns += staticfiles_urlpatterns()

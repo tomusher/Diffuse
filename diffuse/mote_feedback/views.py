@@ -10,30 +10,21 @@ class FeedbackForm(ModelForm):
         model = Feedback
 
 @render_to("mote_feedback/feedback_form.html")
-def create_mote(request, plan_id):
+def mote_edit(request, plan_id, mote_id=None):
+    if mote_id:
+        feedback = Feedback.objects.get(id=mote_id)
+    else:
+        feedback = Feedback()
+
     plan = Plan.objects.get(id=plan_id)
     motes = plan.motes.all();
-    form = FeedbackForm()
-
-    if request.method == "POST":
-        form = FeedbackForm(request.POST)
-        if form.is_valid():
-            feedback = form.save()
-            feedback.plan_set.add(plan)
-            feedback.save()
-
-    return { "form": form, "plan": plan, "motes": motes, }
-
-@render_to("mote_feedback/feedback_form.html")
-def mote_edit(request, plan_id, mote_id):
-    plan = Plan.objects.get(id=plan_id)
-    motes = plan.motes.all();
-    feedback = Feedback.objects.get(id=mote_id)
     form = FeedbackForm(instance=feedback)
 
     if request.method == "POST":
         form = FeedbackForm(request.POST, instance=feedback)
         if form.is_valid():
             form.save()
+            feedback.plan_set.add(plan)
+            return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }

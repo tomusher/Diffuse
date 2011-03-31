@@ -11,32 +11,21 @@ class HeatmapForm(ModelForm):
         model = Heatmap
 
 @render_to("mote_heatmap/heatmap_form.html")
-def create_mote(request, plan_id):
+def mote_edit(request, plan_id, mote_id=None):
+    if mote_id:
+        heatmap = Heatmap.objects.get(id=mote_id)
+    else:
+        heatmap = Heatmap()
+        
     plan = Plan.objects.get(id=plan_id)
     motes = plan.motes.all();
-    form = HeatmapForm()
+    form = HeatmapForm(instance=heatmap)
 
     if request.method == "POST":
-        form = HeatmapForm(request.POST, request.FILES)
-        if form.is_valid():
-            heatmap = form.save()
-            heatmap.plan_set.add(plan)
-            heatmap.save()
-            return redirect('plan_view', plan_id=plan_id)
-
-    return { "form": form, "plan": plan, "motes": motes, }
-
-@render_to("mote_heatmap/heatmap_form.html")
-def mote_edit(request, plan_id, mote_id):
-    plan = Plan.objects.get(id=plan_id)
-    motes = plan.motes.all();
-    feedback = Heatmap.objects.get(id=mote_id)
-    form = HeatmapForm(instance=feedback)
-
-    if request.method == "POST":
-        form = HeatmapForm(request.POST, request.FILES, instance=feedback)
+        form = HeatmapForm(request.POST, request.FILES, instance=heatmap)
         if form.is_valid():
             form.save()
+            heatmap.plan_set.add(plan)
             return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }

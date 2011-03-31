@@ -21,24 +21,12 @@ class SlideForm(ModelForm):
         model = Slide
 
 @render_to("mote_slide/slide_form.html")
-def create_mote(request, plan_id):
-    plan = Plan.objects.get(pk=plan_id)
-    motes = plan.motes.all();
-    form = SlideForm()
-
-    if request.method == "POST":
-        form = SlideForm(request.POST)
-        if form.is_valid():
-            slide = form.save()
-            slide.plan_set.add(plan)
-            slide.save()
-            return redirect('plan_view', plan_id=plan_id)
-
-    return { "form": form, "plan": plan, "motes": motes, }
-
-@render_to("mote_slide/slide_form.html")
-def mote_edit(request, plan_id, mote_id):
-    slide = Slide.objects.get(id=mote_id)
+def mote_edit(request, plan_id, mote_id=None):
+    if mote_id:
+        slide = Slide.objects.get(id=mote_id)
+    else:
+        slide = Slide()
+    
     plan = Plan.objects.get(pk=plan_id)
     motes = plan.motes.all();
     form = SlideForm(instance=slide)
@@ -47,6 +35,7 @@ def mote_edit(request, plan_id, mote_id):
         form = SlideForm(request.POST, instance=slide)
         if form.is_valid():
             form.save()
+            slide.plan_set.add(plan)
             return redirect('plan_view', plan_id=plan_id)
 
     return { "form": form, "plan": plan, "motes": motes, }
