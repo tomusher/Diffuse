@@ -108,7 +108,7 @@ socket.on('clientConnected', function(client, data) {
     }
 });
 
-// On client disconnection
+// On client disconnect
 socket.on('clientDisconnected', function(client, message) {
     if(client.persistentSessionId) {
         dataStore.clearClientResponses(client);

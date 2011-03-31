@@ -1,8 +1,9 @@
 <h2>Motes</h2>
-<ul class="item-list">
+<ul class="mote-list item-list">
 {% for mote in motes %}
     <li>
-        <a class="push" href="{% url mote_push plan.pk mote.id %}">{{ mote.name }}</a>
+    <a class="push" href="{% url mote_push plan.pk mote.id %}" 
+        data-id="{{ mote.id }}">{{ mote.name }}</a>
         <div class="actions">
             <a class="button edit" href="{% url mote_edit plan.id mote.id %}"><span>Edit Mote</span></a>
             <a class="button delete" href="{% url mote_delete plan.id mote.id %}"><span>Delete Mote</span></a>

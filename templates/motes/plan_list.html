@@ -5,7 +5,8 @@
 {% for plan in plans %}
 <li>
 <a href="{% url plan_star plan.id %}" class="star {% if plan.starred %}enabled{% endif %}"><span>Star</span></a>
-<a href="{% url plan_view plan.id %}" data-id="{{ plan.id }}">{{ plan.name }}</a>
+<a href="{% url plan_view plan.id %}" data-id="{{ plan.id }}"
+    data-accesscode="{{ plan.access_code }}">{{ plan.name }}</a>
 </li>
 {% endfor %}
 </ul>

@@ -76,7 +76,8 @@
                 {% for plan in starred_plans %}
                 {% url plan_view plan.id as url %}
                 <li><a class="{% active request url %}active{% endactive %}"
-                    href="{{ url }}" data-id="{{ plan.id }}">{{ plan }}</a></li>
+                    href="{{ url }}" data-id="{{ plan.id }}"
+                    data-accesscode="{{ plan.access_code }}">{{ plan }}</a></li>
                 {% endfor %}
                 </ul>
                 {% endif %}

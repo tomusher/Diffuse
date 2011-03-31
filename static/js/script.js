@@ -1,19 +1,21 @@
 var socket = new io.Socket("flux.tomusher.com", {port: 80});
-socket.on('connect', function(obj){
-    socket.send({event: "clientConnected", data: "admin"});
-});
-socket.on('message', function(obj){
-    console.log(obj);
-    $(document).trigger(obj.event, obj.data);
-});
-socket.connect();
-
 var active_mote;
 var active_plan="";
 var renderer=undefined;
 
 $(document).ready(function(){
     active_plan = $("#plans .active").attr("data-id");
+    active_plan_code = $("#plans .active").attr("data-accesscode");
+
+    socket.on('connect', function(obj){
+        socket.send({event: "clientConnected", data: "admin"});
+        socket.send({event: "clientRequestedPlan", data: active_plan_code});
+    });
+    socket.on('message', function(obj){
+        $(document).trigger(obj.event, obj.data);
+        console.log(obj);
+    });
+    socket.connect();
 
     $(document).bind('serverPushedResponse', function(event, data) {
         if(active_mote.pk == data.mote_id) {
@@ -42,25 +44,17 @@ $(document).ready(function(){
         if(renderer) {
             renderer.updateData(responses, false);
         }
-        
     });
+
+    $(document).bind('serverSetPlan', function(event, data) {
+        setPushedMote(data.latest_mote);
+    });
+
     $('.push').click(function(){
         var url = $(this).attr('href');
         $.get(url, function(data) {
-            active_mote = data;
-            display(active_mote);
-            socket.send(
-                {event: "adminRequestedResponses",
-                data: {
-                    mote_id: active_mote.pk,
-                    plan: "plan:"+active_plan 
-                 }
-            });
+            setPushedMote(data);
         });
-        $(this).parent().siblings().each(function() {
-            $("a",this).removeClass('active');
-        });
-        $(this).addClass('active');
         return false;
     });
     $('.add-mote').click(function(){
@@ -91,6 +85,21 @@ $(document).ready(function(){
         });
         return false;
     });
+
+    function setPushedMote(active_mote) {
+        display(active_mote);
+        socket.send(
+        {event: "adminRequestedResponses",
+                data: {
+                    mote_id: active_mote.pk,
+                    plan: "plan:"+active_plan 
+                 }
+            });
+        $(".mote-list li").each(function() {
+            $("a", this).removeClass('active');
+        });
+        $(".mote-list li a[data-id="+active_mote.pk+"]").addClass('active');
+    }
 
     function clearResponses() {
         socket.send({event: "adminClearedResponses", data: {plan: "plan:"+active_plan, mote_id: active_mote.pk}});
