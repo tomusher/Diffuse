@@ -17,8 +17,14 @@ $(document).ready(function(){
 
     render_manager = new RenderManager();
  
-     $(document).bind('serverSetPlan', function(event, data) {
+    $(document).bind('serverSetPlan', function(event, data) {
         setPushedMote(data.latest_mote);
+    });
+    
+    $(document).bind('serverPushedMote', function(event, data) {
+        if("plan:"+active_plan==data.channel) {
+            setPushedMote(data.message);
+        }
     });
 
     $('.push').click(function(){
