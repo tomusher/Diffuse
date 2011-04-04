@@ -55,6 +55,7 @@ $(document).ready(function(){
                 star.addClass("enabled");
                 $("#plans .item-list").append(star.parent().clone());
                 $("#plans .item-list li .star").remove();
+                $("#plans .item-list li .actions").remove();
             } else {
                 star.removeClass("enabled");
                 $("#plans .item-list [data-id="+star.next().attr("data-id")+"]").remove();

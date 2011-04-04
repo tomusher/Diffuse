@@ -1,12 +1,7 @@
-{% extends "base.html" %}
+{% extends "motes/mote_form.html" %}
 
-{% block selector %}
-{% include "motes/mote_list.html" %}
-{% endblock %}
-
-{% block content %}
-<h2>New Association</h2>
-<form id="edit-mote" method="post" action="">
+{% block form_type %}Association{% endblock %}
+{% block form_fields %}
     <fieldset id="associate">
         <legend>Description</legend>
         {% csrf_token %}
@@ -45,7 +40,4 @@
             </tbody>
         </table>
     </fieldset>
-    <button class="submit" type="submit">Save</button>
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
 {% endblock %}

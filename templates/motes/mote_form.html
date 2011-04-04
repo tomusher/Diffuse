@@ -1,21 +1,31 @@
 {% extends "base.html" %}
+
+{% block selector %}
+{% include "motes/mote_list.html" %}
+{% endblock %}
+
+{% block extra_scripts %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
-<form action="" method="post">
-    <fieldset>
-        {{ form.non_field_errors }}
-        <ul>
-            <li>
-                {{ form.access_code.errors }}
-                <label for="id_access_code1">Access Code:</label>
-                {{ form.access_code }}
-            </li>
-            <li>
-            <button type="submit">Create</button>
-            </li>
-            <input type="hidden" name="{{ form.user.html_name }}" value="{{ request.user.id }}">
-            {{ form.errors }}
-        </ul>
-        {% csrf_token %}
-    </fieldset>
+<h2>
+    {% if form.instance.id %}
+        Edit
+    {% else %}
+        New 
+    {% endif %}
+    {% block form_type %}Mote{% endblock %}</h2>
+<form id="edit-mote" method="post" action="">
+    {% block form_fields %}
+    {% endblock %}
+    <button class="submit" type="submit">
+        {% if form.instance.id %}
+            Save
+        {% else %}
+            Create
+        {% endif %}
+    </button>
+    <input type="hidden" name="next" value="{{ next }}" />
 </form>
 {% endblock %}

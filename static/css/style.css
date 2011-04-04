@@ -212,7 +212,7 @@ header {display: block;
 
 .item-list { list-style: none; margin: 0; padding: 0; }
     .item-list li { clear: both; position: relative; }
-    .item-list li a { display: block; padding: 5px 10px; border: 1px solid transparent; }
+    .item-list li a { display: block; padding: 5px 10px; }
     .item-list li a.active {   background-color: rgba(255,255,255,0.5);
                                border-top: 1px solid #ccc; 
                                border-bottom: 1px solid #fff; }
@@ -246,6 +246,7 @@ a.button:active,button:active {
     -webkit-box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
     box-shadow: inset 0 0 5px 2px #aaa, 0 1px 0 0 #eee;
 }
+
 a.button:before,button:before {
     padding-right: 4px; font-family: "IconicStroke";
 }

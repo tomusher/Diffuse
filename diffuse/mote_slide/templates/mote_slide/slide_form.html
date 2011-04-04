@@ -1,16 +1,7 @@
-{% extends "base.html" %}
+{% extends "motes/mote_form.html" %}
 
-{% block selector %}
-{% include "motes/mote_list.html" %}
-{% endblock %}
-
-{% block extra_scripts %}
-{{ form.media }}
-{% endblock %}
-
-{% block content %}
-<h2>New Slide</h2>
-<form id="edit-mote" method="post" action="">
+{% block form_type %}Slide{% endblock %}
+{% block form_fields %}
     <fieldset id="Slide">
         <legend>Slide</legend>
         {% csrf_token %}
@@ -24,8 +15,4 @@
         {% endfor %}
     </ol>
     </fieldset>
-
-    <button class="submit" type="submit">Save</button>
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
 {% endblock %}
