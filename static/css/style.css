@@ -257,7 +257,7 @@ a.button.edit:before,button.edit:before {       content: "p"; }
 a.button.submit:before,button.submit:before {   content: "y"; }
 a.button.manage:before,button.manage:before {   content: "w"; }
 
-.item-list li .actions { position: absolute; right: 0; padding: 0 4px 0 0; top: 0; display: none; }
+.item-list li .actions { position: absolute; right: 0; padding: 2px 4px 0 0; top: 0; display: none; }
 .item-list li a.button { text-align: center; padding: 4px 8px; display: inline; }
 .item-list li a.button span { display: none; }
 .item-list li a.button:before { padding-right: 0; }

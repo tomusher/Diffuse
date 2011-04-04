@@ -43,9 +43,9 @@ $(document).ready(function(){
         clearResponses();
     });
     $('.item-list li').hover(function() {
-        $(".actions", this).fadeIn();
+        $(".actions", this).stop(false, true).fadeIn();
     }, function() {
-        $(".actions", this).fadeOut();
+        $(".actions", this).stop(false, true).fadeOut();
     });
     $(".star").click(function() {
         var star = $(this);
