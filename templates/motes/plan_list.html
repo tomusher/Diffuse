@@ -7,6 +7,10 @@
 <a href="{% url plan_star plan.id %}" class="star {% if plan.starred %}enabled{% endif %}"><span>Star</span></a>
 <a href="{% url plan_view plan.id %}" data-id="{{ plan.id }}"
     data-accesscode="{{ plan.access_code }}">{{ plan.name }}</a>
+    <div class="actions">
+        <a class="button edit" href="{% url plan_edit plan.id %}"><span>Edit Plan</span></a>
+        <a class="button delete" href="{% url plan_delete plan.id %}"><span>Delete Plan</span></a>
+    </div>
 </li>
 {% endfor %}
 </ul>

@@ -3,11 +3,18 @@ from django.db import models
 from django.utils import importlib
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
 from annoying.decorators import render_to
 from motes.models import Mote, Plan
 
 import simplejson as json
 import redis
+
+class PlanListView(ListView):
+    context_object_name = "plans"
+
+    def get_queryset(self):
+        return Plan.objects.filter(user=self.request.user)
 
 @login_required
 @render_to('motes/plan_view.html')

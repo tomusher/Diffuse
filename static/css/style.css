@@ -253,7 +253,8 @@ a.button.add:before,button.add:before {         content: "+"; }
 a.button.delete:before,button.delete:before {   content: "x"; }
 a.button.clear:before,button.clear:before {     content: "x"; }
 a.button.edit:before,button.edit:before {       content: "p"; }
-a.button.submit#before,button.submit:before {   content: "y"; }
+a.button.submit:before,button.submit:before {   content: "y"; }
+a.button.manage:before,button.manage:before {   content: "w"; }
 
 .item-list li .actions { position: absolute; right: 0; padding: 0 4px 0 0; top: 0; display: none; }
 .item-list li a.button { text-align: center; padding: 4px 8px; display: inline; }
@@ -267,6 +268,7 @@ a.button.submit#before,button.submit:before {   content: "y"; }
 .item-list li a.star:before { font-family: "IconicStroke"; content: "s"; }
 
 #all-plans-list li a { padding-left: 30px; }
+#all-plans-list li .actions a.button { padding: 4px 8px; }
 
 /* Typographic Styles */
 h2 { font-size: 1.1em; padding: 7px 5px 5px 5px; margin-bottom: 5px;

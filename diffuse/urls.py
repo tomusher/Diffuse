@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from motes.models import Plan, Mote
+from motes.views import PlanListView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 admin.autodiscover()
 
@@ -20,8 +21,11 @@ urlpatterns = patterns('',
     url(r'^tinymce/', include('tinymce.urls')),
 
     # Plans
+    url(r'^$',
+                        PlanListView.as_view(),
+                        name="plan_list"),
     url(r'^plans/$',    
-                        ListView.as_view(model=Plan), 
+                        PlanListView.as_view(), 
                         name="plan_list"),
     url(r'^plans/create/$',  
                         CreateView.as_view(model=Plan), 
@@ -52,9 +56,6 @@ urlpatterns = patterns('',
     url(r'^motes/push/(?P<plan_id>\d+)/(?P<mote_id>\d+)/$', 
                         'motes.views.mote_push', 
                         name='mote_push'),
-    url(r'^motes/add/$',
-                        CreateView.as_view(model=Mote),
-                        name='mote_add'),
 
     url(r'^login/', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/', 'django.contrib.auth.views.logout_then_login',
