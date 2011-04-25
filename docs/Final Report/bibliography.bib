@@ -99,7 +99,7 @@
 }
 
 @MISC{git:web,
-	author = "Scott Chacon",
+	author = "Linus Torvalds",
 	title = "Git",
 	note = "\texttt{http://www.git-scm.com/}",
 	annote = {The project was versioned using the Git version control system.}
@@ -152,6 +152,76 @@
 	title = "{Redis-py - GitHub}",
 	note = "\texttt{https://github.com/andymccurdy/redis-py}",
 	annote = {The Redis-py library was used as to interface with Redis from the presenter system. This is the official repository for the library.}
+}
+
+@MISC{highcharts:web,
+	author = "Highslide Software",
+	title = "{Highcharts - Interactive JavaScript charts for your web projects}",
+	note = "\texttt{http://www.highcharts.com/}",
+	annote = {HighCharts was used to render results for some content types. I found the library to be extremely flexible and well documented, and it worked exceptionally well with the live updating required by the system. HighCharts was available under Creative Commons Attribution-NonCommercial 3.0 for non-commercial projects.}
+}
+
+@MISC{socketio:web,
+	author = "Guillermo Rauch",
+	title = "{Socket.IO}",
+	note = "\texttt{http://www.socket.io}",
+	annote = {Socket.io was the library used on both the client and server to implement realtime web-based communication methods.}
+}
+
+@MISC{noderedis:web,
+	author = "Matthew Ranney",
+	title = "{node\_redis on GitHub}",
+	note = "\texttt{http://github.com/mranney/node\_redis}",
+	annote = {node\_redis was the library used to interface with Redis from the Node.js distribution server. Initially, the redis-node-client library was used but the developers stopped supporting it and node\_redis replace it.}
+}
+
+@MISC{connect:web,
+	author = "Sencha Labs",
+	title = "{Connect}",
+	note = "\texttt{http://senchalabs.github.com/connect/}",
+	annote = {Connect was used to assist with creating the HTTP component of the distribution server, serving static files and dealing with sessions.}
+}
+
+@MISC{connectredis:web,
+	author = "Vision Media",
+	title = "{Connect Redis on GitHub}",
+	note = "\texttt{http://github.com/visionmedia/connect-redis}",
+	annote = {Connect Redis was used as the session backend for Connect's session middleware.}
+}
+
+@MISC{yepnope:web,
+	author = "Alex Sexton and Ralph Holzmann",
+	title = "{yepnope.js -  A conditional loader for your polyfills}",
+	note = "\texttt{http://yepnopejs.com/}",
+	annote = {yepnope.js was used as a loader for mote type-specific scripts. While it also supports conditional resource loading, this feature was not used for the project.}
+}
+
+@MISC{mustache:web,
+	author = "Chris Wanstrath",
+	title = "{Mustache}",
+	note = "\texttt{http://mustache.github.com/}",
+	annote = {Mustache was the templating language used for defining the structure and layout of motes rendered on the client.}
+}
+
+@MISC{mustachejs:web,
+	author = "Jan Lehnardt",
+	title = "{Mustache.js}",
+	note = "\texttt{https://github.com/janl/mustache.js/}",
+	annote = {Mustache.js is the JavaScript implementation of Mustache, used to parse and render motes' templates in Flux.}
+}
+
+@MISC{nodechatjs:web,
+	author = "Justin Slattery",
+	title = "{NodeChat}",
+	note = "\texttt{https://github.com/jslatts/nodechat}",
+	annote = {Used as inspiration for the event-based communication model used in Flux.}
+}
+
+@MISC{south:web,
+	author = "Torchbox",
+	title = "{South}",
+	note = "\texttt{http://south.aeracode.org/}",
+	annote = {South is a data migration system for Django. It was used to maintain test data while adding and changing models during development.}
 }
 
 @BOOK{crane:comet,

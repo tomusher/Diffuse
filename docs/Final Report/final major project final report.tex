@@ -33,15 +33,17 @@ broadcasting rich interactive content}\\[0.3cm]
 With thanks to Dave Price, for feedback, advice and suggestions to myself and the rest of the project group during the development of this project.
 
 Many thanks to Denise Williams-Morris and Alex Kruzewski, for testing, feedback and moral support.
+
+\listoftodos{}
 \pagebreak
 
 \section{Abstract}
-Some abstract 
+\todo[inline]{Some abstract}
 
 \tableofcontents
 
-\section{Context}
-\subsection{Introduction}
+\section{Background and Objectives}
+\subsection{Context}
 Audience Response Systems (ARS), more commonly referred to as 'clickers' have been used with varying degrees of success in educational establishments around the world for numerous years. Their use as a means to improve interactivity between students and instructors in an educational environment has been widely documented, with research indicating notable effects on student responsiveness, involvement and success. While this project does not involve additional research in to the value of PRS systems, it does attempt to highlight and enhance upon ``The give-and-take atmosphere encouraged by use of clickers which... makes the students more responsive in general''\cite{wood:clickers}.
 
 From using these clickers from a students' perspective, I have noted two primary issues with the current implementation of these ARS systems:
@@ -63,19 +65,20 @@ The system was designed to:
 \item Be configureable once per site, rather than requiring setup for every meeting/lecture.
 \item Usable on a wide array of mobile and personal computing systems, including mobiles, tablets and laptops.
 \item Facilitate near-instant, actionable feedback to the presenter.
-\item Support a variation of 'types' of material, with the facility to extend and add more if required.
+\item Support a variation of `types' of material, with the facility to extend and add more if required.
 \end{itemize}
 
-\section{Relevant Literature and Existing Systems}
+\subsection{Relevant Literature and Existing Systems}
+\todo[inline]{Add relevant literature}
 
-\section{Methods and Planning}
+\section{Development Process}
 \subsection{Process Model}
-For this project, I wanted to enjoy the development of the system as much as possible, so adopting a process model that best suited the way I write software was important to me. As my typical development methodology is 'hack at it until it works', I wanted to find a process that injected a degree of organisation in to the process, giving me a way to plan and view my progress while maintaining focus on the code rather than the documentation.
+For this project, I wanted to enjoy the development of the system as much as possible, so adopting a process model that best suited the way I write software was important to me. As my typical development methodology is `hack at it until it works', I wanted to find a process that injected a degree of organisation in to the process, giving me a way to plan and view my progress while maintaining focus on the code rather than the documentation.
 
 For this reason, I chose to use an iterative development approach, as I felt it best suits how I build software, allowing me blocks of time in which I can focus on writing code, while adding a sense of organisation and planning to the process. While the waterfall model might also have been suitable, I considered the requirement to complete the design before moving on to development too restrictive as I believe any software project needs room to evolve during its implementation.
 
 \subsection{Planning}
-A discussion on how I came to a decision on the final requirements/objectives.
+\todo[inline]{A discussion on how I came to a decision on the final requirements/objectives.}
 
 \subsection{Implementation Tools}
 The system was implemented in three parts, each communicating over network services. The presenter system was primarily developed in Python\cite{python:web}, using the Django\cite{django:web} web framework, while the client system was written in JavaScript and served from the third component, the distribution server, written in JavaScript using the Node.js\cite{nodejs:web} framework.
@@ -95,6 +98,7 @@ With this configured, I developed by SSHing to the server from the computer I wa
 I used the Git\cite{git:web} version control system for versioning and backing up the project code and documentation. This was mirrored on a private remote hosted by GitHub\cite{github:web} on a free Student/Education package. I periodically cloned the repository to my local computer, a separate server and a USB drive for backup, this meant that the code was available to me in five places, should any failures occur.
 
 \section{Design and Implementation}
+\todo[inline]{Perhaps separate design and implementation?}
 \subsection{Overview}
 \emph{Diffuse} is the final product of this project. Named after the concept of `diffusion' - ``the spread of particles through random motion from regions of higher concentration to regions of lower concentration''\cite{diffusionwikipedia:web}, drawing comparisons between the diffusion of particles and the diffusion of knowledge/information.
 
@@ -122,11 +126,16 @@ When a mote is pushed, it is first passed to the distribution server and cached.
 
 The three system parts operate independently, communicating over HTTP, WebSockets and the Redis PubSub protocol.
 
+\missingfigure{Possibly a diagram of how the systems communicate}
+
 \subsection{Presenter System}
-The presenter system is developed using the Django framework and therefore uses an interpretation of the MVC design pattern, referred to by the designers of Django as the `MTV' pattern (Model, Template, View). This pattern defines `model' the same way as in MVC, as the definition and structure of system data, `view' as `which data is presented' and `template' as `how the data is presented'\cite{djangomvcfaq:web}.
+The presenter system is developed as a web application using the Django framework and therefore uses an interpretation of the MVC design pattern, referred to by the designers of Django as the `MTV' pattern (Model, Template, View). This pattern defines `model' the same way as in MVC, as the definition and structure of system data, `view' as `which data is presented' and `template' as `how the data is presented'\cite{djangomvcfaq:web}.
+
+\textbf{Also considered:} \emph{Implementing the presenter system as a native, `desktop', non-web-based application. However, it is more likely that a presenter will have access to a browser than the ability to install and configure software on systems. I also have more experience developing web based applications than I do native applications, and felt the simple database interactions I was planning would be more suited to a web-based system.}
 
 A base `Mote' model serves as the central model around which the whole system is built. Mote types derive from this model, adding their own fields where required. This polymorphic design, combined with Django's concept of `apps' both aid with the requirement to create a modular, extensible system.
 
+\subsubsection{Modularity and Mote Types}
 The Django 'app' concept allows sections of the system to be separated in to individual modules, with their own models, views, resources and templates. To support modularity in Diffuse, new mote types are created in separate Django apps containing a model which extends the `Mote' model, implements a serialisation method on the new model, and defines how the mote should be represented on the client and the presenter systems. Developers wishing to extend the system need only add a new app to the presenter system and the entire system will now take advantage of it - this is the only place in the system where content types need to be defined - the distribution and client system do not need to be updated. 
 
 Diffuse makes available five content types by default to demonstrate the flexibility of the system:
@@ -138,39 +147,89 @@ A basic `slide' style mote type, defining a single `Slide' model, allowing the p
 \item[Associate - mote\_associate] \hfill \\
 Defines an `AssociationGroup' model derived from Mote, along with an `Association' model with a many-to-one relation between associations and association groups. An association is defined as two strings, the left side, and the right side. When presented to a client, both the left side and right side are randomised, prompting the user to 'join up' the correct association pairs.
 \item[Heatmap - mote\_heatmap] \hfill \\
-A simple 'Heatmap' model, extending Mote, contains an attribute for an image. This image is shown to the client, and any clicks on the image by the client are shown as a `'heatmap' to the administrator.
+A simple `Heatmap' model, extending Mote, contains an attribute for an image. This image is shown to the client, and any clicks on the image by the client are shown as a `heatmap' to the administrator.
 \item[Feedback - mote\_feedback] \hfill \\
 The`Feedback` model is another simple model which simply defines a `description' attribute. When pushed to a client, the description attribute is displayed along with a text entry form. When this entry form receives input, the presenter interface is updated. This is designed to facilitate instant feedback from a class/meeting.
 \end{description}
+
+\textbf{Also considered:} \emph{Implementing a more abstract way of defining and extending content types, perhaps using an EAV (Entity-attribute-value) database model. This would reduce the need for developers to write code to add new types. However, this would also mean creating a framework for automatically generating code for the client representation and feedback representation, so I felt this would complicate the project beyond its scope.}
 
 The Mote model has three significant methods, all of which are used for communication with the distribution server.
 \begin{description}
 \item[as\_dict] \hfill \\
 Returns a Python dictionary of model instance attributes and metadata. Derived classes override this method in order to add their own data to the dictionary. This is used to build a JSON representation of the model instance to be sent to the distribution server.
 \item[cache] \hfill \\
-Cache uses the redis-py\cite{redispy:web} library to store the JSON representation of the mote in Redis, making it available at the key: ``mote:{[}mote\_pk{]}''. This uses the as\_dict method on self, and 
+Cache uses the redis-py\cite{redispy:web} library to store the JSON representation of the mote in Redis, making it available at the key: ``mote:{[}mote\_pk{]}''. This uses the as\_dict method and does typically not need overriding by derived classes.
 \item[push] \hfill \\
+Uses redis-py to publish a message to the Redis pub/sub channel specified by a parameter to the method. The message contains the event string and some data, in this case, the event `adminPublishedMote' and the ID of the mote. It also sets a key `plan:{[}plan\_id{]}:latest\_mote' to the ID of the latest mote, so that clients that aren't currently subscribed to the plan's channel can find the latest mote when they choose to subscribe.
 \end{description}
 
-\subsection{Client System}
-Design of the Client system
-Browsers are available on the vast majority of user agents in variatons incarnations - in my research I noted that every platform I studied had a proficient browser, most being based on the WebKit\cite{webkit:web} open source project (providing HTML rendering and JavaScript implementations) which is also used for Google's Chrome and Apple's Safari browsers. From past experience, I know how web applications can be used for excellent cross-platform support, backed up by research in to existing multi-platform ARS' systems, which all appear to be web-based.
+JSON was used for mote serialisation as both Python and JavaScript have native support for it, it's also very lightweight, designed for data interchange between web applications where there is no need for additional context to be present in the serialised data.
 
-A web-based client solution would be accessible from any device with a browser that supported full HTML, JavaScript and some form of real-time communication protocol (even if emulated), features which all of the devices I researched have. No device-specific code would be required, although styles for different screen sizes would be necessary. It would also be possible to use technologies only present in more modern browsers (such as HTML5 features) by making use of graceful degradation on devices that do not support it.
+\textbf{Also considered:} \emph{Alternative forms of serialisation, including XML and `pickling' in Python. XML was too heavyweight and contained a lot of context data which I didn't consider necessary - it was also more difficult to parse. Language-dependent serialisation methods such as pickling were hard to decode cross-language.}
 
-I will be using a browser-based solution for the client as I feel it is the most appropriate option for a truly multi-platform system. While I may lose some of the flexibility of device-native applications, this is an appropriate compromise. Past experience with web applications using JavaScript and an understanding of how to implement a real-time application also contribute to this decision.
+\textbf{Also considered:} \emph{Caching serialised motes directly in memory on the distribution server, rather than using Redis. However, I felt that if the system were serving thousands of clients at a time, using a key-value store designed for this type of storage would be more suitable.}
 
-The web application will be a thick client, with the majority of operations performed on the client, this means heavy use of JavaScript and HTML5 features where applicable. The client will connect to a server from which it can retreive content.
+\textbf{Also considered:} \emph{My original design had the presenter system send a post HTTP request directly to the distribution server when a mote was pushed. A version of Redis was released during development which implemented its own Pub/Sub protocol so I switched to this to simplify and speed up communication.}
 
-\subsection{Real-Time Communication}
-Discussion of communication between client and presenter
-Being able to handle many concurrent connections through the use of an event based server solves part of the problem, but there are still issues if the code being written is blocking (the main execution loop of the program must wait for an event to complete before it can return, holding up other processing). Event driven programming works in the same way as an event driven server - using a main event loop to support callbacks from functions so that operations can continue while I/O is being performed, operating on the results only when they return.
+\subsubsection{The User Interface}
+The user interface for managing plans and motes was designed to be simple and easy, this was achieved by reducing all operations down to two modes of interaction:
+\begin{description}
+\item[Lists] \hfill \\
+Lists are used to represent available plans and motes. Lists are always present in the first two columns of the interface. Three actions are possible on lists and list items:
+\begin{description}
+\item[Selecting] \hfill \\
+In the case of plans, this displays the motes within that plan, for motes, this broadcasts the mote.
+\item[Editing/Deleting] \hfill \\
+These options are presented modally on hovering over the list item. Editing takes the user to the second type of interaction, 'forms', while deleting prompts the user to permanently remove the item.
+\item[Adding] \hfill \\
+At the bottom of a list, there is usually a way to add a new item to that list. The item created is always the same as the type of item in the list - the add button at the bottom of a plan list will always create a new plan.
+\end{description}
+\item[Forms] \hfill \\
+Forms modify attributes on items - while they can contain different fields, they all take the same structure whether the user is adding or editing an item. Editing items displays the same form as adding an item, only with fields pre-populated. Forms are only ever shown in the last column of the interface.
+\end{description}
+
+\subsubsection{Rendering Feedback}
+The final part of the presenter system is how feedback from clients is displayed to the presenter. When a mote is pushed, the last column updates with some representation of received data - how this data is displayed is specified by the individual mote applications, and can therefore vary between mote types.
+
+Feedback display is implemented in JavaScript by creating a JavaScript file in the motes' app containing a class derived from Renderer. A set of events are bound to the active Renderer, which call methods on the class when they are triggered. Each method\footnote{Note that methods in JavaScript typically use camel case for method names, whereas in Python, PEP8 dictates that methods should be all lowercase, with underscores separating words} needs to be overwritten by the derived, mote type-specific class:
+\begin{description}
+\item[render] \hfill \\
+Builds the relevant representation of the results within the container with the `renderer' ID. This is called when the renderer is first initialised.
+\item[redraw] \hfill \\
+Updates the representation with any new data received.
+\item[updateData] \hfill \\
+Updates the renderers' set of responses with any new responses passed to the method, if the 'append' parameter is true, responses are added to the existing set. If it is false, responses are cleared before new ones are added.
+\item[clientDisconnected] \hfill \\
+When the client disconnect event is fired, the renderer may choose to remove that clients' response from the display, this method is used to achieve this.
+\end{description}
+
+An example implementation of a renderer is that used for the \emph{Question and Answer} mote type. For this, the render method creates a column chart using the HighCharts\cite{highcharts:web} library. the updateData method directly modifies data in the object created by HighCharts, rather than drawing a new chart every time - this created a smooth `sliding' effect on the chart as new data arrived.
+
+\todo[inline]{Also considered?}
+
+\subsection{Distribution Server}
+As this system is designed to be used in large organisations, such as universities, it is likely that there will be thousands of clients attempting to request motes simultaneously. Combined with the need to maintain a persistent connection to each client for broadcasting content and provide updates within a short time, I felt that a traditional server would not be suitable, so the distribution server was introduced.
+
+\subsubsection{Dealing with Scale}
+My concern with broadcasting content in real-time to hundreds of devices at a time using a typical web server was that it is likely to struggle with the number of requests. Techniques used to emulate real-time communication either require a permanent connection open to the server, or hundreds of requests to the server per minute. Traditional web servers such as Apache use a process-based model, where each additional request requires a new thread meaning many hundreds of connections being opened and closed per minute not only causing high memory usage, but incurring quite a large processing overhead, increasing the time it takes to serve a request as the volume increases.
+
+I chose an event-based server as the solution to this issue, which use a single thread and an event loop, removing the requirement for context switching. While this does mean significantly lower memory usage and overhead, it doesn't prevent operations in code from blocking, particularly those that involve I/O. For example; a request which queries the database will temporarily hold up the loop until the database responds, as we require a very quick response from the server, this may prove unacceptable.
+
+To solve this, I chose to implement a distribution server in an event driven programming language, which work in the same way as an event driven server - using a main event loop to support callbacks from functions so that operations can continue while I/O is being performed, operating on the results only when they return.
 
 This type of programming paradigm is implementable in the majority of programming languages, although it is more prevalent and easier to implement in functional languages such as Erlang and Scala. There are also a number of frameworks for other languages available which support event-driven networking, such as Twisted (for Python), EventMachine (for Ruby) and Node.js (for JavaScript). 
 
-As I am not familiar with functional languages, I will not be attempting to implement a server in Erlang or Scala, but the existing event-driven networking frameworks interest me as they do not require learning a new language and seem relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seem too bloated for what I need. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it interests me because it uses JavaScript which is also used by my client system (an opportunity for more code reuse and resource sharing) and is a language with which I'm familiar. There is also a library available for it which abstracts a lot of the client-side communication issues as I will detail in the next section.
+As I am not familiar with functional languages, I did not be attempt to implement a server in Erlang or Scala, but instead looked at existing event-driven networking frameworks as they did not require learning a new language and seemed relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seem too bloated for what I needed. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it interested me because it uses JavaScript which is also used by my client system (an opportunity for more code reuse and resource sharing) and is a language with which I'm familiar. It is also designed to be exceptionally easy to write a simple server using.
 
-Web-based applications aren't usually known for taking advantage of real-time communication, it wasn't until the increased popularity of Ajax that we saw anything beyond standard request-response style websites. Even now, the most common type of interactions require the web browser to make a request to the server before it updates anything. However, we are now beginning to see 'comet'\cite{crane:comet} style web sites, where the client can 'listen' to a server, updating whenever something changes in applications such as chatting. This is made possible using various techniques which either create or emulate 'socket' style connections:
+Using the event based constructs in Node.js, I built a server tailored to the type of communication I needed, thus tackling the blocking I/O problem on two fronts; reducing the amount of I/O time required through caching, and attempting to prevent I/O from blocking. To cache, I had the presenter system push serialised versions of motes to Redis, and used the distribution system to quickly retrieve and push these out to clients.
+
+\todo[inline]{Also considered?}
+
+\subsubsection{Distributing the Motes}
+As this application required content to appear on all client devices within a reasonable period of time after they are broadcast, it needed to use some form of real-time communication method. As both the client and presenter are web-based, choices for doing so are quite limited due to the HTTP protocol being entirely request-response oriented. If I chose to use code which was not being executed in the browser, I could use networking technologies such as sockets to allow the client to 'listen' for communication from the broadcaster.
+
+However, there are various ways to support a  communication channel in web applications:
 \begin{description}
 \item[WebSockets] \hfill \\
 An implementation of a communication channel over TCP for use implementation in web browsers as part of the W3C HTML5 specification. Currently only implemented in the latest version of modern browsers, excluding Internet Explorer.
@@ -182,29 +241,114 @@ A technique which is most commonly used for real-time web applications as it onl
 The XMLHttpRequest object can also be used to react to a server using a multipart content type; suggesting to the browser that the response will be delivered in multiple parts. The browser keeps the connection open and calls a callback function whenever a new part of the response is delivered.
 \end{description}
 
-There are other techniques, but the above are most commonly used. Unfortunately, the only one which reliably works on a large subset of browsers is long polling. I could implement the system using just this techniques, but it would then be unable to take advantage of the faster protocols such as WebSockets, available on the latest mobile browsers (such as Safari on iOS 4.2.1).
+Unfortunately, the only one which reliably works on a large subset of browsers is long polling. I could have implemented the system using just this techniques, but it would then be unable to take advantage of the faster protocols such as WebSockets, available on the latest mobile browsers (such as Safari on iOS 4.2.1).
 
-A library is available for Node.js, socket.io which allows both the client and server to determine which technique to be used and fall back to it as required, with an API to abstract these details away. This would allow me to support many different browsers with whatever technique they require without having to re-implement all the methods and is therefore what I will be using for this part of the system.
+To save writing implementations of each communication method, I used a library available for Node.js, socket.io\cite{socketio:web}, which allows the client and server to determine which communication technique to use depending on what they each support. It provides a simple API to abstract these techniques away and allowed me to simply request some data be transmitted. 
 
-\subsection{Pushing Content to the Client}
-To have content pushed from the presenter system to the client, I will need a way for one system to tell the other what content to broadcast and when. 
+\todo[inline]{Also considered?}
 
-To begin with, it is necessary to figure out in what format I should be serialising data for transfer between all the systems involved. As both Python and JavaScript have native support for serialising to/from JSON (JavaScript Object Notation), a lightweight format designed for data transmitted between a server and web application, this seems like a natural fit for this project.
+\subsubsection{Server Design}
+The implementation of the server was largely assisted by the use of the Connect middleware framework for Node.js. Connect created a basic HTTP server, with middleware for serving static files (used to serve the client application) and for session management.
 
-Sending the data from presenter to the node.js server could be done by sending it a POST request with the JSON as the value, which could then parse the object and determine which clients to send it to. The node.js server will then need to cache this object so that all future request for it from the client will not cause an additional request back to the presenter, leading back to the original bottlenecking problem.
+On top of the basic HTTP server, an event-based cross-system communication micro-protocol was developed. A typical communication would be a JSON string containing two top-level objects: `event' and `data'. The former contains a single camel-cased string describing the event which triggered the communication. The latter contains all the relevant data pertaining to the operation.
 
-It would be possible to simply have the distribution server store the JSON in memory, but if this system were serving tens of sets of audiences at a time, this caching implementation would best be suited to a tool designed for this type of use. Key-value databases are particularly useful at this type of task, allowing very quick retrieval of content by key from memory. Memcached is a commonly used implementation, but I have experience with Redis, a VMWare product which performs a similar task, has a very simple, clean interface and has libraries for both Django and Node.js.
+Operations were triggered by events from the Pub/Sub channel and from the connected sockets. For example, when the event  with the event string `adminPublishedMote' was published on the Pub/Sub channel, a function is called which parses the `data` object and forwards the parsed mote to clients connected to the server and subscribed to the relevant plan.
 
-Redis can also be used as a Publish/Subscribe server - allowing me to do away with the POST request by having Django publish the latest object ID to be broadcast directly to a pub/sub channel which the distribution server is subscribed to. On receiving an update from the channel, the node server can request the JSON object from the presenter server, cache it in Redis and then distribute it out to clients from the cached copy.
+Along with supporting communication through the socket one way (pushing motes out to clients), the server also needed to deal with responses coming back from clients. To do this, it would listen for the `clientRespondedToMote' event on the socket and store the answer in a plan/mote specific hash in Redis.
+
+Whenever the distribution server needs data, it is requested from Redis using the node\_redis\cite{noderedis:web} library. Redis, being very efficient at retrieving data by key from memory (a time complexity of O(1)) required very little time to fetch the required data (although even then, due to the event-loop nature of the server, it continued processing requests).
+
+Redis was used to great effect to reduce the amount of I/O needed to store and retrieve data on the server. Rather than requesting data from the presenter server when it was needed (triggering a request to the RDBMS or filesystem), the presenter was designed to cache any relevant data in Redis before the distribution server needed it. This included serialised motes, mappings between plan `access codes' and plan IDs as well as the current status of plans.
+
+As the system does not request a user be logged in on the client to respond to motes, it is necessary to make some assurances that a single device is a single user. To do this, Connect's session management middleware combined with the Connect Redis\cite{connectredis:web} session backend to store user sessions in Redis. Session keys are used throughout the system as a unique user identifier, so when a user refreshes Flux, rather than creating a new response, their old response is overwritten.
+
+Using sessions also allows a `clientDisconnected' event to be fired when the session expires (when the user no longer has Flux open). The server then removes that users' response and notifies the presenter, which will in turn call the `client\_disconnected' method on the currently active renderer, removing their answer in realtime.
+
+\todo[inline]{Something about key structure in Redis}
+\todo[inline]{Also considered?}
+
+\subsection{Client System}
+The client system is a critical component for meeting the requirements of the project. Referred to as Flux, this is the system which attendees connect to in order to receive broadcasted content.
+While the resources for this component are served both from the distribution server and the presenter system, it is considered a separate entity as the majority of its operations are on the client-side, in JavaScript.
+
+\subsubsection{Why web-based?}
+In my research I noted that every platform I studied had a proficient browser, most being based on the WebKit\cite{webkit:web} open source project (providing HTML rendering and JavaScript implementations) which is also used for Google's Chrome and Apple's Safari browsers. From past experience, I know how web applications can be used for excellent cross-platform support, backed up by research in to existing multi-platform ARS' systems, which all appear to be web-based. 
+
+A web-based client would be accessible from any device with a browser that supported full HTML, JavaScript and some form of real-time communication protocol (even if emulated), features which all of the devices I researched have. No device-specific code is required, although styles for different screen sizes are necessary. It is also possible to use technologies only present in more modern browsers (such as HTML5 features) by making use of graceful degradation on devices that do not support it.
+
+I therefore chose a browser-based solution for the client as I felt it was the most appropriate option for a truly multi-platform system. While I may have lost some of the flexibility of device-native applications, I considered this an appropriate compromise. Past experience with web applications using JavaScript and an understanding of how to implement a real-time application also contribute to this decision.
+
+\todo[inline]{Also considered?}
+
+\subsubsection{System Design}
+On loading, Flux attempts to connect to the distribution server using the client-side version of the socket.io library. This establishes a realtime method through which to communicate for the rest of the session. The same event-based micro-protocol was implemented here in order to deal with events from the distribution server. For example, receiving a communication with the event `serverPushedMote' triggers a function which updates the display. These two features combine to create a simple web page which updates in realtime, on request.
+
+In order to render a pushed mote, Flux performs a variety of operations triggered by its update\_mote function. It begins by updating the list of past motes available in the history panel. It then attempts to load the scripts and styles required by that mote type. This is done by using yepnope.js\cite{yepnope:web} to check whether the scripts are already loaded, and if not, request them from the distribution server. The distribution server proxies to the motes' resources the developer created for the presenter system and returns them Flux.
+
+Once these resources are loaded, the returned JavaScript resource will contain a subclass of ClientMoteRenderer (named after the object identifier) which is instantiated and has its `render' method called. This method fetches the mote types' template (again, created by the mote type's developer) which will be written using the mustache\cite{mustache:web} template language and rendered using mustache.js\cite{mustachejs:web}. The ClientMoteRenderer subclass will likely implement additional functionality which will eventually trigger Flux's `respond' function, returning the users' response to the distribution server.
+
+For example, QaRenderer, the implementation of ClientMoteRenderer which is loaded when a mote of type Question and Answer is pushed calls the respond function with the answer the user has selected and updates the display to show some feedback to the user.
+
+\todo[inline]{Also considered?}
+
+\subsubsection{User Interface}
+It was important that this part of the system was very easy to use, so I attempted to limit the amount of choices a user had at any one point. On initially loading the system, they user is prompted to enter the access code for the plan they wish to join. This is the only option they have available at this point. Entering the code will trigger a communication with the distribution server to check whether the access code matches an existing plan. If it does, the page will be updated with the most recently pushed mote to that plan.
+
+The renderers implemented for the built-in mote types are designed to respond immediately on interaction - there is never a need to select a 'send' button so that the user never needs to understand the concept of communication between client and server.
+
+There are two other interface elements available to the user, neither of which are critical to its operation. The first, visible to the top left, is the currently active plan. Selecting this will allow the user to change to another plan. The second, available to the top right, is a history panel. Selecting this will drop down a list of all past motes, allowing the user to navigate back to a previous mote if desired.
 
 \section{Problems}
-Any issues encountered during development
+\subsection{Communication protocol}
+Once I had the distribution server communicating in both directions with the client, I had the problem of making communications trigger operations on each system. I struggled with figuring out a way to establish a light RPC protocol, until I came across the nodechat.js\cite{nodechatjs:web} which used an event based model, including an event string as part of the communication between systems. 
 
-\section{Testing Strategy}
-How I tested - use iteration documents as appendices
+Implementing this was simple, and it made my system much more flexible, however, I did not design the triggered events before implementing them, so I found myself getting confused by what was triggering which events, when to respond to them, and how to `bubble' them through all three systems when required. To resolve this, I established a naming convention for events; starting with the system from which they originated; `admin', `server', `client', followed by the operation which triggered the event (rather than the operation the event should trigger) in the past tense. 
 
-\section{Critical Evaluation}
-Lots of stuff about how good it was
+For example, the `clientRespondedToMote' event is triggered by the client when the user responds to a mote. This event is returned to the admin by triggering the `serverPushedResponse' event.
+
+The other issue I had with this protocol was maintaing context between communications. For example, if the client requested the existence of a plan from the distribution server, it was necessary for the distribution server to know which client requested it, and the client needed to know when it received a response. 
+
+As there would be no concept of a `response' to a certain communication in this protocol, I had trouble figuring out how to know when the distribution server was responding. My eventual solution to this was to include just enough context in the sent message so that the response could be identified and to remove the need for context from events. For example, the client identifier would be sent with the request for the existence of a plan so that the distribution server could trigger a `serverSetPlan' event only on the requesting client.
+ 
+ \subsection{Dynamic resource loading}
+One of the more complicated issues I came across when developing Flux was the issue of dynamically loading mote-type specific resources on request. 
+
+The first issue I encountered with this was a race condition where the system would attempt to instantiate the loaded object before it had successfully loaded. I attempted to fix this by instantiating the object in a callback triggered by the resource loader, but the race condition still existed when the resource had loaded but the browser had not fully interpreted the new script. I ended up fixing this by using yepnope.js, which had built in callback functions which worked perfectly.
+
+The second issue I had with this was with maintaining mote type modularity. I originally had all mote-specific resources for Flux stored in a separate directory from the main mote type definition, this allowed me to use the distribution server to serve these resources. However, I wanted all mote-specific items to be in a single folder, regardless of whether they were used for Diffuse or Flux. To achieve this, I moved these resources in to the folder which would typically be served by Django and updated Flux to find them on the Diffuse domain. 
+
+However, because the client was being served from the Flux domain, and JavaScript resources were attempting to load from another domain, the same origin policy implemented in most browsers prevented them from loading. I tried to work around this by requesting the JavaScript resource using JSONP, but this added extra unnecessary complexity. My final solution was to use Nginx to proxy requests for the resources on the Flux domain to the Diffuse resource folder.
+
+\todo[inline]{More problems - perhaps saving error when demoing?}
+
+\section{Testing}
+I adopted a number of testing strategies during the development of the project, each serving a different purpose.
+
+\subsection{Testing during development}
+An informal testing strategy was used during development cycles. This usually consisted of
+\begin{itemize}
+\item Creating a `test' entries in the presenter system database and ensuring they worked as I built the system. 
+\item Adding debug code (logging, prints, debug output) to systems.
+\end{itemize}
+
+The use of Django's fixtures system made it easy to load a set of test data in to the database during development. Combined with the use of South\cite{south:web} to create data migrations when models were changed, persistent test data was a valuable way to ensure the system was working.
+
+This approach was used primarily to ensure I could clearly see the workings of the system as it was built. It was not intended to ensure the system met specifications.
+
+\todo[inline]{Expand if possible}
+
+\subsection{Iteration Testing}
+At the end of every iteration, I went through a testing plan to ensure that what I had built met the specifications determined at the start of the iteration. Feedback from this testing then went in to planning the next iteration.
+
+\todo[inline]{Expand if possible, refer appendices}
+\todo[inline]{Create appendices for testing}
+
+\subsection{Automated Stress Testing}
+As this system is built around many clients connected simultaneously, I needed to test how the system would behave under normal use. As I only had access to a few client systems at a time, I wrote a set of scripts to emulate the behaviour of clients in order to ensure that the distribution system and presenter system renderers could cope with normal (and abnormal) numbers of responses.
+\todo[inline]{Expand if possible}
+
+\section{Evaluation}
+\todo[inline]{Lots of stuff here}
 
 \bibliography{bibliography}
 
