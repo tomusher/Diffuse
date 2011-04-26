@@ -29,7 +29,7 @@ broadcasting rich interactive content}\\[0.3cm]
 \vspace*{\fill}
 \pagebreak
 
-\section{Acknowledgements}
+\section*{Acknowledgements}
 With thanks to Dave Price, for feedback, advice and suggestions to myself and the rest of the project group during the development of this project.
 
 Many thanks to Denise Williams-Morris and Alex Kruzewski, for testing, feedback and moral support.
@@ -37,10 +37,24 @@ Many thanks to Denise Williams-Morris and Alex Kruzewski, for testing, feedback 
 \listoftodos{}
 \pagebreak
 
-\section{Abstract}
+\section*{Abstract}
 \todo[inline]{Some abstract}
 
+\section*{Definition of Terms}
+\begin{description}
+\item[Presenter] \hfill \\
+The user running a presentation. A lecturer, teacher or meeting co-ordinator.
+\item[Attendee] \hfill \\
+User attending a presentation. A student or one attending a meeting.
+\item[Presentation] \hfill \\
+A setting in which a single Presenter (occasionally multiple) is interacting with multiple Attendees, typically in order to present information. A lecture, class, talk or meeting.
+\end{description}
+
+\pagebreak
+
 \tableofcontents
+
+\pagebreak
 
 \section{Background and Objectives}
 \subsection{Context}
@@ -52,24 +66,34 @@ From using these clickers from a students' perspective, I have noted two primary
 \item Specific clicker hardware is required. While they can be relatively cheap, costs do increase with complexity and they are single-purposes devices. In most cases, specialist receiver hardware is also required and in larger scale cases, technicians are required to maintain these systems.
 \end{itemize}
 
-This project attempts to solve the above issues by creating a 'next-generation' ARS system for use on any system with a relatively modern web-browser and the ability to access the local network. While the system is platform and device agnostic, the increasing popularity of Apple's iPad and other tablet computers to enhance textbooks in education provides an ideal device around which the system was built and tested within the time constraints (although it does not use any tablet or device specific implementations).
-
-The system is built around an extensible framework; allowing additional types of content to be created for broadcast, and to allow the system to be used in other use cases, such as school classrooms and business meetings. 
-
 \subsection{Objectives}
-Clickers exist to improve interactivity during lectures, helping to engage students in the subject, improve attention-span and providing additional ways for students to feel personally involved in the subject. Secondarily, facilitating real-time feedback allows lecturers to tailor their approach based on the class response - for example, the lecturer might broadcast a set of questions about the current topic, if a large percentage of students answer incorrectly, the lecturer might wish to attempt another explanation. This project attempts to maintain all of these benefits while building on the types of content which can be broadcast, as well as adding additional forms of interactivity where possible.
+Clickers exist to improve interactivity during lectures, helping to engage students in the subject, improve attention-span and providing additional ways for students to feel personally involved in the subject. Secondarily, facilitating real-time feedback allows lecturers to tailor their approach based on the class response - for example, the lecturer might broadcast a set of questions about the current topic, if a large percentage of students answer incorrectly, the lecturer might wish to attempt another explanation. 
 
-The system was designed to:
+This project attempts to maintain all of these benefits while creating a `next-generation' ARS system by focusing on improving three areas: accessibility, interaction and flexibility:
+
+\subsubsection{Accessibility}
 \begin{itemize}
-\item Be very simple to use for both the presenter and attendee.
-\item Be configureable once per site, rather than requiring setup for every meeting/lecture.
-\item Usable on a wide array of mobile and personal computing systems, including mobiles, tablets and laptops.
-\item Facilitate near-instant, actionable feedback to the presenter.
-\item Support a variation of `types' of material, with the facility to extend and add more if required.
+\item Improving ease and cost of setup/configuration for system administrators by leveraging existing local area networks, allowing the system to be configured once per site, rather than requiring setup for every presentation.
+\item Facilitating ease of access by presenters by supporting the use of the presenter system on existing network-connected systems without the requirement for additional software installations.
+\item Extending the use of ARS systems for attendees by using existing devices with a relatively modern web-browser and the ability to access the local network as clients. Allowing attendees to use their existing smartphones, tablets or laptops rather than using proprietary hardware.
+\item Removing the requirement to have dedicated hardware installed and available when an ARS is required.
+\item Simplifying the experience of interacting with the system for both the presenter and the attendee.
 \end{itemize}
+
+\subsubsection{Interaction}
+By using the capabilities of powerful modern portable hardware, the system aims to provide multiple ways by which attendees can interact with the presenter during a presentation. While a typical ARS offers only Question and Answer style interaction, this system will allow a large variety of content to be broadcast and responded to, including images, puzzles and games.
+
+As with standard ARS', the system is intended to facilitate near-instant, actionable feedback to the presenter from interactions with attendees.
+
+\subsubsection{Flexibility}
+Building the system around an extensible framework allows additional types of content to be created for broadcast by developers, creating infinite possible types of interaction supporting the use of system in many other use cases. By refraining from using any device-specific implementations/code, extending the system to support future devices should be trivial.
+
+\todo[inline]{Put this somewhere: }
+While the system is platform and device agnostic, the increasing popularity of Apple's iPad and other tablet computers to enhance textbooks in education provides an ideal device around which the system was built and tested within the time constraints (although it does not use any tablet or device specific implementations).
 
 \subsection{Relevant Literature and Existing Systems}
 \todo[inline]{Add relevant literature}
+\pagebreak
 
 \section{Development Process}
 \subsection{Process Model}
@@ -87,16 +111,17 @@ Both the client system and the presenter system used a frontend written in HTML5
 
 Redis\cite{redis:web}, a key-value store, was used to great effect in the project - its primary purpose was to store a cached representation of the content to be broadcast, allowing fast retrieval when required. Its built-in publish/subscribe server mechanism was also used as the communication protocol between the presenter system and the broadcast system. It was also used for caching user session data and data mappings which required quick access.
 
-The presenter system uses a relational database to maintain a persistent store of content and plans. As Django's ORM abstracts the database away and supports many systems, the choice of RDBMS is not as important as it would be if I were not using a framework, therefore I used the RDBMS with which I am most familiar, MySQL\cite{mysql:web}.
+The presenter system uses a relational database to maintain a persistent store of content and plans. As Django's ORM abstracts the database away and supports many systems, the choice of RDBMS is not as important as it would be if a framework was not being used, therefore, the RDBMS with which the author is most most familiar was chosen, MySQL\cite{mysql:web}.
 
-The system was developed on a VPS provided by Linode on which I configured Ubuntu 10.04 with all the tools mentioned above. Nginx\cite{nginx:web} was configured with Gunicorn\cite{gunicorn:web} to serve the Django application, it was also used to proxy to the Node.js server. I also configured a development environment using tmux\cite{tmux:web} (a terminal multiplexer, similar to GNU Screen) so that I could maintain a development session across multiple connections, as well as allowing me to quickly switch between terminals.
+The system was developed on a VPS provided by Linode on which Ubuntu 10.04 was configured with all the tools mentioned above. Nginx\cite{nginx:web} was configured with Gunicorn\cite{gunicorn:web} to serve the Django application, it was also used to proxy to the Node.js server. A development environment using tmux\cite{tmux:web} (a terminal multiplexer, similar to GNU Screen) was also set up so that development sessions could be maintained across multiple connections, as well as allowing quick switching between terminals.
 
-Vim\cite{vim:web} was used as the primary editor for development of the system, as I felt it was the best option for developing in the terminal on a remote server and configuring it with plugins such as Command-T and Pyflakes vastly improved productivity.
+Vim\cite{vim:web} was used as the primary editor for development of the system, as it was considered the best option for developing in the terminal on a remote server and configuring it with plugins such as Command-T and Pyflakes vastly improved productivity.
 
-With this configured, I developed by SSHing to the server from the computer I was working on and resuming the tmux session, this allowed me to change from a University computer to my home computer and be able to immediately resume where I left off.
+With this configured, development was done by SSHing to the server from the computer currently being worked on and resuming the tmux session, this supported changing from a University computer to a home computer while being able to immediately resume where development left off.
 
-I used the Git\cite{git:web} version control system for versioning and backing up the project code and documentation. This was mirrored on a private remote hosted by GitHub\cite{github:web} on a free Student/Education package. I periodically cloned the repository to my local computer, a separate server and a USB drive for backup, this meant that the code was available to me in five places, should any failures occur.
+The Git\cite{git:web} version control system was used for versioning and backing up the project code and documentation. This was mirrored on a private remote hosted by GitHub\cite{github:web} on a free Student/Education package. The repository was periodically cloned to a local computer, a separate server and a USB drive for backup, this meant that the code was available in five places, should any failures occur.
 
+\pagebreak
 \section{Design and Implementation}
 \todo[inline]{Perhaps separate design and implementation?}
 \subsection{Overview}
@@ -138,19 +163,8 @@ A base `Mote' model serves as the central model around which the whole system is
 \subsubsection{Modularity and Mote Types}
 The Django 'app' concept allows sections of the system to be separated in to individual modules, with their own models, views, resources and templates. To support modularity in Diffuse, new mote types are created in separate Django apps containing a model which extends the `Mote' model, implements a serialisation method on the new model, and defines how the mote should be represented on the client and the presenter systems. Developers wishing to extend the system need only add a new app to the presenter system and the entire system will now take advantage of it - this is the only place in the system where content types need to be defined - the distribution and client system do not need to be updated. 
 
-Diffuse makes available five content types by default to demonstrate the flexibility of the system:
-\begin{description}
-\item[Question and Answer - mote\_qa] \hfill \\
-Defines a `Question' model derived from Mote, as well as an `Answer' model with a many-to-one relation between answers and questions. Presented on Flux as a question with a list of answers. Selected answers are immediately recorded and shown as a dynamically updating graph on the presenter interface.
-\item[Slide - mote\_slide] \hfill \\
-A basic `slide' style mote type, defining a single `Slide' model, allowing the presenter to push non-interactive HTML content to users.
-\item[Associate - mote\_associate] \hfill \\
-Defines an `AssociationGroup' model derived from Mote, along with an `Association' model with a many-to-one relation between associations and association groups. An association is defined as two strings, the left side, and the right side. When presented to a client, both the left side and right side are randomised, prompting the user to 'join up' the correct association pairs.
-\item[Heatmap - mote\_heatmap] \hfill \\
-A simple `Heatmap' model, extending Mote, contains an attribute for an image. This image is shown to the client, and any clicks on the image by the client are shown as a `heatmap' to the administrator.
-\item[Feedback - mote\_feedback] \hfill \\
-The`Feedback` model is another simple model which simply defines a `description' attribute. When pushed to a client, the description attribute is displayed along with a text entry form. When this entry form receives input, the presenter interface is updated. This is designed to facilitate instant feedback from a class/meeting.
-\end{description}
+Diffuse makes available five content types by default to demonstrate the flexibility of the system
+\todo[inline]{Link to mote type section}
 
 \textbf{Also considered:} \emph{Implementing a more abstract way of defining and extending content types, perhaps using an EAV (Entity-attribute-value) database model. This would reduce the need for developers to write code to add new types. However, this would also mean creating a framework for automatically generating code for the client representation and feedback representation, so I felt this would complicate the project beyond its scope.}
 
@@ -298,6 +312,56 @@ The renderers implemented for the built-in mote types are designed to respond im
 
 There are two other interface elements available to the user, neither of which are critical to its operation. The first, visible to the top left, is the currently active plan. Selecting this will allow the user to change to another plan. The second, available to the top right, is a history panel. Selecting this will drop down a list of all past motes, allowing the user to navigate back to a previous mote if desired.
 
+\subsection{Mote Types}
+A number of mote types were created to demonstrate the system, each for a different type of interaction and use.
+
+\subsubsection{Slide}
+The Slide is the most basic mote type available in Diffuse, created to demonstrate the basic ability to push non-interactive HTML content to Flux.
+
+When creating a Slide, the presenter is prompted to complete a `Content' field in which they can enter any HTML content for the slide. The administrator interface implements the TinyMCE\cite{tinymce:web} WYSIWYG editor with django-tinymce\cite{djangotinymce:web} to allow the presenter to generate HTML by using a simple editor.
+
+When pushed to Flux, this mote type simply re-renders all the HTML defined by the presenter.
+
+Uses of this mote type include:
+\begin{itemize}
+\item As title/divider content - if Diffuse is being used as the primary form of presentation, title motes can be pushed to users.
+\item Instructive content - for displaying instructions to the attendees.
+\item For content which requires physical interaction. For example, a presenter might still want to encourage the raising of hands.
+\item Content shown only to a subset of attendees. The presenter might be interested in dividing the group into multiple subgroups, each with their own plan and access code. The presenter could then broadcast some informational content to a subgroup without letting the other groups see it.
+\end{itemize}
+
+\subsubsection{Question and Answer}
+The Question and Answer mote type was created to show a basic, immediate response type of interaction and as a direct comparison to the questions content that standard ARS systems are primarily used for. It defines a `Question' model derived from Mote, as well as an `Answer' model with a many-to-one relation between answers and questions.
+
+Creating a Question and Answer mote requires the following fields to be completed:
+\begin{description}
+\item[Question Text] The question shown to the attendees.
+\item[Answers] A list of answers with a text string, and an option to select whether the answer is considered `correct' or not.
+\end{description}
+
+This mote type is presented on Flux as a question with a list of answers. Selected answers are highlighted and immediately pushed back to the distribution server.
+
+Answers are shown to the presenter in the form of a column graph (using HighCharts) showing the number of attendees that responded with each answer. As new answers arrive, this graph updates in real-time with the new respondent's answer. The graph's scale changes automatically if numbers begin to move off the original scale. Should a user change their answer or disconnect, their previous answer is dynamically removed from the graph and replaced with their new one (if they submitted one).
+
+Answers marked as correct are shown on the response graph as a green bar. Although this option is not used for any other feedback, it is used to demonstrate how attributes can affect how motes are displayed.
+
+Uses of this mote type include:
+\begin{itemize}
+\item Prompting attendees for feedback from a set list of answers (Enjoyed, did not enjoy, etc.). 
+\item Asking a question related to materials discussed in the presentation. Useful in a lecture for understanding how well students understand the material, allowing the presenter to rapidly know what they need to explain in more detail, etc.
+\item As an anonymous alternative to `hands up' situations, where attendees are prompted to select some relatively private information (such as what category they fall into) without having to alert all other attendees.
+\end{itemize}
+
+\subsubsection{Association}
+Defines an `AssociationGroup' model derived from Mote, along with an `Association' model with a many-to-one relation between associations and association groups. An association is defined as two strings, the left side, and the right side. When presented to a client, both the left side and right side are randomised, prompting the user to 'join up' the correct association pairs.
+
+\subsubsection{Heatmap}
+A simple `Heatmap' model, extending Mote, contains an attribute for an image. This image is shown to the client, and any clicks on the image by the client are shown as a `heatmap' to the administrator.
+
+\subsubsection{Feedback}
+The`Feedback` model is another simple model which simply defines a `description' attribute. When pushed to a client, the description attribute is displayed along with a text entry form. When this entry form receives input, the presenter interface is updated. This is designed to facilitate instant feedback from a class/meeting.
+
+\pagebreak
 \section{Problems}
 \subsection{Communication protocol}
 Once I had the distribution server communicating in both directions with the client, I had the problem of making communications trigger operations on each system. I struggled with figuring out a way to establish a light RPC protocol, until I came across the nodechat.js\cite{nodechatjs:web} which used an event based model, including an event string as part of the communication between systems. 
@@ -321,6 +385,7 @@ However, because the client was being served from the Flux domain, and JavaScrip
 
 \todo[inline]{More problems - perhaps saving error when demoing?}
 
+\pagebreak
 \section{Testing}
 I adopted a number of testing strategies during the development of the project, each serving a different purpose.
 
@@ -347,9 +412,78 @@ At the end of every iteration, I went through a testing plan to ensure that what
 As this system is built around many clients connected simultaneously, I needed to test how the system would behave under normal use. As I only had access to a few client systems at a time, I wrote a set of scripts to emulate the behaviour of clients in order to ensure that the distribution system and presenter system renderers could cope with normal (and abnormal) numbers of responses.
 \todo[inline]{Expand if possible}
 
+\pagebreak
 \section{Evaluation}
-\todo[inline]{Lots of stuff here}
+The system was successful in improving on the three areas defined in the objectives:
+
+\subsection{Accessibility}
+\subsubsection{Improving ease and cost of setup/configuration}
+By implementing the system entirely in software and supporting communication over existing networks, the project successfully improves on ease and cost of setup/configuration for system administrators. There is no additional configuration required for individual presentations, so as desired, the system only requires configuring once.
+
+However, the system is dependent on a large number of tools and libraries. Configuring these as the author has done in another environment is likely to be complicated and error-prone. If the system were to be distributed, it would likely need to be reconfigured to reduce external dependencies and distributed as some form of `package'. There is also a number of areas of the system where some configuration variables are hard-coded (such as domains); this would need to be addressed by separating all of these variables out to configuration files.
+
+The communication of system services entirely over web-based services means there is no need for additional firewall configuration as long as HTTP traffic is allowed around the network. Support for WebSockets does not require any additional ports due to HTTP's UPGRADE method. 
+
+A potential shortcoming in system communication is between the presenter system and the distribution server. This requires a shared Redis instance accessible by both systems so that the presenter system can publish to the pub/sub channel. This would require either the presenter system, the distribution server and the Redis instance to be on the same machine (presenting potential scalability issues), or requiring additional firewall configurations to allow the Redis instance to be accessed over the network (presenting potential security issues). This could have been avoided by having the presenter system publish content to the distribution server over the established socket, or over HTTP.
+
+\subsubsection{Facilitating ease of access by presenters}
+As specified in the system objectives, there is no requirement to install additional software on individual systems. Presenters are able to access a URL on the network in a browser for access to the presenter system. 
+
+An issue with this approach is that the presenter system is not fully operational on all browsers. Due to time constraints, it was only tested in modern browsers such as Mozilla Firefox and Google Chrome and uses features of CSS3 and HTML5 which are not supported in many versions of Internet Explorer. Considering a number of businesses do not support modern browsers, this could potentially be an issue for them. However, considering the focus of the project was the way in which these systems communicate, optimising for old browsers would have been time better spent elsewhere.
+
+\todo[inline]{logging in?}
+
+\subsubsection{Supporting existing devices}
+\label{sec:supportexistingdevices}
+The Flux web client, while optimised for iPad, has been tested and runs well on iPhone, Android phones and most modern browsers (again, Chrome and Firefox). While this does meet the requirement that it runs on existing mobile devices, it was not tested on a large number of the platforms initially researched (Windows Mobile, Windows Phone 7, BlackBerry OS and Symbian) due to the authors' limited access to devices using these platforms. 
+
+However, should these devices not function correctly, the system was designed to allow for modifications to the client without affecting the rest of the system due to the low coupling between mote type definitions, Flux, and the presenter system. Modifying individual mote type JavaScript to include feature detection or bug fixes for certain platforms would be relatively easy and would not require restarting the server.
+
+The flexibility offered by allowing the developer full access to the JavaScript used by each mote type could be an issue as it is possible that they will implement features not supported by some user agents. For example, one of the demonstration mote types, Association, requires the browser to support SVG, which is not supported in Android devices. If the developer of this mote type did not create some form of fallback, this mote type would not work correctly on these devices. 
+
+The solution to this would be to create a more limited subset of fully tested features which developers could implement in their mote types through a defined API. Implementing this would have involved designing, developing and documenting this API, which would have been time consuming and could be considered outside the scope of the project. It would also mean significantly less flexibility afforded to developers creating mote types.
+
+\subsubsection{Removing dedicated hardware requirement}
+There is no dedicated hardware required for using Diffuse, meeting the objectives specified for the project. The two servers can be configured on existing hardware, communication is designed to work over the existing network, and clients do not require proprietary `handsets' to interact with the system - they are able to use their own mobile, portable or desktop devices.
+
+Should an establishment not have an existing network infrastructure, there would be significant costs and work required to set one up in order to use Diffuse. It is likely that there would be no incentive to configure a network solely to use Diffuse, but for smaller establishments, it is conceivable that the Diffuse servers could be configured on a single desktop PC with a wireless router attached and still be highly functional.
+
+There is also the issue of the prevalence of devices which would run the client. While in some establishments it is likely that the vast majority of attendees are likely to have a compatible phone or laptop, in others those attendees might be in the minority. Supplying all other users with a suitable device may be more expensive to the presenter than purchasing dedicated ARS hardware. Considering the problems Diffuse attempts to solve, this issue is unfortunately unavoidable, however, it is hoped that this system will be attractive to those establishments where attendees are likely to own these devices and will value the improved interactivity provided by Diffuse.
+\todo[inline]{More research?}
+
+\subsubsection{Simplifying interaction experience}
+Interaction with the client system is improved in Diffuse over typical ARS' through the use of a graphical interface. Being able to click or touch items/answers directly without the user having to deal with the abstract concept of matching answer numbers/letters with a slide on a different screen, or pressing `send' buttons to respond makes the system much more intuitive to use. Being able to use a full colour screen also allows additional instructions and guidance to be presented to the user where required.
+
+Presenting all the information required on screen on the users' own device also makes this system valuable for disabled users, for example, blind users using an iPad with VoiceOver enabled will be able to have the question and answers read to them. This benefit is unfortunately limited to some mote types, as VoiceOver will not be as valuable to the blind user with images, or drag-and-drop puzzles. It is left up to the presenter when each type of content should be used.
+
+An issue with this is the lack of tactile feedback from screens - there is no physical response to pressing a button, so a user may have issues with knowing when they have correctly submitted a response. To alleviate this, visual cues such as highlighting are used to show a user what options they have selected.
+
+The presenter interface is designed to be simple and easy-to-use. During informal testing, testers found it simple and were able to create and broadcast plans and motes without any instruction. Many existing ARS' integrated with PowerPoint to create content matched with slides - these often involve a plugin used for turning slides in to questions. This type of use might be more familiar to those used to PowerPoint, to whom Diffuse may be initially confusing. There are also likely to be those who do not like the idea of creating two sets of content, one for presentation and one for interaction.
+
+\subsection{Interaction}
+By leveraging the flexibility of the web browser found in targeted devices, Diffuse is able to offer a large variety of types of interaction. From simple Question and Answer interactions found in standard ARS systems, through complex puzzle-like association questions, to interactive images.
+
+\todo[inline]{Lots of examples of potential uses}
+
+\subsection{Flexibility}
+Developing the system around a modular framework from the start meant the final version of Diffuse is very flexible and extendable. All final mote types were written after the main system was developed without any additional changes needed to the core system. This demonstrated that any developer with knowledge of the workings of the system could create almost any type of mote type they required.
+
+Apart from the issues this flexibility causes with device compatibility detailed in section \ref{sec:supportexistingdevices}, there are also a few shortcomings with the implementation. Primarily, in order to set up a new mote type, the system administrator must run a few Django administration commands in order to generate the correct database tables. While these commands are relatively simple and require very little learning, this is an awkward step which could be alleviated by creating some form of plugin framework which allowed the administrator to enable mote types from the administration interface. 
+
+
+
+
+
+
+
+
+
+
+
+
 
 \bibliography{bibliography}
+
+
 
 \end{document}
