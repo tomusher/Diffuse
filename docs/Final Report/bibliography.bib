@@ -238,6 +238,62 @@
 	annote = {django-tinymce was used to implement TinyMCE as a widget for editing the Slide mote type.}
 }
 
+@MISC{raphaeljs:web,
+	author = "Dmitry Baranosvskiy",
+	title = "{Raphael - JavaScript Library}",
+	note = "\texttt{http://raphaeljs.com/}",
+	annote = {Raphael is a JavaScript library used for creating SVG graphics. This was used in the Association mote type to draw lines between options.}
+}
+
+@MISC{jqueryuiipad:web,
+	author = "Stephen von Takach",
+	title = "{jQuery UI for iPhone, iPad and iPod Touch}",
+	note = "\texttt{http://code.google.com/p/jquery-ui-for-ipad-and-iphone/}",
+	annote = {This plugin was used for the Association mote type, enabling a mapping between jQuery click/drag events to their equivalent touch events.}
+}
+
+@MISC{heatmap:web,
+	author = "Patrick Wied",
+	title = "{Heatmap.js}",
+	note = "\texttt{http://www.patrick-wied.at/static/heatmapjs/}",
+	annote = {Now a fully-fledged plugin, parts of heatmap.js code was used to generate heatmaps for the Heatmap mote type. At the time of development, this was not a finalised plugin.}
+}
+
+@MISC{jquerythrottle:web,
+	author = "Remy Sharp",
+	title = "{Throttling function calls}",
+	note = "\texttt{http://remysharp.com/2010/07/21/throttling-function-calls/}",
+	annote = {This snippet was used to throttle checking the input field for the Feedback mote type to prevent network traffic on every key press.}
+}
+
+@MISC{pil:web,
+	author = "Pythonware",
+	title = "{Python Image Library (PIL)}",
+	note = "\texttt{http://www.pythonware.com/products/pil/}",
+	annote = {PIL was used with Django's built-in ImageField support for storing images for the HeatMap data type.}
+}
+
+@MISC{djangopolymorphic:web,
+	author = "Bert Constantin",
+	title = "{Polymorphic Models for Django}",
+	note = "\texttt{http://bserve.webhop.org/django_polymorphic/}",
+	annote = {The structure of mote types depended on the use of django-polymorphic to support specialisation of the Mote model when required.}
+}
+
+@MISC{djangoannoying:web,
+	author = "Anderson",
+	title = "{django-annoying on BitBucket}",
+	note = "\texttt{https://bitbucket.org/offline/django-annoying}",
+	annote = {This utility library was used to simplify some Django development.}
+}
+
+@MISC{debugtoolbar:web,
+	author = "Rob Hudson",
+	title = "{django-debug-toolbar on GitHub}",
+	note = "\texttt{https://github.com/robhudson/django-debug-toolbar}",
+	annote = {This utility library aided in developing and debugging the presenter system. It provides debug information panels on rendered views containing headers, available variables and the context used.}
+}
+
 @BOOK{crane:comet,
 	author = "Dave Crane and Phil McCarthy",
 	title = "{Comet and Reverse Ajax: The Next Generation Ajax 2.0}",
@@ -245,6 +301,7 @@
 	year = "2008",
 	annote = "Read the first three chapters which outline what Comet applications are, how they work and how they can be implemented."
 }
+
 
 @MISC{nginxapache:web,
 	author = "WebFaction",
