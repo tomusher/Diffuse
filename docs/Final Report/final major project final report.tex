@@ -1,4 +1,4 @@
-\documentclass[a4papert,11pt,notitlepage]{ltxdoc}
+\documentclass[a4papert,11pt,notitlepage]{article}
 \usepackage[left=1.0in, right=1.0in, top=1.0in, bottom=1.0in]{geometry}
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
@@ -9,6 +9,7 @@
 \usepackage{longtable}
 \usepackage{fancyhdr}
 \usepackage{appendix}
+\usepackage{url}
 \pagestyle{fancy}
 
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -39,7 +40,7 @@ Many thanks to Denise Williams-Morris, Alex Kruzewski and my parents, for testin
 \pagebreak
 
 \section*{Abstract}
-\todo[inline]{Some abstract}
+Audience Response Systems (ARS), more commonly referred to as `clickers' have been used with varying degrees of success in educational establishments around the world for numerous years, however they suffer from a few important shortcomings. Using existing mobile devices communicating over a standard network, an alternative ARS has been developed which extends the concept of an ARS while attempting to solve some of the problems with existing systems. The rationale and design for the system is presented, along with a conclusion that the system is largely successful in its goal and a few points on potential future improvements and developments for the system.
 
 \section*{Definition of Terms}
 \begin{description}
@@ -88,7 +89,7 @@ This project attempts to maintain all of these benefits while creating a `next-g
 \end{itemize}
 
 \subsubsection{Interaction}
-By using the capabilities of powerful modern portable hardware, the system aims to provide multiple ways by which attendees can interact with the presenter during a presentation. While a typical ARS offers only Question and Answer style interaction, this system will allow a large variety of content to be broadcast and responded to, including images, puzzles and games.
+By using the capabilities of powerful modern portable hardware, the system aims to provide multiple ways by which attendees can interact with the presenter during a presentation. While a typical ARS offers only `Question and Answer' style interaction, this system will allow a large variety of content to be broadcast and responded to, including images, puzzles and games.
 
 As with standard ARS', the system is intended to facilitate near-instant, actionable feedback to the presenter from interactions with attendees.
 
@@ -96,7 +97,7 @@ As with standard ARS', the system is intended to facilitate near-instant, action
 Building the system around an extensible framework allows additional types of content to be created for broadcast by developers, creating infinite possible types of interaction supporting the use of system in many other use cases. By refraining from using any device-specific implementations/code, extending the system to support future devices should be trivial.
 
 \subsection{Relevant Literature and Existing Systems}
-A number of varying ARS systems were researched during project planning, full details on which can be found in Appendix \ref{app:existingars}. The general conclusion reached from this research was that all current ARS systems have not developed beyond the simple Question and Answer style interaction model, likely due to the restrictions of requiring legacy device support in their software.
+A number of varying ARS systems were researched during project planning, full details on which can be found in Appendix \ref{app:existingars}. The general conclusion reached from this research was that all current ARS systems have not developed beyond the simple `Question and Answer' style interaction model, likely due to the restrictions of requiring legacy device support in their software.
 
 \pagebreak
 
@@ -104,7 +105,7 @@ A number of varying ARS systems were researched during project planning, full de
 \subsection{Process Model}
 For this project, being able to enjoy the development of the system was important, so a process model which best suited the way the author wrote software needed to be adopted. As the author's typical development methodology is `hack at it until it works', a process model that injected a degree of organisation in to the process, providing a way to plan and view progress while maintaining focus on the code rather than the documentation needed to be found.
 
-For this reason, the iterative development approach was chosen, as it best suits how the author builds software, allowing blocks of time in which the focus is on writing code, while adding a sense of organisation and planning to the process. While the waterfall model might also have been suitable, the requirement to complete the design before moving on to development was considered too restrictive as it is believed that any software project needs room to evolve during its implementation.
+For this reason, the iterative development\cite{iterativedevelopment:web} approach was chosen, as it best suits how the author builds software, allowing blocks of time in which the focus is on writing code, while adding a sense of organisation and planning to the process. While the waterfall model\cite{waterfallmodel:web} might also have been suitable, the requirement to complete the design before moving on to development was considered too restrictive as it is believed that any software project needs room to evolve during its implementation.
 
 The iterative development model was adapted slightly to suit the project, following this cycle:
 \begin{enumerate}
@@ -120,7 +121,6 @@ The iterative development model was adapted slightly to suit the project, follow
 \item Re-execute all test plans.
 \item Perform additional testing.
 \end{enumerate}
-\todo[inline]{A bit more detail here}
 
 \subsection{Planning}
 When planning the system requirements, it was important to decide the scope of the system and what features would be important to create a system which met the desired objectives, created an interesting, distinguishable project, and was fun and educational to build, while maintaining a tight schedule (see Appendix \ref{app:schedule}) and minimising risk.
@@ -156,9 +156,9 @@ The presenter system uses a relational database to maintain a persistent store o
 
 A utility library, django-annoying\cite{djangoannoying:web} was used to simplify some elements of Django development, particularly through the use of the render\_to decorator which is used to replace the usual requirement to return a render\_to\_response object in Django views. Additionally, django-debug-toolbar\cite{debugtoolbar:web} was used to aid in developing and debugging the presenter system, providing varying useful debug information on rendered output.
 
-The system was developed on a VPS provided by Linode on which Ubuntu 10.04 was configured with all the tools mentioned above. Nginx\cite{nginx:web} was configured with Gunicorn\cite{gunicorn:web} to serve the Django application, it was also used to proxy to the Node.js server. A development environment using tmux\cite{tmux:web} (a terminal multiplexer, similar to GNU Screen) was also set up so that development sessions could be maintained across multiple connections, as well as allowing quick switching between terminals.
+The system was developed on a VPS provided by Linode\cite{linode:web} on which Ubuntu 10.04\cite{ubuntu:web} was configured with all the tools mentioned above. Nginx\cite{nginx:web} was configured with Gunicorn\cite{gunicorn:web} to serve the Django application, it was also used to proxy to the Node.js server. A development environment using tmux\cite{tmux:web} (a terminal multiplexer, similar to GNU Screen) was also set up so that development sessions could be maintained across multiple connections, as well as allowing quick switching between terminals.
 
-Vim\cite{vim:web} was used as the primary editor for development of the system, as it was considered the best option for developing in the terminal on a remote server and configuring it with plugins such as Command-T and Pyflakes vastly improved productivity.
+Vim\cite{vim:web} was used as the primary editor for development of the system, as it was considered the best option for developing in the terminal on a remote server and configuring it with plugins such as Command-T\cite{commandt:web} and Pyflakes\cite{pyflakes:web} vastly improved productivity.
 
 With this configured, development was done by SSHing to the server from the computer currently being worked on and resuming the tmux session, this supported changing from a University computer to a home computer while being able to immediately resume where development left off.
 
@@ -169,7 +169,7 @@ The Git\cite{git:web} version control system was used for versioning and backing
 \subsection{Overview}
 To complement the iterative development model chosen, a form of iterative design was also used. This began with a basic outline system design before anything was programmed. As sections were implemented, the design was revised and added to as required. The following describes the final design after implementing the system, and where relevant, how it changed from the base design.
 
-While the system was intended to be platform and device agnostic, the increasing popularity of Apple's iPad and other tablet computers to enhance textbooks in education provided an ideal device around which to build and test the system within the time constraints (although it would not use any tablet or device specific implementations). Building interfaces for additional platforms was considered an `iteration six' task, as long as there were no tablet or device specific implementations, the device could still be tested on other devices, so additional interfaces were not required to meet the objectives of the system.
+While the system was intended to be platform and device agnostic, the increasing popularity of Apple's iPad\cite{ipadpopu:web} and other tablet computers to enhance textbooks in education provided an ideal device around which to build and test the system within the time constraints (although it would not use any tablet or device specific implementations). Building interfaces for additional platforms was considered an `iteration six' task, as long as there were no tablet or device specific implementations, the device could still be tested on other devices, so additional interfaces were not required to meet the objectives of the system.
 
 To create a naming convention for system elements, models and documentation, the system was given the name \emph{Diffuse}, coined after the concept of `diffusion' - ``the spread of particles through random motion from regions of higher concentration to regions of lower concentration''\cite{diffusionwikipedia:web}, drawing comparisons between the diffusion of particles and the diffusion of knowledge/information.
 
@@ -181,7 +181,7 @@ Also used as the name for the main presenter system.
 The distribution and `client' end of the system.
 \end{description}
 
-The three system parts were designed to operate independently, communicating over HTTP, WebSockets and the Redis PubSub protocol. Non-system specific communication protocols were chosen so that that if required, components could be switched out later in development if one didn't work as required - for example, if the web-based client system did not work, it would be possible to fall back to a native client. An additional benefit, although outside the scope of the project, would be the potential to implement the endpoints in different ways, as long as they adhered to the same basic protocol. For example, the same system would be able to support proprietary handheld devices, device-native clients (e.g. an iOS device written in Objective-C), etc.
+The three system parts were designed to operate independently, communicating over HTTP, WebSockets and the Redis PubSub\cite{pubsub:web} protocol. Non-system specific communication protocols were chosen so that that if required, components could be switched out later in development if one didn't work as required - for example, if the web-based client system did not work, it would be possible to fall back to a native client. An additional benefit, although outside the scope of the project, would be the potential to implement the endpoints in different ways, as long as they adhered to the same basic protocol. For example, the same system would be able to support proprietary handheld devices, device-native clients (e.g. an iOS device written in Objective-C), etc.
 
 System content consists of two primary types of entity:
 \begin{description}
@@ -195,7 +195,7 @@ Both motes and plans are created by a logged in presenter on the presenter syste
 
 A client using Flux enters the plan code provided by their presenter, which will `subscribe' them to receive motes pushed from that plan. The initial design had the user enter their organisational login credentials to access plans. This was changed during the first iteration (while creating the presenter system) for a number of reasons:
 \begin{itemize}
-\item The added implementation complexity of gaining access to an organisation's authentication service, considering each may implement a different service (Shibboleth, OAuth, etc.).
+\item The added implementation complexity of gaining access to an organisation's authentication service, considering each may implement a different service (Shibboleth\cite{shibboleth:web}, OAuth\cite{oauth:web}, etc.).
 \item Added complexity for the presenter, requiring them to add a list of authorised users to each plan.
 \item Added complexity for the attendee, requiring them to login to access plans.
 \item Reduced use in environments where there may not be an established account system (informal meetings, smaller organisations).
@@ -204,7 +204,7 @@ A client using Flux enters the plan code provided by their presenter, which will
 
 When a mote is pushed, it is first passed to the distribution server and cached. The distribution server then attempts to push the mote forward on to subscribed clients. Figure \ref{fig:dfd} shows how data flows between the three system components.
 
-\begin{figure}
+\begin{figure}[h]
 \caption{Overview data flow diagram}
 \label{fig:dfd}
 \centering
@@ -218,16 +218,16 @@ Implementing the presenter system as a native, `desktop', non-web-based applicat
 
 The presenter system was designed to be the primary system for managing and storing motes and plans, it was therefore necessary to establish an idea of the models which would be used for each. Figure \ref{fig:classdiagram} shows the initial basic model structure concept.
 
-\begin{figure}
+\begin{figure}[h]
 \caption{Original concept model diagram}
 \label{fig:classdiagram}
 \centering
 \includegraphics[width=200pt]{classdiagram}
 \end{figure}
 
-A base `Mote' model serves as the central model around which the whole system is designed. This base Mote model would only contain Name and ID attributes (as they would be the only common attribute between all motes), as well as some utility methods. Mote types derive from this model, adding their own fields where required. This polymorphic design, combined with Django's concept of `apps' both aid with the requirement to create a modular, extensible system.
+A base `Mote' model serves as the central model around which the whole system is designed. This base Mote model would only contain Name and ID attributes (as they would be the only common attribute between all motes), as well as some utility methods. Mote types derive from this model, adding their own fields where required. This polymorphic\cite{polymorphism:web} design, combined with Django's concept of `apps' both aid with the requirement to create a modular, extensible system.
 
-Also considered was implementing a more abstract way of defining and extending content types, perhaps using an EAV (Entity-attribute-value) database model. This would reduce the need for developers to write code to add new types. However, this would also mean creating a framework for automatically generating code for the client representation and feedback representation, so it was felt that this would complicate the project beyond its scope.
+Also considered was implementing a more abstract way of defining and extending content types, perhaps using an EAV\cite{eav:web} (Entity-attribute-value) database model. This would reduce the need for developers to write code to add new types. However, this would also mean creating a framework for automatically generating code for the client representation and feedback representation, so it was felt that this would complicate the project beyond its scope.
 
 A Plan model would be used with a many-to-many relationship to the base Mote type, allowing it to refer to a list of any combination of mote types, using polymorphism to retrieve their full attributes when required. The Plan model would also `belong', through a one-to-many relationship, to a User, modelled by a username, password and date created. During development, the User model was implemented by Django's built-in `auth' application, so the final implementation included a number of fields which were not initially planned.
 
@@ -248,7 +248,7 @@ Cache uses the redis-py\cite{redispy:web} library to store the JSON representati
 Uses redis-py to publish a message to the Redis pub/sub channel specified by a parameter to the method. The message contains the event string and some data, in this case, the event `adminPublishedMote' and the ID of the mote. It   sets a key `plan:{[}plan\_id{]}:latest\_mote' to the ID of the latest mote, so that clients that aren't currently subscribed to the plan's channel can find the latest mote when they choose to subscribe.
 \end{description}
 
-JSON was chosen for mote serialisation as both Python and JavaScript have native support for it, it is also very lightweight, designed for data interchange between web applications where there is no need for additional context to be present in the serialised data. Alternative forms of serialisation, including XML and `pickling' in Python. XML were considered too heavyweight, containing a lot of context data which was not required - it was also found more difficult to parse. Language-dependent serialisation methods such as pickling would have been another alternative, but would be hard to decode cross-language.
+JSON\cite{json:web} was chosen for mote serialisation as both Python and JavaScript have support for it, it is also very lightweight, designed for data interchange between web applications where there is no need for additional context to be present in the serialised data. Alternative forms of serialisation, including XML\cite{xml:web} and `pickling'\cite{pickle:web} in Python. XML were considered too heavyweight, containing a lot of context data which was not required - it was also found more difficult to parse. Language-dependent serialisation methods such as pickling would have been another alternative, but would be hard to decode cross-language.
 
 \textbf{Also considered:}
 \begin{itemize}
@@ -258,7 +258,7 @@ JSON was chosen for mote serialisation as both Python and JavaScript have native
 \subsubsection{The User Interface}
 The presenter user interface was not planned or designed before development, it was considered that this method often creates interfaces that have had elements `tacked on' to suit changing features and can often be hard to use due to a lack of understanding of how the system works. While building the system, it becomes evident where elements make the most sense, so creating the UI was an evolutionary process that was not considered fully `designed' until the end of the last iteration.
 
-One of the primary goals for the user interface during its evolution was to ensure it was simple and easy-to-use. This was achieved by a decision to reduce all operations down to two modes of interaction:
+One of the primary goals for the user interface during its evolution was to ensure it was simple and easy-to-use. This was achieved by a decision to reduce all operations down to two modes of interaction, inspired by Steve Krug's `second law of usability': ``It doesn't matter how many times I have to click, as long as each click is a mindless, unambiguous choice''\cite{krug:dontmakemethink}.
 \begin{description}
 \item[Lists] \hfill \\
 Lists are used to represent available plans and motes. Lists are always present in the first two columns of the interface. Three actions are possible on lists and list items:
@@ -270,16 +270,16 @@ These options are presented modally on hovering over the list item. Editing take
 \item[Adding] \hfill \\
 At the bottom of a list, there is usually a way to add a new item to that list. The item created is always the same as the type of item in the list - the add button at the bottom of a plan list will always create a new plan.
 \end{description}
-\item[Forms] \hfill \\
+\item[Forms] \hfill \\f
 Forms modify attributes on items - while they can contain different fields, they all take the same structure whether the user is adding or editing an item. Editing items displays the same form as adding an item, only with fields pre-populated. Forms are only ever shown in the last column of the interface.
 \end{description}
 
 \subsubsection{Rendering Feedback}
 The final part of the presenter system is how feedback from clients is displayed to the presenter. When a mote is pushed, the last column updates with some representation of received data - how this data is displayed is specified by the individual mote applications, and can therefore vary between mote types.
 
-The original design for implementing feedback rendering was to use HTML templates, as with the rest of the system, however, during their implementation in the interactivity iteration (iteration 4), it was noted that all the templates were very similar; a container which had content injected by JavaScript. It was therefore decided to do away with the template system and implement them entirely in JavaScript.
+The original design for implementing feedback rendering was to use HTML templates, as with the rest of the system, however, during their implementation in the interactivity iteration (iteration 4), it was noted that all the templates were very similar; a container which had content injected by DOM manipulation\cite{dommanipulation:web} in JavaScript. It was therefore decided to do away with the template system and implement them entirely in JavaScript.
 
-The new design had individual mote types specify a JavaScript file in the motes' app containing a class derived from Renderer. A set of events are bound to the active Renderer, which call methods on the class when they are triggered. Each method\footnote{Note that methods in JavaScript typically use camel case for method names, whereas in Python, PEP8 dictates that methods should be all lowercase, with underscores separating words} needs to be overwritten by the derived, mote type-specific class:
+The new design had individual mote types specify a JavaScript file in the motes' app containing a object prototype derived from Renderer. A set of events are bound to the active Renderer, which call methods on the object when they are triggered. Each method\footnote{Note that methods in JavaScript typically use camel case for method names, whereas in Python, PEP8 dictates that methods should be all lowercase, with underscores separating words} needs to be overwritten by the derived, mote type-specific object prototype:
 \begin{description}
 \item[render] \hfill \\
 Builds the relevant representation of the results within the container with the `renderer' ID. This is called when the renderer is first initialised.
@@ -294,34 +294,34 @@ When the client disconnect event is fired, the renderer may choose to remove tha
 An example implementation of a renderer is that used for the \emph{Question and Answer} mote type. For this, the render method creates a column chart using the HighCharts\cite{highcharts:web} library. the updateData method directly modifies data in the object created by HighCharts, rather than drawing a new chart every time - this created a smooth `sliding' effect on the chart as new data arrived.
 
 \subsection{Distribution Server}
-As this system is intended for use in large organisations, such as universities, it is likely that there will be thousands of clients attempting to request motes simultaneously. Combined with the need to maintain a persistent connection to each client for broadcasting content and provide updates within a short time, it was felt that a traditional server would not be suitable, so the distribution server was introduced.
+As this system is intended for use in large organisations such as universities, it is likely that there will be thousands of clients attempting to request motes simultaneously. Combined with the need to maintain a persistent connection to each client for broadcasting content and provide updates within a short time, it was felt that a traditional server would not be suitable, so the distribution server was introduced.
 
 \subsubsection{Dealing with Scale}
-The concern with broadcasting content in real-time to hundreds of devices at a time using a typical web server was that it is likely to struggle with the number of requests. Techniques used to emulate real-time communication either require a permanent connection open to the server, or hundreds of requests to the server per minute. Traditional web servers such as Apache use a process-based model, where each additional request requires a new thread meaning many hundreds of connections being opened and closed per minute not only causing high memory usage, but incurring quite a large processing overhead, increasing the time it takes to serve a request as the volume increases.
+The concern with broadcasting content in real-time to hundreds of devices at a time using a typical web server was that it is likely to struggle with the number of requests. Techniques used to emulate real-time communication either require a permanent connection open to the server, or hundreds of requests to the server per minute. Traditional web servers such as Apache\cite{apache:web} use a process-based model, where each additional request requires a new thread meaning many hundreds of connections being opened and closed per minute not only causing high memory usage, but incurring quite a large processing overhead, increasing the time it takes to serve a request as the volume increases.
 
-An event-based server was chosen as the solution to this issue, which use a single thread and an event loop, removing the requirement for context switching. While this does mean significantly lower memory usage and overhead, it doesn't prevent operations in code from blocking, particularly those that involve I/O. For example; a request which queries the database will temporarily hold up the loop until the database responds, as we require a very quick response from the server, this may prove unacceptable.
+An event-based server was chosen as the solution to this issue, which use a single thread and an event loop, removing the requirement for context switching. While this does mean significantly lower memory usage and overhead, it doesn't prevent operations in code from blocking\cite{asyncio:web}, particularly those that involve I/O. For example; a request which queries the database will temporarily hold up the loop until the database responds, as we require a very quick response from the server, this may prove unacceptable.
 
 To solve this, a distribution server was designed in an event driven programming language, which work in the same way as an event driven server - using a main event loop to support callbacks from functions so that operations can continue while I/O is being performed, operating on the results only when they return.
 
-This type of programming paradigm is implementable in the majority of programming languages, although it is more prevalent and easier to implement in functional languages such as Erlang and Scala. There are also a number of frameworks for other languages available which support event-driven networking, such as Twisted (for Python), EventMachine (for Ruby) and Node.js (for JavaScript). 
+This type of programming paradigm is implementable in the majority of programming languages, although it is more prevalent and easier to implement in functional languages such as Erlang and Scala. There are also a number of frameworks for other languages available which support event-driven networking, such as Twisted\cite{twisted:web} (for Python), EventMachine\cite{eventmachine:web} (for Ruby) and Node.js (for JavaScript). 
 
-As the author was not familiar with functional languages, implementing a server in Erlang or Scala was not attempted, but instead existing event-driven networking frameworks were researched as they did not require learning a new language and seemed relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seemed too bloated for what was needed. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it was particularly interesting due to its use of JavaScript which is also used by the client system (an opportunity for more code reuse and resource sharing) and is a language with which the author was familiar. It is also designed to be exceptionally easy to use to write a simple server.
+As the author was not familiar with functional languages, implementing a server in Erlang\cite{erlang:web} or Scala\cite{scala:web} was not attempted, but instead existing event-driven networking frameworks were researched as they did not require learning a new language and seemed relatively popular. Twisted and EventMachine are mature frameworks, both with a large community and many extensions, but they both seemed too bloated for what was needed. Node.js is a relatively new framework which is rapidly gaining popularity, primarily because of its speed and simplicity - it was particularly interesting due to its use of JavaScript which is also used by the client system (an opportunity for more code reuse and resource sharing) and is a language with which the author was familiar. It is also designed to be exceptionally easy to use to write a simple server.
 
-Using the event based constructs in Node.js, a server was designed tailored to the type of communication needed, thus tackling the blocking I/O problem on two fronts; reducing the amount of I/O time required through caching, and attempting to prevent I/O from blocking. To cache, the presenter system pushes serialised versions of motes to Redis and uses the distribution system to quickly retrieve and push these out to clients.
+Using the event based constructs\cite{nodejspresentation:web} in Node.js, a server was designed tailored to the type of communication needed, thus tackling the blocking I/O problem on two fronts; reducing the amount of I/O time required through caching, and attempting to prevent I/O from blocking. To cache, the presenter system pushes serialised versions of motes to Redis and uses the distribution system to quickly retrieve and push these out to clients.
 
 \subsubsection{Distributing the Motes}
 As this application required content to appear on all client devices within a reasonable period of time after they are broadcast, it needed to use some form of real-time communication method. As both the client and presenter are web-based, choices for doing so are quite limited due to the HTTP protocol being entirely request-response oriented. If code which was not being executed in the browser was used, it would be possible to use networking technologies such as sockets to allow the client to 'listen' for communication from the broadcaster.
 
-However, there are various ways to support a  communication channel in web applications:
+However, there are various ways to support a  communication channel in web applications\cite{crane:comet}\cite{comet:web}:
 \begin{description}
-\item[WebSockets] \hfill \\
+\item[WebSockets\cite{websockets:web}] \hfill \\
 An implementation of a communication channel over TCP for use implementation in web browsers as part of the W3C HTML5 specification. Currently only implemented in the latest version of modern browsers, excluding Internet Explorer.
-\item[Flash Sockets] \hfill \\
+\item[Flash Sockets\cite{flashsockets:web}] \hfill \\
 TCP sockets can also be implemented using the ActionScript 3.0 Socket class, requiring the browser to load a Flash file and therefore requiring the Flash browser plugin. While this is the next best thing to using WebSockets, many mobile browsers do not fully support Flash.
-\item[Ajax long polling] \hfill \\
+\item[Ajax long polling\cite{longpolling:web}] \hfill \\
 A technique which is most commonly used for real-time web applications as it only requires a browser to support the XMLHttpRequest object, commonly used for Ajax interactions. This technique makes an asynchronous request to the server which the server keeps open until it has new data to send. As soon as new data has been received, the browser starts a new long polling request. While this technique is available on more devices, it is also slower and causes the browser to constantly be in a 'loading' state.
 \item[Multipart streaming] \hfill \\
-The XMLHttpRequest object can also be used to react to a server using a multipart content type; suggesting to the browser that the response will be delivered in multiple parts. The browser keeps the connection open and calls a callback function whenever a new part of the response is delivered.
+The XMLHttpRequest\cite{xmlhttprequest:web} object can also be used to react to a server using a multipart content type; suggesting to the browser that the response will be delivered in multiple parts. The browser keeps the connection open and calls a callback function whenever a new part of the response is delivered.
 \end{description}
 
 Unfortunately, the only one which reliably works on a large subset of browsers is long polling. The system could have been implemented using just this techniques, but it would then be unable to take advantage of the faster protocols such as WebSockets, available on the latest mobile browsers (such as Safari on iOS 4.2.1).
@@ -329,7 +329,7 @@ Unfortunately, the only one which reliably works on a large subset of browsers i
 To save writing implementations of each communication method, A library available for Node.js, socket.io\cite{socketio:web} was chosen, which allows the client and server to determine which communication technique to use depending on what they each support. It provides a simple API to abstract these techniques away and allowed me to simply request some data be transmitted. 
 
 \subsubsection{Server Design}
-The design of the server was largely based around the use of the Connect middleware framework for Node.js. Connect creates a basic HTTP server, with middleware for serving static files (used to serve the client application) and for session management.
+The design of the server was largely based around the use of the Connect\cite{connect:web} middleware framework for Node.js. Connect creates a basic HTTP server, with middleware for serving static files (used to serve the client application) and for session management.
 
 On top of the basic HTTP server, an event-based cross-system communication micro-protocol was designed. A typical communication would be a JSON string containing two top-level objects: `event' and `data'. The former contains a single camel-cased string describing the event which triggered the communication. The latter contains all the relevant data pertaining to the operation.
 
@@ -380,8 +380,6 @@ Once these resources are loaded, the returned JavaScript resource will contain a
 
 For example, QaRenderer, the implementation of ClientMoteRenderer which is loaded when a mote of type Question and Answer is pushed calls the respond function with the answer the user has selected and updates the display to show some feedback to the user.
 
-\todo[inline]{Also considered?}
-
 \subsubsection{User Interface}
 It was important that this part of the system was very easy to use. One of the ways this was achieved was by limiting the amount of choices a user had at any one point. On initially loading the system, they user is prompted to enter the access code for the plan they wish to join. This is the only option they have available at this point. Entering the code will trigger a communication with the distribution server to check whether the access code matches an existing plan. If it does, the page will be updated with the most recently pushed mote to that plan.
 
@@ -390,6 +388,7 @@ The renderers implemented for the built-in mote types are designed to respond im
 There are two other interface elements available to the user, neither of which are critical to its operation. The first, visible to the top left, is the currently active plan. Selecting this will allow the user to change to another plan. The second, available to the top right, is a history panel. Selecting this will drop down a list of all past motes, allowing the user to navigate back to a previous mote if desired.
 
 \subsection{Mote Types}
+\label{sec:motetypes}
 A number of mote types were designed to demonstrate the system, each for a different type of interaction and use. The only mote type initially designed was Question and Answer, the rest being designed in later iterations once the majority of functionality was in place.
 
 \subsubsection{Slide}
@@ -439,7 +438,7 @@ To demonstrate possibilities for delayed response, the client only submits the u
 The primary use of this mote type is to prompt users to match two sets of related data - countries to capitals, equations to correct answers, etc.
 
 \subsubsection{Heatmap}
-The Heatmap type was created to demonstrate interactions with different types of media, in this case, images. It defines a simple `Heatmap' model, extending Mote which contains an attribute for an image, Django and PIL\cite{pil:web} (Python Imaging Library} handle the image upload and storage operations. 
+The Heatmap type was created to demonstrate interactions with different types of media, in this case, images. It defines a simple `Heatmap' model, extending Mote which contains an attribute for an image, Django and PIL\cite{pil:web} (Python Imaging Library) handle the image upload and storage operations. 
 
 When pushed to Flux, the full image is shown to the client. On clicking/touching the image, a small marker shows where they have selected. The presenter sees the same image in the presenter interface with the addition of a heatmap overlay, showing areas with low click density in yellows and greens, up to those with higher click density in oranges and reds. The heatmap code was based off the work of Patrick Wied\cite{heatmap:web}.
 
@@ -467,7 +466,7 @@ Uses of this mote type include:
 \pagebreak
 \section{Problems}
 \subsection{Communication protocol}
-Once the distribution server was communicating in both directions with the client, the issue of making communications trigger operations on each system arised. There were issues with figuring out a way to establish a light RPC protocol, until inspiration came from the nodechat.js\cite{nodechatjs:web} which used an event based model, including an event string as part of the communication between systems. 
+Once the distribution server was communicating in both directions with the client, the issue of making communications trigger operations on each system arised. There were issues with figuring out a way to establish a light RPC\cite{rpc:web} protocol, until inspiration came from the nodechat.js\cite{nodechatjs:web} which used an event based model, including an event string as part of the communication between systems. 
 
 Implementing this was simple, and it made the system much more flexible, however, the triggered events were not fully designed before implementing them, so it was often confusing to figure out what was triggering which events, when to respond to them, and how to `bubble' them through all three systems when required. To resolve this, a naming convention was established for events; starting with the system from which they originated; `admin', `server', `client', followed by the operation which triggered the event (rather than the operation the event should trigger) in the past tense. 
 
@@ -484,12 +483,20 @@ The first issue encountered with this was a race condition where the system woul
 
 The second issue with this was with maintaining mote type modularity. Originally, all mote-specific resources for Flux were stored in a separate directory from the main mote type definition, this allowed the distribution server to be used to serve these resources. However, to meet flexibility objectives, it was desired that all mote-specific items be in a single folder, regardless of whether they were used for Diffuse or Flux. To achieve this, these resources were moved in to the folder which would typically be served by Django and updated Flux to find them on the Diffuse domain. 
 
-However, because the client was being served from the Flux domain, and JavaScript resources were attempting to load from another domain, the same origin policy implemented in most browsers prevented them from loading. An attempted work around was to request the JavaScript resource using JSONP, but this added extra unnecessary complexity. The final solution was to use Nginx to proxy requests for the resources on the Flux domain to the Diffuse resource folder.
+However, because the client was being served from the Flux domain, and JavaScript resources were attempting to load from another domain, the same origin policy implemented in most browsers prevented them from loading. An attempted work around was to request the JavaScript resource using JSONP\cite{jsonp:web}, but this added extra unnecessary complexity. The final solution was to use Nginx to proxy requests for the resources on the Flux domain to the Diffuse resource folder.
 
-\todo[inline]{More problems - perhaps saving error when demoing?}
+\subsection{JavaScript programming paradigms}
+While developing the JavaScript elements of the system, a number of problems arose when dealing with paradigms in the language that were very different from those in more traditional object-oriented languages. Dealing with these required detailed reading and research in to the language.
+
+Initially, confusion arose with attempting to implement a standard `class' structure for the Renderer. However, JavaScript is a class-free language, making use of a prototypal structure where methods are defined as part of function prototypes. Classes are implemented as functions, with their prototypes modified to add methods to them. The initial implementation attempt had methods as variables in the `class' function which did not work correctly as inherited objects would refer to the same instance of the function. The solution was to implement methods as variables on the `class' function prototype, which were correctly inherited.
+
+This lead to a problem experienced with creating `sub-classes'. Again, as there are no true classes, there are also no true subclasses or implementation of traditional inheritance. To support the required behaviour, it was necessary to use prototypal inheritance by first creating the new `class' function and overwriting its prototype with that of the `superclass'. This seemed to work, but whenever a method referred to an attribute specific to the subclass, the system would throw an error. This issue was caused by the overwriting of the new class's constructor when its superclass' prototype was used. To fix this, the original constructor was set back to the object's prototype constructor property.
+
+Another confusion caused by the different JavaScript paradigms was the concept of binding. An issue arose when attempting to pass an object's method as a parameter to another function so that it could be used as a callback. The passed method would lose its binding to its object, and would be unable to reference any attributes on the object. This was due to the use of the `this' keyword in the passed method - while `this' would usually refer to the method's object, when it was passed as a parameter, the binding of `this' was changed to the object it was passed to. This issue held up development for a while until it was posted on Stack Overflow\cite{persistentfunction:web}, where a response was received within 5 minutes and the problem fixed. The solution was to pass the function wrapped within an anonymous function, thereby invoking the method on the correct object instance and maintaing the binding of `this'.
 
 \pagebreak
 \section{Testing}
+\label{sec:testing}
 A number of testing strategies were adopted during the development of the project, each serving a different purpose.
 
 \subsection{Testing during development}
@@ -501,19 +508,33 @@ An informal testing strategy was used during development cycles. This usually co
 
 The use of Django's fixtures system made it easy to load a set of test data in to the database during development. Combined with the use of South\cite{south:web} to create data migrations when models were changed, persistent test data was a valuable way to ensure the system was working.
 
-This approach was used primarily to the workings of the system could be clearly seen as it was built. It was not intended to ensure the system met specifications.
-
-\todo[inline]{Expand if possible}
+This approach was used primarily so the workings of the system could be clearly seen as it was built. It was not intended to ensure the system met specifications.
 
 \subsection{Iteration Testing}
-At the end of every iteration, a testing plan was executed to ensure that what was built met the specifications determined at the start of the iteration. Feedback from this testing then went in to planning the next iteration.
+At the beginning of every iteration, a brief outline testing plan was created for use to ensure the requirements of the iteration were met. If there was a reason to change requirements during implementation, this was noted and feedback from development went in to planning the next iteration. The testing plan was executed at the end of the iteration, with any failures added to the requirements for a future iteration.
 
-\todo[inline]{Expand if possible, refer appendices}
-\todo[inline]{Create appendices for testing}
+Appendix \ref{app:testing} details how each iteration was specified and tested, some of the more important items include:
+\begin{itemize}
+\item If a requirement in iteration 1, 2 or 3 would cause these iterations to overrun, these requirements were pushed to later implementations so as not to hold up development of the core.
+\item The end of iteration 1 saw a failure in implementing the requirement to edit created content. This was due to complications with the polymorphic Mote structure which was not able to be completed within the time allotted to iteration 1. In order to keep development of the core on schedule, this requirement was moved to iteration 5.
+\item A number of requirements were changed during development. While this might be considered bad practice, the intent of choosing a flexible development model was so that the system could evolve in this way. A full discussion of this can be seen in section \ref{sec:devprocess}.
+\end{itemize}
+
+The iteration testing was considered a suitable way for continually testing an evolving project. Creating a test plan in each implementation also meant they could all be combined at the end of development to be ran as a single test plan with full requirement coverage.
 
 \subsection{Automated Stress Testing}
 As this system is built around many clients connected simultaneously, it was necessary to test how the system would behave under normal use. As only a few client systems at a time were available, a set of scripts were wrote to emulate the behaviour of clients in order to ensure that the distribution system and presenter system renderers could cope with normal (and abnormal) numbers of responses.
-\todo[inline]{Expand if possible}
+
+In most cases, these automated tests would emulate a set of connected clients, following this behaviour:
+\begin{enumerate}
+\item Select a random client
+\item Generate a random answer from those available
+\item Return the answer
+\item Wait 0.8 seconds
+\item Repeat 100 times
+\end{enumerate}
+
+This process was considered to be an example of high-end usage of the system. In all cases, the system performed well, with no slowdowns, and no significant memory increases. Only informal, visual analysis was performed, no formal profiling.
 
 \pagebreak
 \section{Evaluation}
@@ -534,7 +555,7 @@ As specified in the system objectives, there is no requirement to install additi
 
 An issue with this approach is that the presenter system is not fully operational on all browsers. Due to time constraints, it was only tested in modern browsers such as Mozilla Firefox and Google Chrome and uses features of CSS3 and HTML5 which are not supported in many versions of Internet Explorer. Considering a number of businesses do not support modern browsers, this could potentially be an issue for them. However, considering the focus of the project was the way in which these systems communicate, optimising for old browsers would have been time better spent elsewhere.
 
-\todo[inline]{logging in?}
+One shortcoming of this system is the requirement that presenters login to access their plans. While this is likely a sensible way to secure and protect their content, it is also an extra, potentially unnecessary step and is further complicated by the requirement that they have a separate Diffuse account. Ideally, it would have been possible to integrate the presenter's organisation's authentication system so that they are automatically logged in or use shared credentials, however, implementing a system which authenticates with all of the varying technologies present in organisations would have been complicated and would have reduced time spent on meeting important system objectives.
 
 \subsubsection{Supporting existing devices}
 \label{sec:supportexistingdevices}
@@ -544,7 +565,7 @@ However, should these devices not function correctly, the system was designed to
 
 The flexibility offered by allowing the developer full access to the JavaScript used by each mote type could be an issue as it is possible that they will implement features not supported by some user agents. For example, one of the demonstration mote types, Association, requires the browser to support SVG, which is not supported in Android devices. If the developer of this mote type did not create some form of fallback, this mote type would not work correctly on these devices. 
 
-The solution to this would be to create a more limited subset of fully tested features which developers could implement in their mote types through a defined API. Implementing this would have involved designing, developing and documenting this API, which would have been time consuming and could be considered outside the scope of the project. It would also mean significantly less flexibility afforded to developers creating mote types.
+The solution to this would be to create a more limited subset of fully tested features which developers could implement in their mote types through a defined API. Implementing this would have involved designing, developing and documenting this API, which would have been time consuming and could be considered outside the scope of the project. It would also mean significantly less flexibility afforded to developers creating mote types as they would only be able to use the functions provided by the API.
 
 \subsubsection{Removing dedicated hardware requirement}
 There is no dedicated hardware required for using Diffuse, meeting the objectives specified for the project. The two servers can be configured on existing hardware, communication is designed to work over the existing network, and clients do not require proprietary `handsets' to interact with the system - they are able to use their own mobile, portable or desktop devices.
@@ -552,34 +573,95 @@ There is no dedicated hardware required for using Diffuse, meeting the objective
 Should an establishment not have an existing network infrastructure, there would be significant costs and work required to set one up in order to use Diffuse. It is likely that there would be no incentive to configure a network solely to use Diffuse, but for smaller establishments, it is conceivable that the Diffuse servers could be configured on a single desktop PC with a wireless router attached and still be highly functional.
 
 There is also the issue of the prevalence of devices which would run the client. While in some establishments it is likely that the vast majority of attendees are likely to have a compatible phone or laptop, in others those attendees might be in the minority. Supplying all other users with a suitable device may be more expensive to the presenter than purchasing dedicated ARS hardware. Considering the problems Diffuse attempts to solve, this issue is unfortunately unavoidable, however, it is hoped that this system will be attractive to those establishments where attendees are likely to own these devices and will value the improved interactivity provided by Diffuse.
-\todo[inline]{More research?}
 
 \subsubsection{Simplifying interaction experience}
 Interaction with the client system is improved in Diffuse over typical ARS' through the use of a graphical interface. Being able to click or touch items/answers directly without the user having to deal with the abstract concept of matching answer numbers/letters with a slide on a different screen, or pressing `send' buttons to respond makes the system much more intuitive to use. Being able to use a full colour screen also allows additional instructions and guidance to be presented to the user where required.
 
-Presenting all the information required on screen on the users' own device also makes this system valuable for disabled users, for example, blind users using an iPad with VoiceOver enabled will be able to have the question and answers read to them. This benefit is unfortunately limited to some mote types, as VoiceOver will not be as valuable to the blind user with images, or drag-and-drop puzzles. It is left up to the presenter when each type of content should be used.
+Presenting all the information required on screen on the users' own device also makes this system valuable for disabled users, for example, blind users using an iPad with VoiceOver enabled will be able to have the question and answers read to them. This benefit is unfortunately limited to some mote types, as VoiceOver will not be as valuable to the blind user with images, or drag-and-drop puzzles. It is left up to the presenter when each type of content should be used, and it would theoretically be possible to design new mote types making heavy use of accessibility features for disabled users.
 
-An issue with this is the lack of tactile feedback from screens - there is no physical response to pressing a button, so a user may have issues with knowing when they have correctly submitted a response. To alleviate this, visual cues such as highlighting are used to show a user what options they have selected.
+An issue with the use of a touch display is the lack of tactile feedback from screens - there is no physical response to pressing a button, so a user may have issues with knowing when they have correctly submitted a response. To alleviate this, visual cues such as highlighting are used to show a user what options they have selected.
 
 The presenter interface is designed to be simple and easy-to-use. During informal testing, testers found it simple and were able to create and broadcast plans and motes without any instruction. Many existing ARS' integrated with PowerPoint to create content matched with slides - these often involve a plugin used for turning slides in to questions. This type of use might be more familiar to those used to PowerPoint, to whom Diffuse may be initially confusing. There are also likely to be those who do not like the idea of creating two sets of content, one for presentation and one for interaction.
 
 \subsection{Interaction}
-By leveraging the flexibility of the web browser found in targeted devices, Diffuse is able to offer a large variety of types of interaction. From simple Question and Answer interactions found in standard ARS systems, through complex puzzle-like association questions, to interactive images.
+By leveraging the flexibility of the web browser found in targeted devices, Diffuse is able to offer a large variety of types of interaction. From simple Question and Answer interactions found in standard ARS systems, through complex puzzle-like association questions, to interactive images, as detailed in Section \ref{sec:motetypes}. 
 
-\todo[inline]{Lots of examples of potential uses}
+The options for developing additional interactions are potentially limitless, some possible examples include:
+\begin{itemize}
+\item A game (HTML5, Flash, etc.) which can be played by the user and have their performance information sent back to the presenter.
+\item Interactive content, such as a diagram or animation which can be rotated/manipulated.
+\item `Fill in the blanks' style puzzles, displaying text or mathematical puzzles prompting users to enter the correct answers in the blanks on the display.
+\item Using the system to push content to large `surface'-style displays to display content such as group activities, such as a jigsaw or puzzle for multiple users which returns the time it took each group to complete the puzzle to the presenter.
+\item Restaurant menus either displayed on tables or on surfaces, returning the users' order to the presenter (waiter).
+\item Making use of hardware features in some devices, for example, using the JavaScript rotation API on tablet/mobile devices that support it to detect which way the user is holding the device. Could be used as a virtual `thumbs up/down'.
+\item Allowing multiple users to control some entity on the presenter interface. For example, the presenter interface could be projected on to a larger display and render a maze game containing a character for each connected user. Individual devices display a control pad to move their character, which updates their movement on the projected screen in real-time.
+\item Another game projected on to a larger screen which requires all users to vote on the next movement of the character.
+\end{itemize}
 
 \subsection{Flexibility}
 Developing the system around a modular framework from the start meant the final version of Diffuse is very flexible and extendable. All final mote types were written after the main system was developed without any additional changes needed to the core system. This demonstrated that any developer with knowledge of the workings of the system could create almost any type of mote type they required.
 
 Apart from the issues this flexibility causes with device compatibility detailed in section \ref{sec:supportexistingdevices}, there are also a few shortcomings with the implementation. Primarily, in order to set up a new mote type, the system administrator must run a few Django administration commands in order to generate the correct database tables. While these commands are relatively simple and require very little learning, this is an awkward step which could be alleviated by creating some form of plugin framework which allowed the administrator to enable mote types from the administration interface. 
 
-\todo[inline]{Potential for future developments}
+\subsection{The Development Process}
+\label{sec:devprocess}
+While the development model chosen for the project was iterative development, it was felt that the actual development process was significantly less structured than typically imposed by the model for a number of reasons.
 
+There were no full system requirements set out at the start of the project, only at the start of each iteration, meaning there was never a full set of requirements for the system until the last iteration. While this does not mean the objectives of the system were not met, it does mean requirements were never entirely clear. This was not considered detrimental to the system, but had it been developed in a team or for a client, it would likely have been unsuitable.
 
+Requirements were also often changed during iterations - this suggest requirements were not being used for their intended purpose as an outline of the structure of the system, but instead as `hints' for the direction of each iteration. Again, it is not thought that this caused any negative effects on the outcome of each iteration, but if it weren't controlled, it could have been potentially harmful to the project schedule if the requirements were constantly changing.
 
+The intent of choosing a structured development model was to create some organisation when combined with the `hacking' style of programming so that design and requirements aren't entirely created while coding. Although the model did create some organisation (as is evident by the existence of requirement/testing plans), it was felt that not enough emphasis was placed on the planning and testing elements, so the actual development model could be better described as `hack at it until it works' combined with a few reluctant breaks required to write the next set of requirements.
 
+It is thought that the reason the development model was not used to its full potential was to do with the author's reluctance and difficulty with writing requirements on paper when they were already fully mentally planned. The desire to write code and experiment with technology to see how best to implement the project was generally stronger than the desire to plan everything beforehand.
 
+Despite these issues, it is considered that the process adopted was largely beneficial to the outcome of the project:
+\begin{itemize}
+\item Flexible requirements allowed the system to evolve in directions other than that specified. Had the requirements been followed to the letter, there were a few cases where the design would have meant an awkward or unsuitable implementation, causing issues in later iterations.
+\item Focusing on code made the system very enjoyable to develop, the chance to experiment with the technologies used significantly increased the author's desire to continue development on the system. While this is purely personal and the results speculative, if a large portion of this time was dedicated to writing requirement specifications and testing documentation, it is likely that morale and incentive would have dropped, reducing the overall quality of the project.
+\end{itemize}
 
+Although the project did not suffer from the loose interpretation of this loose interpretation model used, had all the variables not been as they were, it is predicted that the outcome might have been significantly different, for example:
+\begin{itemize}
+\item If this project was intended to be developed in a team, there would be a very large gap in the understanding of requirements between team members leading to disorganised and chaotic development.
+\item If the author was not able to develop each separate system with relatively few problems. Had a problem occurred and there were no requirements specified, the final system would be missing components with no documents detailing how they were intended to be structured.
+\item If the author had no self-control over requirement changes, causing requirements to continually be changing, never reaching the final state of the system.
+\item If there had been an issue which caused development to be off schedule, recovering would have been complicated by the lack of structure.
+\end{itemize}
+
+Overall, while development did not follow the planned process model as strictly as it should have, a combination of luck and minor benefits from the flexible process adopted still managed to result in a complete system which successfully met all of the defined objectives.
+
+\subsection{Testing}
+Testing is considered to be one of the major failing points of this project as there was generally very little testing done, and what was done was informal and not entirely comprehensive.
+
+While the testing strategies adopted and described in section \ref{sec:testing} would be sufficient if they were used to their full extent, it was felt that there were a number of shortcomings in how each strategy was executed.
+
+The concept behind using the iteration testing strategy was that each iteration would be a self-contained unit with defined requirements and a full-testing plan for each. In reality, each iteration was not as self-contained as it should have been and the loose interpretation of the planning process (discussed in section \ref{sec:devprocess} caused listed requirements to be short and insufficient. These issues meant the testing plan was very brief, usually consisting of about five tests per iteration.
+
+Those tests that were documented were very broad with results that would be difficult to quantify. There was also no attempt made to test edge cases in the majority of situations. On the positive side, the tests that did exist served to show what was actually achieved in each iteration.
+
+Stress testing was used to ensure the system could cope with high loads - while in this regard, it served its purpose, it could have been formalised and extended in a number of ways:
+\begin{itemize}
+\item Creating more dynamic scripts for all types of content and for all potential motes, rather than hardcoding particular motes. Allowing for testing more scenarios.
+\item Detailed formal profiling; taking records of latency, time taken for the presenter to update, memory increase in all systems, etc. so that an analysis could be performed on the affect of changing various variables on the performance of the system.
+\item Using automation to test other parts of the system using tools such as Selenium\cite{selenium:web}.
+\end{itemize}
+
+If this project was started again, a number of things would be changed in regards to testing:
+\begin{itemize}
+\item Dependent on a more strict following of the development model, more detailed requirements would be written along with significantly more detailed test plans for each requirement when using iteration testing.
+\item Heavier and more detailed use of automated testing.
+\item Making use of unit testing for all systems to ensure code meets requirements.
+\end{itemize}
+
+\todo[inline]{Talk about testing with real people}
+
+\subsection{What was learnt}
+\todo[inline]{All the stuff I learnt}
+
+\subsection{Future Developments}
+Saving responses
+\todo[inline]{How it could evolve}
 
 
 
