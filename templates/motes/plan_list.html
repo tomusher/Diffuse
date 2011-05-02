@@ -2,6 +2,7 @@
 {% block selector %}
 <h2>Available Plans</h2>
 <ul class="item-list" id="all-plans-list">
+{% if user.is_authenticated %}
 {% for plan in plans %}
 <li>
 <a href="{% url plan_star plan.id %}" class="star {% if plan.starred %}enabled{% endif %}"><span>Star</span></a>
@@ -13,6 +14,7 @@
     </div>
 </li>
 {% endfor %}
+{% endif %}
 </ul>
 <div class="actions">
     <a class="button add" href="{% url plan_add %}">Add Plan</a>

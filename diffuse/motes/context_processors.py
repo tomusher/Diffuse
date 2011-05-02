@@ -4,7 +4,7 @@ from django.conf import settings
 
 def user_starred_plans(request):
     plans = []
-    if(request.user.is_authenticated()):
+    if request.user.is_authenticated():
         plans = Plan.objects.filter(user=request.user,starred=True)
     return {'starred_plans':plans}
 

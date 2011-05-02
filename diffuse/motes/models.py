@@ -22,8 +22,7 @@ class Mote(PolymorphicModel):
 
     def cache(self):
         r = redis.Redis(host='localhost', db=0)
-        mote = Mote.objects.get(pk=self.id)
-        json_data = json.dumps(mote.as_dict())
+        json_data = json.dumps(self.as_dict())
         mote_key = "mote:{0}".format(self.id);
         r.set(mote_key, json_data)
 

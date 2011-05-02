@@ -53,9 +53,12 @@ urlpatterns = patterns('',
                         name='mote_delete'),
     
     # Motes
-    url(r'^motes/push/(?P<plan_id>\d+)/(?P<mote_id>\d+)/$', 
+    url(r'^plans/(?P<plan_id>\d+)/push/(?P<mote_id>\d+)/$', 
                         'motes.views.mote_push', 
                         name='mote_push'),
+    url(r'^plans/(?P<plan_id>\d+)/#!push/(?P<mote_id>\d+)/$',
+                        'motes.views.mote_push',
+                        name='mote_push_dynamic'),
 
     url(r'^login/', 'django.contrib.auth.views.login', name='login'),
     url(r'^logout/', 'django.contrib.auth.views.logout_then_login',

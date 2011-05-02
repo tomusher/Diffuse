@@ -14,7 +14,9 @@ class PlanListView(ListView):
     context_object_name = "plans"
 
     def get_queryset(self):
-        return Plan.objects.filter(user=self.request.user)
+        if self.request.user.is_authenticated():
+            return Plan.objects.filter(user=self.request.user)
+        return Plan.objects.none()
 
 @login_required
 @render_to('motes/plan_view.html')

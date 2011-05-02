@@ -31,9 +31,7 @@ Heatmap.prototype.render = function() {
 
 Heatmap.prototype.redraw = function() {
     var self = this;
-    var pointContainer = $("<div>");
     self.canvas[0].width = self.canvas[0].width;
-    $("#renderer").append(pointContainer);
     for(response in self.responses) {
         var ratio = self.responses[response].width/self.width;
         console.log(self.responses[response].x/ratio);
