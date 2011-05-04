@@ -209,6 +209,10 @@ header {display: block;
         background: -moz-linear-gradient(left, #DDD 0%, #EAEAEA 100%);
         background: -webkit-gradient(linear, left top, right top, color-stop(0%,#DDD), color-stop(100%,#EAEAEA));
         -webkit-box-shadow: -2px 0 2px #bbb; } 
+    #login-form {
+        clear: both;
+        padding: 10px;
+    }
 
 .item-list { list-style: none; margin: 0; padding: 0; }
     .item-list li { clear: both; position: relative; }
