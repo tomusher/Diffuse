@@ -34,7 +34,7 @@ Heatmap.prototype.redraw = function() {
     self.canvas[0].width = self.canvas[0].width;
     for(response in self.responses) {
         var ratio = self.responses[response].width/self.width;
-        console.log(self.responses[response].x/ratio);
+        //console.log(self.responses[response].x/ratio);
         self._drawHeatSpot(self.responses[response].x/ratio, self.responses[response].y/ratio);
     };
 };
@@ -45,7 +45,7 @@ Heatmap.prototype.updateData = function(responses, append) {
         self.responses = {};
     };
     for(attr in responses) {
-        console.log(responses[attr]);
+        //console.log(responses[attr]);
         self.responses[attr] = responses[attr];
     };
     self.redraw();

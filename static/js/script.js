@@ -11,7 +11,6 @@ $(document).ready(function(){
     });
     socket.on('message', function(obj){
         $(document).trigger(obj.event, obj.data);
-        console.log(obj);
     });
     socket.connect();
 

@@ -1,1 +1,28 @@
-178.79.138.225
+System can be accessed at:
+Presenter system: http://diffuse.tomusher.com
+Client system: http://flux.tomusher.com
+
+Presenter login credentials:
+Username: presenter
+Password: presenter
+
+To acccess the configured server (to see live code):
+- SSH to diffuse.tomusher with username 'visitor'
+- Use password: tYjjxN9u
+- cd to /srv/projects/diffuse
+
+To deploy system, configure:
+- A Python Virtualenv using the requirements.txt file
+- A Redis (http://www.redis.io) instance using default port 6379
+- Node.js on the system path
+
+To launch the presenter system, from the diffuse directory, run:
+- ./manage.py syncdb
+- ./manage.py migrate
+- ./manage.py runserver
+
+To launch the flux server, from the flux directory, run:
+- node server.js
+
+Configure Nginx using the provided nginx-conf file
+
