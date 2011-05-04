@@ -17,11 +17,11 @@ Heatmap.prototype.render = function() {
     img.css("width", "100%");
     img.css("height", "auto");
     $("#renderer").append(img);
+    self.canvas = $("<canvas>").css({"position": "absolute", "top": 0, "left": 0});
     img.load(function() {
         self.width = img.width();
         self.height = img.height();
 
-        self.canvas = $("<canvas>").css({"position": "absolute", "top": 0, "left": 0});
         self.canvas.attr("width", self.width).attr("height", self.height);
         self.canvas.attr("id", "heatmap");
         $("#renderer").append(self.canvas);
